@@ -1,6 +1,6 @@
-package com.smartdengg.ultrafit.Ultrafit.annotation;
+package com.smartdengg.ultrafit.ultrafit.annotation;
 
-import com.smartdengg.ultrafit.Ultrafit.type.RestType;
+import com.smartdengg.ultrafit.ultrafit.type.RestType;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

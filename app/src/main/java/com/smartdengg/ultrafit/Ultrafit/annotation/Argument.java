@@ -1,4 +1,4 @@
-package com.smartdengg.ultrafit.Ultrafit.annotation;
+package com.smartdengg.ultrafit.ultrafit.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
