@@ -9,7 +9,7 @@ import com.smartdengg.ultrafit.ultrafit.annotation.GET;
  * Created by SmartDengg on 2016/2/14.
  */
 
-@GET(stringUrl = Constants.LOGIC_URL) public class TestRequest {
+@GET(stringUrl = Constants.MOVIE_URL) public class TestRequest {
 
   @Argument(parameter = "Sting") private String name;
   @Argument(parameter = "Sting[]") private String[] phones;

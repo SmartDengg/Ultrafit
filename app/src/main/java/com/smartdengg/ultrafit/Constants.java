@@ -5,11 +5,11 @@ package com.smartdengg.ultrafit;
  */
 public class Constants {
 
-  public static final String BASE_URL = "http://api.dmore.com.cn/";
+  public static final String BASE_URL = "http://m.maoyan.com/";
+  public static final String MOVIE_URL = "movie/list.json";
 
-  public static final String LOGIC_URL = "mobile/api/client/interface.php";
-  public static final Integer RESULT_OK = 1;
+  public static final Integer RESULT_OK = 0;
   public static boolean isDebugEnv = true;
   public static boolean isDebugChrome = true;
-  public static boolean isJsonDebug = true;
+  public static boolean isJsonDebug = false;
 }

@@ -12,19 +12,18 @@ import rx.Observable;
 public class BaseResponse {
 
   /*
-    "result": [{  }],
-    "code": 1,
-    "message": ""
+    "data": [{  }],
+    "status": 1,
+    "control": {"expires": 1800},
   */
 
-  @Expose @SerializedName("code") public Integer resultCode;
-  @Expose public String message;
+  @Expose @SerializedName("status") public Integer status;
 
   public Observable filterWebServiceErrors() {
-    if (resultCode == Constants.RESULT_OK) {
+    if (status == Constants.RESULT_OK) {
       return Observable.just(BaseResponse.this);
     } else {
-      return Observable.<BaseResponse>error(new WebServiceException(BaseResponse.this.message));
+      return Observable.<BaseResponse>error(new WebServiceException("Error occur when fetch service"));
     }
   }
 }

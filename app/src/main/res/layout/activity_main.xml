@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:padding="@dimen/material_8dp"
         android:clipToPadding="false"
-        tools:listitem="@layout/product_item"
+        tools:listitem="@layout/movie_item"
     />
   </android.support.v4.widget.SwipeRefreshLayout>
 

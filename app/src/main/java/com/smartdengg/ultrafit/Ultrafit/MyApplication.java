@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import com.facebook.stetho.Stetho;
 import com.jakewharton.picasso.OkHttp3Downloader;
+import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.smartdengg.ultrafit.Constants;
 import com.smartdengg.ultrafit.service.ServiceGenerator;
 import com.squareup.picasso.Picasso;
 import java.util.concurrent.Executors;
@@ -26,7 +28,8 @@ public class MyApplication extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    Stetho.initializeWithDefaults(MyApplication.this);
+
+    if (Constants.isDebugChrome) Stetho.initializeWithDefaults(MyApplication.this);
 
     Picasso picasso = new Picasso.Builder(MyApplication.this)
         .downloader(new OkHttp3Downloader(new OkHttpClient()))
@@ -37,7 +40,8 @@ public class MyApplication extends Application {
 
     Picasso.setSingletonInstance(picasso);
 
-    Logger.init("OkHttp");
+    Logger.init("OkHttp").setMethodOffset(0).setMethodCount(4).setLogLevel(LogLevel.FULL);
+
     ServiceGenerator.initService();
   }
 }

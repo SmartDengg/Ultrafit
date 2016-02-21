@@ -2,6 +2,7 @@ package com.smartdengg.ultrafit.service;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.smartdengg.ultrafit.Constants;
 import com.smartdengg.ultrafit.coverter.GsonConverterFactory;
 import com.smartdengg.ultrafit.service.adapter.callAdapter.SmartCallAdapterFactory;
@@ -20,6 +21,10 @@ public class ServiceGenerator {
 
   public static void initService() {
 
+    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation() //不导出实体中没有用@Expose注解的属性
+                                 .enableComplexMapKeySerialization() //支持Map的key为复杂对象的形式
+                                 .serializeNulls().create();
+
     ServiceGenerator.httpClientBuilder
         .addNetworkInterceptor((Constants.isDebugChrome) ? new StethoInterceptor() : null)
         .addInterceptor(new HeaderInterceptor())
@@ -30,7 +35,7 @@ public class ServiceGenerator {
         .baseUrl(Constants.BASE_URL)
         .addCallAdapterFactory(SmartCallAdapterFactory.create())
         .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
         .client(httpClientBuilder.build());
   }
 

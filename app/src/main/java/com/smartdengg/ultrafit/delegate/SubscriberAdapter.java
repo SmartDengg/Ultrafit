@@ -1,5 +1,6 @@
 package com.smartdengg.ultrafit.delegate;
 
+import com.orhanobut.logger.Logger;
 import rx.Subscriber;
 
 /**
@@ -11,7 +12,7 @@ public class SubscriberAdapter<T> extends Subscriber<T> {
   }
 
   @Override public void onError(Throwable e) {
-
+    Logger.e(e.getMessage());
   }
 
   @Override public void onNext(T t) {
