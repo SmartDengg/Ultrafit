@@ -174,8 +174,8 @@ public class UltraParser {
           }
         }
 
-        System.out.println("name = " + name);
-        System.out.println("value = " + value);
+        /*System.out.println("name = " + name);
+        System.out.println("value = " + value);*/
 
         if (params.containsKey(name)) {
           throw Utils.methodError(field.getDeclaringClass(),

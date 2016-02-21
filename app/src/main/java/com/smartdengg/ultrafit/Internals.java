@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.smartdengg.ultrafit.bean.response.ResponseEntity;
+import com.smartdengg.ultrafit.bean.response.BaseResponse;
 import java.lang.reflect.Type;
 
 /**
@@ -24,10 +24,10 @@ public class Internals {
     return gsonBuilder;
   }
 
-  static class SmartDeserializer implements JsonDeserializer<ResponseEntity> {
+  static class SmartDeserializer implements JsonDeserializer<BaseResponse> {
     static final SmartDeserializer instance = new SmartDeserializer();
 
-    @Override public ResponseEntity deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    @Override public BaseResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
         throws JsonParseException {
 
       JsonElement results =
