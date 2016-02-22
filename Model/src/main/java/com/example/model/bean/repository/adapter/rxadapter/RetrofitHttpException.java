@@ -3,12 +3,12 @@ package com.example.model.bean.repository.adapter.rxadapter;
 import retrofit2.Response;
 
 /** Exception for an unexpected, non-2xx HTTP response. */
-public final class HttpException extends Exception {
+public final class RetrofitHttpException extends Exception {
   private final int code;
   private final String message;
   private final transient Response<?> response;
 
-  public HttpException(Response<?> response) {
+  public RetrofitHttpException(Response<?> response) {
     super("HTTP " + response.code() + " " + response.message());
     this.code = response.code();
     this.message = response.message();

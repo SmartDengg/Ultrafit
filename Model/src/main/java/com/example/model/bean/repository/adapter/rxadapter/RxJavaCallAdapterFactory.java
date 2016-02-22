@@ -126,7 +126,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
           if (response.isSuccess() && code != 204 && code != 205) {
             return Observable.just(response.body());
           }
-          return Observable.error(new HttpException(response));
+          return Observable.error(new RetrofitHttpException(response));
         }
       }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<Long>>() {
         @Override public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
