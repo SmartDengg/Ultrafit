@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+
+android {
+  compileSdkVersion 23
+  buildToolsVersion "23.0.2"
+
+  defaultConfig {
+    minSdkVersion 14
+    targetSdkVersion 23
+    versionCode 1
+    versionName "1.0"
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  /*Third Library*/
+  compile 'com.orhanobut:logger:1.11'
+
+  /*RxJava*/
+  compile 'io.reactivex:rxandroid:1.1.0'
+  compile 'com.trello:rxlifecycle-components:0.4.0'
+  compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
+}

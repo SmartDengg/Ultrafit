@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/material_blue_50"
+    tools:context=".views.activity.MainActivity">
+
+    <TextView
+        android:id="@+id/main_layout_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/material_160dp"
+        android:textSize="@dimen/material_20sp"
+        android:textColor="@color/material_white"
+        android:textStyle="italic"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        tools:text="@string/app_name"
+    />
+
+
+  <android.support.v4.widget.SwipeRefreshLayout
+      android:id="@+id/main_layout_srl"
+      android:layout_below="@+id/main_layout_title_tv"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+  >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_layout_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/material_8dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/movie_item"
+    />
+  </android.support.v4.widget.SwipeRefreshLayout>
+
+  <com.example.ultrafit.ui.SmartTextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentRight="true"
+      android:textSize="24sp"
+      android:shadowDy="10"
+      android:shadowRadius="4"
+      android:shadowColor="@android:color/holo_orange_light"
+      android:textColor="@android:color/holo_blue_bright"
+      android:text="@string/smartDengg"
+  />
+
+</RelativeLayout>

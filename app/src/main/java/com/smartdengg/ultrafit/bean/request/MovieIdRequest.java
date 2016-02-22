@@ -7,13 +7,13 @@ import com.smartdengg.ultrafit.ultrafit.annotation.GET;
 /**
  * Created by SmartDengg on 2016/2/21.
  */
-@GET(stringUrl = Constants.MOVIE_URL) public class MovieRequest {
+@GET(stringUrl = Constants.MOVIE_URL) public class MovieIdRequest {
 
   @Argument(parameter = "type") private String type;
   @Argument(parameter = "offset") private int offset;
   @Argument(parameter = "limit") private int limit;
 
-  public MovieRequest(String type, int offset, int limit) {
+  public MovieIdRequest(String type, int offset, int limit) {
     this.type = type;
     this.offset = offset;
     this.limit = limit;

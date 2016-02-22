@@ -9,7 +9,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.smartdengg.ultrafit.bean.entity.MovieEntity;
-import com.smartdengg.ultrafit.bean.request.MovieRequest;
+import com.smartdengg.ultrafit.bean.request.MovieIdRequest;
 import com.smartdengg.ultrafit.delegate.SubscriberAdapter;
 import com.smartdengg.ultrafit.domain.ProductUsecase;
 import com.smartdengg.ultrafit.rx.RxExtension;
@@ -32,7 +32,7 @@ public class MainActivity extends RxAppCompatActivity {
   @NonNull @Bind(R.id.main_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
   @NonNull @Bind(R.id.main_layout_rv) protected RecyclerView recyclerView;
 
-  private MovieRequest movieRequest;
+  private MovieIdRequest movieIdRequest;
   private MovieAdapter movieAdapter;
 
   private int pageIndex = 1;
@@ -62,10 +62,10 @@ public class MainActivity extends RxAppCompatActivity {
 
     int itemCount = 10;
     this.pageIndex = 0;
-    movieRequest = new MovieRequest("hot", pageIndex, itemCount);
+    movieIdRequest = new MovieIdRequest("hot", pageIndex, itemCount);
 
     compositeSubscription.add(ProductUsecase
-                                  .getMovieList(movieRequest)
+                                  .getMovieList(movieIdRequest)
                                   .doOnTerminate(new Action0() {
                                     @Override public void call() {
                                       if (MainActivity.this.swipeRefreshLayout.isRefreshing()) {
@@ -91,6 +91,7 @@ public class MainActivity extends RxAppCompatActivity {
   }
 
   private void initView() {
+
     swipeRefreshLayout.setColorSchemeResources(MainActivity.colors);
     swipeRefreshLayout.setOnRefreshListener(listener);
     swipeRefreshLayout.post(new Runnable() {
@@ -118,8 +119,8 @@ public class MainActivity extends RxAppCompatActivity {
               @Override public Observable<List<MovieEntity>> call(Void aVoid) {
 
                 /*if (MainActivity.this.isEndless) {
-                  movieRequest.setOffset(++pageIndex);
-                  return ProductUsecase.getMovieList(movieRequest);
+                  movieIdRequest.setOffset(++pageIndex);
+                  return ProductUsecase.getMovieList(movieIdRequest);
                 }*/
                 return Observable.empty();
               }

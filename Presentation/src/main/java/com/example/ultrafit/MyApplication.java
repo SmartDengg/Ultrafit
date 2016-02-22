@@ -1,20 +1,19 @@
-package com.smartdengg.ultrafit.ultrafit;
+package com.example.ultrafit;
 
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import com.example.common.Constants;
 import com.facebook.stetho.Stetho;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
-import com.smartdengg.ultrafit.Constants;
-import com.smartdengg.ultrafit.service.ServiceGenerator;
 import com.squareup.picasso.Picasso;
 import java.util.concurrent.Executors;
 import okhttp3.OkHttpClient;
 
 /**
- * Created by SmartDengg on 2016/2/21.
+ * Created by SmartDengg on 2016/2/22.
  */
 public class MyApplication extends Application {
 
@@ -40,8 +39,6 @@ public class MyApplication extends Application {
 
     Picasso.setSingletonInstance(picasso);
 
-    Logger.init("OkHttp").setMethodOffset(0).setMethodCount(4).setLogLevel(LogLevel.FULL);
-
-    ServiceGenerator.initService();
+    Logger.init(Constants.LOGGER_TAG).setMethodOffset(0).setMethodCount(4).setLogLevel(LogLevel.FULL);
   }
 }
