@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout_root_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/material_blue_50"
@@ -36,19 +37,13 @@
     />
   </android.support.v4.widget.SwipeRefreshLayout>
 
-  <com.example.ultrafit.ui.SmartTextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
-      android:layout_marginRight="8dp"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentRight="true"
-      android:textSize="24sp"
-      android:shadowDy="10"
-      android:shadowRadius="4"
-      android:shadowColor="@android:color/holo_orange_light"
-      android:textColor="@android:color/holo_blue_bright"
-      android:text="@string/smartDengg"
+  <ViewStub
+      android:id="@+id/main_layout_viewstub"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout="@layout/main_layout_stub_layout"
+      android:inflatedId="@+id/main_layout_blur_iv"
   />
+
 
 </RelativeLayout>

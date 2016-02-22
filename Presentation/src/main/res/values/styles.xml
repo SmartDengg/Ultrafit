@@ -12,6 +12,11 @@
     <item name="android:windowBackground">@drawable/toolbar_placeholder</item>
   </style>
 
+  <style name="AppTheme.TransparentActivity">
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowIsTranslucent">true</item>
+  </style>
+
   <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
     <!-- This would set the toolbar's background color -->
     <item name="android:background">@color/colorPrimary</item>

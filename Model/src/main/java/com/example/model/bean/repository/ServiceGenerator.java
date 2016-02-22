@@ -2,6 +2,7 @@ package com.example.model.bean.repository;
 
 import com.example.common.Constants;
 import com.example.model.bean.repository.adapter.callAdapter.SmartCallAdapterFactory;
+import com.example.model.bean.repository.adapter.rxadapter.RxJavaCallAdapterFactory;
 import com.example.model.bean.repository.coverter.GsonConverterFactory;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
@@ -9,7 +10,6 @@ import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 
 /**
  * Created by Joker on 2016/2/19.

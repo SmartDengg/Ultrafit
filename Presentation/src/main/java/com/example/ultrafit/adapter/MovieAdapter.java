@@ -44,15 +44,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
     MovieAdapter.this.runEnterAnimation(holder.itemView, position);
   }
 
-  private void bindValue(ItemHolder holder, int position) {
-    MovieEntity movieEntity = items.get(position);
+  private void bindValue(final ItemHolder holder, final int position) {
+    final MovieEntity movieEntity = items.get(position);
+
+    holder.itemView.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        if (callback != null) callback.onItemClick(position, holder.thumbIv, movieEntity);
+      }
+    });
+
     holder.nameTv.setText(movieEntity.getMovieName());
-    holder.scoreTv.setText(movieEntity.getMovieScore()+" 分");
-    Picasso
-        .with(context)
-        .load(items.get(position).getMovieThumbUrl())
-        .noFade()
-        .into(holder.thumbIv);
+    holder.scoreTv.setText(movieEntity.getMovieScore() + " 分");
+    Picasso.with(context).load(items.get(position).getMovieThumbUrl()).noFade().into(holder.thumbIv);
   }
 
   private void runEnterAnimation(View itemView, int position) {
@@ -102,11 +105,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
     @Nullable @Bind(R.id.movie_item_thumb_iv) ImageView thumbIv;
     @Nullable @Bind(R.id.movie_item_name_tv) TextView nameTv;
     @Nullable @Bind(R.id.movie_item_score_tv) TextView scoreTv;
-   /* @Nullable @Bind(R.id.movie_item_description_tv) TextView descriptionTv;
-
-    @Nullable @Bind(R.id.movie_item_category_tv) TextView categoryTv;
-    @Nullable @Bind(R.id.movie_item_director_tv) TextView directorTv;
-    @Nullable @Bind(R.id.movie_item_actor_tv) TextView actorTv;*/
 
     public ItemHolder(View itemView) {
       super(itemView);
@@ -120,7 +118,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
 
   public interface Callback {
 
-    void onCompleted();
+    void onItemClick(int position, ImageView thumbIv, MovieEntity movieEntity);
 
     void onError(Throwable error);
   }

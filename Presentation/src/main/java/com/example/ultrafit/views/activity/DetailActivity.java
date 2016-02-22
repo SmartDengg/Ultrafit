@@ -1,0 +1,209 @@
+package com.example.ultrafit.views.activity;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.example.common.Util.DensityUtil;
+import com.example.model.bean.entity.MovieEntity;
+import com.example.ultrafit.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+/**
+ * Created by SmartDengg on 2016/2/22.
+ */
+public class DetailActivity extends AppCompatActivity {
+
+  private static final String START_BOUND = "startBounds";
+  private static final String GLOBAL_OFFSET = "globalOffset";
+  private static final String ENTITY = "entity";
+
+  @NonNull @Bind(R.id.detail_layout_thumb_iv) protected ImageView movieThumbIv;
+
+  @NonNull @Bind(R.id.detail_layout_primary_root_rl) protected RelativeLayout moviePrimaryRl;
+  @NonNull @Bind(R.id.detail_layout_name_tv) protected TextView movieNameTv;
+  @NonNull @Bind(R.id.detail_layout_category_tv) protected TextView movieCategoryTv;
+  @NonNull @Bind(R.id.detail_layout_release_tv) protected TextView movieReleaseTv;
+
+  @NonNull @Bind(R.id.detail_layout_area_tv) protected TextView movieCountryTv;
+  @NonNull @Bind(R.id.detail_layout_writers_tv) protected TextView movieWritersTv;
+  @NonNull @Bind(R.id.detail_layout_director_tv) protected TextView movieDirectorTv;
+  @NonNull @Bind(R.id.detail_layout_actor_tv) protected TextView movieActorTv;
+  @NonNull @Bind(R.id.detail_layout_sketch_tv) protected TextView movieSketchTv;
+
+  private Rect startBounds;
+  private float scale;
+  private AnimatorSet animatorSet;
+  private MovieEntity movieEntity;
+
+  public static void navigateToActivity(@NonNull AppCompatActivity startingActivity, @NonNull Rect startBounds,
+                                        @NonNull Point globalOffset, @NonNull MovieEntity movieEntity) {
+
+    Intent intent = new Intent(startingActivity, DetailActivity.class);
+
+    intent.putExtra(START_BOUND, startBounds);
+    intent.putExtra(GLOBAL_OFFSET, globalOffset);
+    intent.putExtra(ENTITY, movieEntity);
+
+    startingActivity.startActivity(intent);
+  }
+
+  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.detail_activity);
+    ButterKnife.bind(DetailActivity.this);
+
+    DetailActivity.this.initView(savedInstanceState);
+  }
+
+  private void initView(Bundle savedInstanceState) {
+
+    if (savedInstanceState == null) {
+      movieThumbIv.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        @Override public boolean onPreDraw() {
+
+          movieThumbIv.getViewTreeObserver().removeOnPreDrawListener(this);
+          DetailActivity.this.runEnterAnimation(getIntent().getExtras());
+
+          return true;
+        }
+      });
+    }
+  }
+
+  private void runEnterAnimation(Bundle bundle) {
+
+    movieEntity = (MovieEntity) bundle.getSerializable(ENTITY);
+    if (movieEntity == null) return;
+
+    this.movieNameTv.setText(movieEntity.getMovieName());
+    this.movieCategoryTv.setText(movieEntity.getMovieCategory());
+    this.movieReleaseTv.setText(movieEntity.getMovieReleaseTime());
+
+    String movieCountry = movieEntity.getMovieCountry();
+    this.movieWritersTv.setVisibility(TextUtils.isEmpty(movieCountry) ? View.GONE : View.VISIBLE);
+
+    this.movieCountryTv.setText("地区:" + movieCountry);
+    this.movieWritersTv.setText("编剧:" + movieEntity.getMovieWriters());
+    this.movieDirectorTv.setText("导演:" + movieEntity.getMovieDirector());
+    this.movieActorTv.setText("演员:" + movieEntity.getMovieActor());
+    this.movieSketchTv.setText("剧情概要:" + movieEntity.getMovieSketch());
+
+    Point globalOffset = bundle.getParcelable(GLOBAL_OFFSET);
+    startBounds = bundle.getParcelable(START_BOUND);
+
+    Rect finalBounds = new Rect();
+    this.movieThumbIv.getGlobalVisibleRect(finalBounds);
+    finalBounds.offset(-globalOffset.x, -globalOffset.y);
+
+    scale = DensityUtil.calculateScale(startBounds, finalBounds);
+
+    this.movieThumbIv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+    ViewCompat.setPivotX(movieThumbIv, 0.0f);
+    ViewCompat.setPivotY(movieThumbIv, 0.0f);
+    ViewCompat.setAlpha(moviePrimaryRl, 0.0f);
+
+    animatorSet = new AnimatorSet();
+    animatorSet
+        .play(ObjectAnimator.ofFloat(this.movieThumbIv, View.X, startBounds.left, finalBounds.left))
+        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.Y, startBounds.top, finalBounds.top))
+        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_X, scale, 1.0f))
+        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_Y, scale, 1.0f));
+    animatorSet.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+    animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+    animatorSet.addListener(new AnimatorListenerAdapter() {
+      @Override public void onAnimationEnd(Animator animation) {
+
+        ViewCompat.animate(moviePrimaryRl).alpha(1.0f).withLayer();
+
+        movieThumbIv.setLayerType(View.LAYER_TYPE_NONE, null);
+        DetailActivity.this.animatorSet = null;
+      }
+    });
+
+    Picasso
+        .with(DetailActivity.this)
+        .load(movieEntity.getMovieThumbUrl())
+        .noFade()
+        .into(movieThumbIv, new Callback.EmptyCallback() {
+          @Override public void onSuccess() {
+            animatorSet.start();
+          }
+        });
+  }
+
+  protected void runExitAnimator() {
+
+    if (animatorSet != null) animatorSet.cancel();
+
+    this.movieThumbIv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+    animatorSet = new AnimatorSet();
+    animatorSet
+        .play(ObjectAnimator.ofFloat(this.movieThumbIv, View.X, startBounds.left))
+        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.Y, startBounds.top))
+        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_X, scale))
+        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_Y, scale));
+    animatorSet.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
+    animatorSet.setInterpolator(new DecelerateInterpolator());
+    animatorSet.addListener(new AnimatorListenerAdapter() {
+      @Override public void onAnimationStart(Animator animation) {
+        DetailActivity.this.moviePrimaryRl.setVisibility(View.GONE);
+      }
+
+      @Override public void onAnimationEnd(Animator animation) {
+
+        DetailActivity.this.animatorSet = null;
+        DetailActivity.this.movieThumbIv.setLayerType(View.LAYER_TYPE_NONE, null);
+        DetailActivity.this.finish();
+      }
+    });
+    animatorSet.start();
+  }
+
+  @NonNull @OnClick(R.id.detail_layout_cancel_iv) protected void onCancel() {
+    DetailActivity.this.runExitAnimator();
+  }
+
+  @Override public void finish() {
+    super.finish();
+    overridePendingTransition(0, 0);
+  }
+
+  @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+      DetailActivity.this.onCancel();
+    }
+    return false;
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+
+    Picasso.with(DetailActivity.this).cancelRequest(this.movieThumbIv);
+    if (animatorSet != null && animatorSet.isRunning()) animatorSet.cancel();
+    ButterKnife.unbind(DetailActivity.this);
+  }
+}
