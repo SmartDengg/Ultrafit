@@ -12,7 +12,6 @@
             <option value="$PROJECT_DIR$/Domain" />
             <option value="$PROJECT_DIR$/Model" />
             <option value="$PROJECT_DIR$/Presentation" />
-            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
         <option name="myModules">
@@ -22,7 +21,6 @@
             <option value="$PROJECT_DIR$/Domain" />
             <option value="$PROJECT_DIR$/Model" />
             <option value="$PROJECT_DIR$/Presentation" />
-            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
       </GradleProjectSettings>

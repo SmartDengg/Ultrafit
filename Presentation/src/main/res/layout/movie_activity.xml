@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_layout_root_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.activity.MovieListActivity"
+>
+
+  <TextView
+      android:id="@+id/movie_layout_title_tv"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:textSize="@dimen/material_20sp"
+      android:textColor="@color/material_white"
+      android:textStyle="italic"
+      android:gravity="center"
+      android:background="@color/colorPrimary"
+      android:text="@string/movie_title"
+  />
+
+  <FrameLayout
+      android:id="@+id/movie_layout_content_fl"
+      android:layout_below="@id/movie_layout_title_tv"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@color/material_blue_50"
+  >
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/movie_layout_srl"
+        android:layout_below="@id/movie_layout_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    >
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/movie_layout_rv"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:padding="@dimen/material_8dp"
+          android:clipToPadding="false"
+          tools:listitem="@layout/movie_item"
+      />
+    </android.support.v4.widget.SwipeRefreshLayout>
+  </FrameLayout>
+
+  <ViewStub
+      android:id="@+id/movie_layout_viewstub"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout="@layout/main_layout_stub_layout"
+      android:inflatedId="@+id/main_layout_blur_iv"
+  />
+
+</RelativeLayout>

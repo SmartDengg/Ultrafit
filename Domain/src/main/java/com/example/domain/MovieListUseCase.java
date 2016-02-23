@@ -10,16 +10,16 @@ import rx.Observable;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public class ListUseCase<R> extends UseCase<R, List<MovieEntity>> {
+public class MovieListUseCase<R> extends UseCase<R, List<MovieEntity>> {
 
   private MovieService movieService;
 
-  private ListUseCase() {
+  private MovieListUseCase() {
     this.movieService = MovieService.createdService();
   }
 
-  public static <R> ListUseCase<R> createdUseCase() {
-    return (ListUseCase<R>) new ListUseCase();
+  public static <R> MovieListUseCase<R> createdUseCase() {
+    return (MovieListUseCase<R>) new MovieListUseCase();
   }
 
   @Override protected Observable<List<MovieEntity>> interactor(@NonNull String url, @NonNull Map params) {

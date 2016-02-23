@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 import com.example.common.SchedulersCompat;
 import com.example.common.ultrafit.RequestEntity;
 import com.example.common.ultrafit.UltraParser;
+import com.example.model.bean.entity.CityEntity;
 import com.example.model.bean.entity.MovieEntity;
 import com.example.model.bean.repository.ServiceGenerator;
 import com.example.model.bean.request.MovieDetailRequest;
+import com.example.model.bean.response.CityListResponse;
 import com.example.model.bean.response.MovieDetailResponse;
 import com.example.model.bean.response.MovieListResponse;
 import com.orhanobut.logger.Logger;
@@ -27,6 +29,8 @@ public class MovieService {
 
   private interface InternalService {
 
+    @GET Observable<CityListResponse> getCityList(@Url String url, @QueryMap Map<String, String> params);
+
     @GET Observable<MovieListResponse> getMovieList(@Url String url, @QueryMap Map<String, String> params);
 
     @GET Observable<MovieDetailResponse> getMovieDetail(@Url String url, @QueryMap Map<String, String> params);
@@ -38,6 +42,37 @@ public class MovieService {
 
   public static MovieService createdService() {
     return new MovieService();
+  }
+
+  public Observable<List<CityEntity>> getCityEntities(@NonNull String url, @NonNull Map<String, String> params) {
+
+    final CityEntity cityEntityInstance = new CityEntity();
+
+    return MovieService.this.service
+        .getCityList(url, params)
+        .concatMap(new Func1<CityListResponse, Observable<CityListResponse>>() {
+          @Override public Observable<CityListResponse> call(CityListResponse cityListResponse) {
+            return cityListResponse.filterWebServiceErrors();
+          }
+        })
+        .concatMap(new Func1<CityListResponse, Observable<CityListResponse.Result>>() {
+          @Override public Observable<CityListResponse.Result> call(CityListResponse cityListResponse) {
+            return Observable.from(cityListResponse.getResultList());
+          }
+        })
+        .map(new Func1<CityListResponse.Result, CityEntity>() {
+          @Override public CityEntity call(CityListResponse.Result result) {
+
+            CityEntity clone = cityEntityInstance.newInstance();
+
+            clone.setCityId(result.cityId);
+            clone.setCityName(result.cityName);
+
+            return clone;
+          }
+        })
+        .toList()
+        .compose(SchedulersCompat.<List<CityEntity>>applyExecutorSchedulers());
   }
 
   @SuppressWarnings("unchecked")
@@ -56,7 +91,7 @@ public class MovieService {
           @Override public Observable<MovieListResponse.Result> call(MovieListResponse movieListResponse) {
             //return Observable.from(movieListResponse.getResultList());
 
-            return Observable.just(movieListResponse.getResultList().get(0), movieListResponse.getResultList().get(1));
+            return Observable.just(movieListResponse.getResultList().get(0));
           }
         })
         .concatMap(new Func1<MovieListResponse.Result, Observable<MovieDetailResponse>>() {

@@ -1,4 +1,7 @@
 <resources>
   <string name="app_name">UltraFit</string>
   <string name="smartDengg">By : SmartDengg</string>
+
+  <string name="city_title">城市</string>
+  <string name="movie_title">今日电影</string>
 </resources>

@@ -6,6 +6,8 @@ package com.example.common;
 public class Constants {
 
   public static final String BASE_URL = "http://v.juhe.cn/";
+
+  public static final String CITY_URL = "movie/citys";
   public static final String MOVIE_TODAY_URL = "movie/movies.today";
   public static final String MOVIE_DETAIL_URL = "movie/query";
 
@@ -13,7 +15,6 @@ public class Constants {
 
   public static final String LOGGER_TAG = "OkHttp";
   public static final Integer RESULT_OK = 0;
-  public static final int BEIJING_ID = 2;
 
   public static boolean isDebugChrome = true;
   public static boolean isDebugJsonLog = true;

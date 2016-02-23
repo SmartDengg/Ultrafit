@@ -11,13 +11,18 @@
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/AppTheme.SplashTheme">
-    <activity android:name=".views.activity.MainActivity"
+    <activity android:name=".views.activity.CityListActivity"
         android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+
+    <activity
+        android:name=".views.activity.MovieListActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme.TransparentActivity"/>
 
     <activity
         android:name=".views.activity.DetailActivity"
