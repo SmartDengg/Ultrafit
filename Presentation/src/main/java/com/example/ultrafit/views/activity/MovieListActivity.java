@@ -18,7 +18,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.example.common.Constants;
@@ -39,7 +38,6 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   private static final String CITY_ID = "CITY_ID";
 
   @NonNull @Bind(R.id.movie_layout_root_rl) protected RelativeLayout rootView;
-  @NonNull @Bind(R.id.movie_layout_title_tv) protected TextView titleTv;
 
   @NonNull @Bind(R.id.movie_layout_content_fl) protected FrameLayout contentLayout;
   @NonNull @Bind(R.id.movie_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
@@ -62,6 +60,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
       if (viewStub.getParent() != null) {
         MovieListActivity.this.blurIv = (ImageView) viewStub.inflate();
       } else {
+        MovieListActivity.this.blurIv.setImageDrawable(null);
         viewStub.setVisibility(View.VISIBLE);
       }
       MovieListActivity.this.navigateToDetail(position, thumbIv, movieEntity);
@@ -156,7 +155,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     this.itemView = staggeredGridLayoutManager.findViewByPosition(position).findViewById(R.id.movie_item_thumb_iv);
     this.itemView.setVisibility(View.INVISIBLE);
 
-    BitmapUtil.blurImage(MovieListActivity.this, blurIv, BitmapUtil.retrieveScreen(MovieListActivity.this));
+    BitmapUtil.blurImage(MovieListActivity.this, this.blurIv, BitmapUtil.retrieveScreen(MovieListActivity.this));
 
     Rect startBounds = new Rect();
     thumbIv.getGlobalVisibleRect(startBounds);

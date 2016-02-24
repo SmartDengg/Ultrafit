@@ -22,7 +22,8 @@ public class MovieListUseCase<R> extends UseCase<R, List<MovieEntity>> {
     return (MovieListUseCase<R>) new MovieListUseCase();
   }
 
-  @Override protected Observable<List<MovieEntity>> interactor(@NonNull String url, @NonNull Map params) {
+  @SuppressWarnings("unchecked") @Override
+  protected Observable<List<MovieEntity>> interactor(@NonNull String url, @NonNull Map params) {
     return movieService.getMovieEntities(url, params);
   }
 }

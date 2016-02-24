@@ -22,7 +22,8 @@ public class CityListUseCase<R> extends UseCase<R, List<CityEntity>> {
     return (CityListUseCase<R>) new CityListUseCase();
   }
 
-  @Override protected Observable<List<CityEntity>> interactor(@NonNull String url, @NonNull Map params) {
+  @SuppressWarnings("unchecked") @Override
+  protected Observable<List<CityEntity>> interactor(@NonNull String url, @NonNull Map params) {
     return movieService.getCityEntities(url, params);
   }
 }

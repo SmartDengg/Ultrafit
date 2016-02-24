@@ -18,8 +18,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -39,8 +39,8 @@ public class DetailActivity extends BaseActivity {
   private static final String ENTITY = "entity";
 
   @NonNull @Bind(R.id.detail_layout_thumb_iv) protected ImageView movieThumbIv;
+  @NonNull @Bind(R.id.detail_layout_content_fl) protected FrameLayout contentLayout;
 
-  @NonNull @Bind(R.id.detail_layout_primary_root_rl) protected RelativeLayout moviePrimaryRl;
   @NonNull @Bind(R.id.detail_layout_name_tv) protected TextView movieNameTv;
   @NonNull @Bind(R.id.detail_layout_category_tv) protected TextView movieCategoryTv;
   @NonNull @Bind(R.id.detail_layout_release_tv) protected TextView movieReleaseTv;
@@ -54,7 +54,6 @@ public class DetailActivity extends BaseActivity {
   private Rect startBounds;
   private float scale;
   private AnimatorSet animatorSet;
-  private MovieEntity movieEntity;
 
   public static void navigateToActivity(@NonNull AppCompatActivity startingActivity, @NonNull Rect startBounds,
                                         @NonNull Point globalOffset, @NonNull MovieEntity movieEntity) {
@@ -95,7 +94,7 @@ public class DetailActivity extends BaseActivity {
 
   private void runEnterAnimation(Bundle bundle) {
 
-    movieEntity = (MovieEntity) bundle.getSerializable(ENTITY);
+    MovieEntity movieEntity = (MovieEntity) bundle.getSerializable(ENTITY);
     if (movieEntity == null) return;
 
     this.movieNameTv.setText(movieEntity.getMovieName());
@@ -124,7 +123,7 @@ public class DetailActivity extends BaseActivity {
 
     ViewCompat.setPivotX(movieThumbIv, 0.0f);
     ViewCompat.setPivotY(movieThumbIv, 0.0f);
-    ViewCompat.setAlpha(moviePrimaryRl, 0.0f);
+    ViewCompat.setAlpha(contentLayout, 0.0f);
 
     animatorSet = new AnimatorSet();
     animatorSet
@@ -137,7 +136,7 @@ public class DetailActivity extends BaseActivity {
     animatorSet.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
 
-        ViewCompat.animate(moviePrimaryRl).alpha(1.0f).withLayer();
+        ViewCompat.animate(contentLayout).alpha(1.0f).withLayer();
 
         movieThumbIv.setLayerType(View.LAYER_TYPE_NONE, null);
         DetailActivity.this.animatorSet = null;
@@ -171,7 +170,7 @@ public class DetailActivity extends BaseActivity {
     animatorSet.setInterpolator(new DecelerateInterpolator());
     animatorSet.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationStart(Animator animation) {
-        DetailActivity.this.moviePrimaryRl.setVisibility(View.GONE);
+        DetailActivity.this.contentLayout.setVisibility(View.GONE);
       }
 
       @Override public void onAnimationEnd(Animator animation) {
