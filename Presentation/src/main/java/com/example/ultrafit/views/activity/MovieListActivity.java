@@ -18,9 +18,9 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import com.example.common.Constants;
 import com.example.common.Util.BitmapUtil;
 import com.example.model.bean.entity.MovieEntity;
@@ -30,16 +30,16 @@ import com.example.ultrafit.presenter.MovieListPresenter;
 import com.example.ultrafit.presenter.MovieListPresenterImp;
 import com.example.ultrafit.ui.MarginDecoration;
 import com.example.ultrafit.views.ListView;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import java.util.List;
 import rx.Observable;
 
-public class MovieListActivity extends RxAppCompatActivity implements ListView<MovieEntity> {
+public class MovieListActivity extends BaseActivity implements ListView<MovieEntity> {
 
   private static final String START_LOCATION_Y = "START_LOCATION_Y";
   private static final String CITY_ID = "CITY_ID";
 
   @NonNull @Bind(R.id.movie_layout_root_rl) protected RelativeLayout rootView;
+  @NonNull @Bind(R.id.movie_layout_title_tv) protected TextView titleTv;
 
   @NonNull @Bind(R.id.movie_layout_content_fl) protected FrameLayout contentLayout;
   @NonNull @Bind(R.id.movie_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
@@ -88,13 +88,15 @@ public class MovieListActivity extends RxAppCompatActivity implements ListView<M
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.movie_activity);
-    ButterKnife.bind(MovieListActivity.this);
 
     MovieListActivity.this.initView(savedInstanceState);
 
     this.movieListPresenter = MovieListPresenterImp.createdPresenter();
     this.movieListPresenter.attachView(MovieListActivity.this);
+  }
+
+  @Override protected int getLayoutId() {
+    return R.layout.movie_activity;
   }
 
   private void initView(Bundle savedInstanceState) {
@@ -192,14 +194,8 @@ public class MovieListActivity extends RxAppCompatActivity implements ListView<M
     this.viewStub.setVisibility(View.GONE);
   }
 
-  @Override public void finish() {
-    super.finish();
-    overridePendingTransition(0, 0);
-  }
-
   @Override protected void onDestroy() {
     super.onDestroy();
-    ButterKnife.unbind(MovieListActivity.this);
     this.movieListPresenter.detachView();
   }
 }

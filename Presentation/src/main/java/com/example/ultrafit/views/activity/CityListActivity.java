@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
-import butterknife.ButterKnife;
 import com.example.common.Constants;
 import com.example.common.Util.DensityUtil;
 import com.example.model.bean.entity.CityEntity;
@@ -25,14 +24,13 @@ import com.example.ultrafit.presenter.CityListPresenter;
 import com.example.ultrafit.presenter.CityListPresenterImp;
 import com.example.ultrafit.ui.MarginDecoration;
 import com.example.ultrafit.views.ListView;
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import java.util.List;
 import rx.Observable;
 
 /**
  * Created by SmartDengg on 2016/2/24.
  */
-public class CityListActivity extends RxAppCompatActivity implements ListView<CityEntity> {
+public class CityListActivity extends BaseActivity implements ListView<CityEntity> {
 
   @NonNull @BindString(R.string.city_title) protected String title;
 
@@ -66,14 +64,16 @@ public class CityListActivity extends RxAppCompatActivity implements ListView<Ci
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.city_activity);
     getWindow().setBackgroundDrawable(null);
-    ButterKnife.bind(CityListActivity.this);
 
     CityListActivity.this.initView(savedInstanceState);
 
     this.cityListPresenter = CityListPresenterImp.createdPresenter();
     this.cityListPresenter.attachView(CityListActivity.this);
+  }
+
+  @Override protected int getLayoutId() {
+    return R.layout.city_activity;
   }
 
   private void initView(Bundle savedInstanceState) {
@@ -154,7 +154,6 @@ public class CityListActivity extends RxAppCompatActivity implements ListView<Ci
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    ButterKnife.unbind(CityListActivity.this);
     this.cityListPresenter.detachView();
   }
 }

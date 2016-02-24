@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.example.common.Util.DensityUtil;
 import com.example.model.bean.entity.MovieEntity;
@@ -33,7 +32,7 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends BaseActivity {
 
   private static final String START_BOUND = "startBounds";
   private static final String GLOBAL_OFFSET = "globalOffset";
@@ -71,10 +70,12 @@ public class DetailActivity extends AppCompatActivity {
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.detail_activity);
-    ButterKnife.bind(DetailActivity.this);
 
     DetailActivity.this.initView(savedInstanceState);
+  }
+
+  @Override protected int getLayoutId() {
+    return R.layout.detail_activity;
   }
 
   private void initView(Bundle savedInstanceState) {
@@ -204,6 +205,5 @@ public class DetailActivity extends AppCompatActivity {
 
     Picasso.with(DetailActivity.this).cancelRequest(this.movieThumbIv);
     if (animatorSet != null && animatorSet.isRunning()) animatorSet.cancel();
-    ButterKnife.unbind(DetailActivity.this);
   }
 }
