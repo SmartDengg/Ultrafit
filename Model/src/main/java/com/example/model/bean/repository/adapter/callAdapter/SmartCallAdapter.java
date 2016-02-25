@@ -1,5 +1,6 @@
 package com.example.model.bean.repository.adapter.callAdapter;
 
+import com.example.common.ExecutorsManager;
 import com.example.model.bean.repository.callback.SmartCallback;
 import java.io.IOException;
 import okhttp3.Request;
@@ -23,9 +24,11 @@ public class SmartCallAdapter<T> implements SmartCall<T> {
   private static int CODE_600 = 600;
 
   private Call<T> delegate;
+  private ExecutorsManager.MainThreadExecutor callbackExecutor;
 
-  public SmartCallAdapter(Call<T> delegate) {
+  public SmartCallAdapter(Call<T> delegate, ExecutorsManager.MainThreadExecutor mainThreadExecutor) {
     this.delegate = delegate;
+    this.callbackExecutor = mainThreadExecutor;
   }
 
   @Override public Response<T> execute() throws IOException {
@@ -35,33 +38,41 @@ public class SmartCallAdapter<T> implements SmartCall<T> {
   @Override public void enqueue(final SmartCallback<T> callback) {
 
     delegate.enqueue(new Callback<T>() {
-      @Override public void onResponse(Call<T> call, Response<T> response) {
+      @Override public void onResponse(Call<T> call, final Response<T> response) {
 
-        int code = response.code();
-        if (code >= CODE_200 && code < CODE_300) {
-          T body = response.body();
-          if (code == CODE_204 || code == CODE_205 || body == null) {
-            callback.noContent(response);
-          } else {
-            callback.success(response.body());
+        callbackExecutor.execute(new Runnable() {
+          @Override public void run() {
+            int code = response.code();
+            if (code >= CODE_200 && code < CODE_300) {
+              T body = response.body();
+              if (code == CODE_204 || code == CODE_205 || body == null) {
+                callback.noContent(response);
+              } else {
+                callback.success(response.body());
+              }
+            } else if (code == CODE_401) {
+              callback.unauthenticated(response);
+            } else if (code >= CODE_400 && code < CODE_500) {
+              callback.clientError(response);
+            } else if (code >= CODE_500 && code < CODE_600) {
+              callback.serverError(response);
+            } else {
+              callback.unexpectedError(new RuntimeException("Unexpected response " + response));
+            }
           }
-        } else if (code == CODE_401) {
-          callback.unauthenticated(response);
-        } else if (code >= CODE_400 && code < CODE_500) {
-          callback.clientError(response);
-        } else if (code >= CODE_500 && code < CODE_600) {
-          callback.serverError(response);
-        } else {
-          callback.unexpectedError(new RuntimeException("Unexpected response " + response));
-        }
+        });
       }
 
-      @Override public void onFailure(Call<T> call, Throwable t) {
-        if (t instanceof IOException) {
-          callback.networkError((IOException) t);
-        } else {
-          callback.unexpectedError(t);
-        }
+      @Override public void onFailure(Call<T> call, final Throwable t) {
+        callbackExecutor.execute(new Runnable() {
+          @Override public void run() {
+            if (t instanceof IOException) {
+              callback.networkError((IOException) t);
+            } else {
+              callback.unexpectedError(t);
+            }
+          }
+        });
       }
     });
   }

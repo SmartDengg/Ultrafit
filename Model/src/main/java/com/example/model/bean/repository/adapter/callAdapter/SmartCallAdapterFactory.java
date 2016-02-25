@@ -1,5 +1,6 @@
 package com.example.model.bean.repository.adapter.callAdapter;
 
+import com.example.common.ExecutorsManager;
 import com.example.model.bean.repository.utils.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -13,7 +14,10 @@ import retrofit2.Retrofit;
  */
 public class SmartCallAdapterFactory extends CallAdapter.Factory {
 
+  private ExecutorsManager.MainThreadExecutor mainThreadExecutor;
+
   private SmartCallAdapterFactory() {
+    this.mainThreadExecutor = ExecutorsManager.getInstance().mainThreadExecutor();
   }
 
   public static SmartCallAdapterFactory create() {
@@ -39,7 +43,7 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
       }
 
       @Override public <R> SmartCall<?> adapt(Call<R> call) {
-        return new SmartCallAdapter<>(call);
+        return new SmartCallAdapter<>(call,mainThreadExecutor);
       }
     };
   }
