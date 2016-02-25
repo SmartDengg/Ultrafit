@@ -9,20 +9,25 @@ import java.util.Map;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.subscriptions.Subscriptions;
 
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public abstract class UseCase<R, T> {
+public abstract class UseCase<R, S> {
 
   private Subscription subscription = Subscriptions.empty();
 
-  @SuppressWarnings("unchecked") public void subscribe(R requestEntity, Observer<T> useCaseSubscriber) {
+  @SuppressWarnings("unchecked") public void subscribe(final R requestEntity, Observer<S> useCaseSubscriber) {
 
-    UseCase.this.subscription = Observable.just(requestEntity).concatMap(new Func1<R, Observable<T>>() {
-      @Override public Observable<T> call(R r) {
+    subscription = Observable.fromCallable(new Func0<R>() {
+      @Override public R call() {
+        return requestEntity;
+      }
+    }).concatMap(new Func1<R, Observable<S>>() {
+      @Override public Observable<S> call(R r) {
 
         RequestEntity requestEntity = UltraParser.createParser(r).parseRequestEntity();
         Logger.d("Begin Request!!! \nType : %s \n" + "URL : %s \n" + "Params : %s \n", //
@@ -30,8 +35,8 @@ public abstract class UseCase<R, T> {
 
         return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getQueryMap());
       }
-    }).onBackpressureBuffer().take(1).filter(new Func1<T, Boolean>() {
-      @Override public Boolean call(T t) {
+    }).onBackpressureBuffer().take(1).filter(new Func1<S, Boolean>() {
+      @Override public Boolean call(S s) {
         return !subscription.isUnsubscribed();
       }
     }).subscribe(useCaseSubscriber);
@@ -43,5 +48,5 @@ public abstract class UseCase<R, T> {
     }
   }
 
-  @CheckResult protected abstract Observable<T> interactor(@NonNull String url, @NonNull Map params);
+  @CheckResult protected abstract Observable<S> interactor(@NonNull String url, @NonNull Map params);
 }

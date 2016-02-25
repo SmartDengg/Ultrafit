@@ -8,6 +8,7 @@ import com.example.ultrafit.views.ListView;
 import java.util.List;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Func0;
 
 /**
  * Created by SmartDengg on 2016/2/22.
@@ -37,8 +38,13 @@ public class CityListPresenterImp implements CityListPresenter<CityEntity> {
     this.listUseCase.unsubscribe();
   }
 
-  @SuppressWarnings("unchecked") private void showContent(List<CityEntity> cityEntities) {
-    this.listView.showMovieList(Observable.just(cityEntities));
+  @SuppressWarnings("unchecked") private void showContent(final List<CityEntity> cityEntities) {
+
+    this.listView.showDataList(Observable.fromCallable(new Func0<List<CityEntity>>() {
+      @Override public List call() {
+        return cityEntities;
+      }
+    }));
   }
 
   private void showError(String errorMessage) {

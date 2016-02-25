@@ -8,7 +8,7 @@ import rx.Observable;
  */
 public interface ListView<T> {
 
-  void showMovieList(Observable<List<T>> data);
+  void showDataList(Observable<List<T>> data);
 
   void showError(String errorMessage);
 }

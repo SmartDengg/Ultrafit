@@ -142,7 +142,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     this.cityListPresenter.loadData();
   }
 
-  @Override public void showMovieList(Observable<List<CityEntity>> data) {
+  @Override public void showDataList(Observable<List<CityEntity>> data) {
     CityListActivity.this.closeRefresh();
     data.subscribe(this.cityListAdapter);
   }
