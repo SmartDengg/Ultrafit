@@ -22,20 +22,24 @@ public abstract class UseCase<R, S> {
 
   @SuppressWarnings("unchecked") public void subscribe(final R requestEntity, Observer<S> useCaseSubscriber) {
 
-    subscription = Observable.fromCallable(new Func0<R>() {
+    this.subscription = Observable.fromCallable(new Func0<R>() {
       @Override public R call() {
         return requestEntity;
       }
+    }).switchMap(new Func1<R, Observable<R>>() {
+      @Override public Observable<R> call(R r) {
+        return Observable.just(r);
+      }
     }).concatMap(new Func1<R, Observable<S>>() {
       @Override public Observable<S> call(R r) {
-
+        
         RequestEntity requestEntity = UltraParser.createParser(r).parseRequestEntity();
         Logger.d("Begin Request!!! \nType : %s \n" + "URL : %s \n" + "Params : %s \n", //
                  requestEntity.getRestType().name(), requestEntity.getUrl(), requestEntity.getQueryMap());
 
         return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getQueryMap());
       }
-    }).onBackpressureBuffer().take(1).filter(new Func1<S, Boolean>() {
+    }).onBackpressureBuffer().takeFirst(new Func1<S, Boolean>() {
       @Override public Boolean call(S s) {
         return !subscription.isUnsubscribed();
       }

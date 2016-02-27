@@ -12,12 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import butterknife.Bind;
 import com.example.common.Constants;
@@ -37,7 +37,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   private static final String START_LOCATION_Y = "START_LOCATION_Y";
   private static final String CITY_ID = "CITY_ID";
 
-  @NonNull @Bind(R.id.movie_layout_root_rl) protected RelativeLayout rootView;
+  @NonNull @Bind(R.id.movie_layout_root_view) protected ViewGroup rootView;
 
   @NonNull @Bind(R.id.movie_layout_content_fl) protected FrameLayout contentLayout;
   @NonNull @Bind(R.id.movie_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
@@ -120,13 +120,18 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     this.location = getIntent().getIntExtra(START_LOCATION_Y, 0);
 
     if (savedInstanceState == null) {
-      this.contentLayout.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-        @Override public boolean onPreDraw() {
-          contentLayout.getViewTreeObserver().removeOnPreDrawListener(this);
-          MovieListActivity.this.startEnterAnim(location);
-          return true;
-        }
-      });
+
+      ViewTreeObserver viewTreeObserver = this.rootView.getViewTreeObserver();
+      if (viewTreeObserver.isAlive()) {
+        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+          @Override public boolean onPreDraw() {
+            rootView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+            MovieListActivity.this.startEnterAnim(location);
+            return true;
+          }
+        });
+      }
     } else {
       MovieListActivity.this.initData();
     }

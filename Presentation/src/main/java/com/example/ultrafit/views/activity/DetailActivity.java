@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -37,6 +38,8 @@ public class DetailActivity extends BaseActivity {
   private static final String START_BOUND = "startBounds";
   private static final String GLOBAL_OFFSET = "globalOffset";
   private static final String ENTITY = "entity";
+
+  @NonNull @Bind(R.id.detail_layout_root_view) protected ViewGroup rootView;
 
   @NonNull @Bind(R.id.detail_layout_thumb_iv) protected ImageView movieThumbIv;
   @NonNull @Bind(R.id.detail_layout_content_fl) protected FrameLayout contentLayout;
@@ -80,15 +83,18 @@ public class DetailActivity extends BaseActivity {
   private void initView(Bundle savedInstanceState) {
 
     if (savedInstanceState == null) {
-      movieThumbIv.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-        @Override public boolean onPreDraw() {
 
-          movieThumbIv.getViewTreeObserver().removeOnPreDrawListener(this);
-          DetailActivity.this.runEnterAnimation(getIntent().getExtras());
+      ViewTreeObserver viewTreeObserver = this.rootView.getViewTreeObserver();
+      if (viewTreeObserver.isAlive()) {
+        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+          @Override public boolean onPreDraw() {
+            rootView.getViewTreeObserver().removeOnPreDrawListener(this);
 
-          return true;
-        }
-      });
+            DetailActivity.this.runEnterAnimation(getIntent().getExtras());
+            return true;
+          }
+        });
+      }
     }
   }
 

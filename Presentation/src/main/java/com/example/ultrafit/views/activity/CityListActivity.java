@@ -34,6 +34,8 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
 
   @NonNull @BindString(R.string.city_title) protected String title;
 
+  @NonNull @Bind(R.id.city_layout_root_view) protected ViewGroup rootView;
+
   @NonNull @Bind(R.id.city_layout_title_tv) protected TextView titleTv;
   @NonNull @Bind(R.id.city_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
   @NonNull @Bind(R.id.city_layout_rv) protected RecyclerView recyclerView;
@@ -98,15 +100,19 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     recyclerView.setAdapter(cityListAdapter);
 
     if (savedInstanceState == null) {
-      this.titleTv.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-        @Override public boolean onPreDraw() {
-          titleTv.getViewTreeObserver().removeOnPreDrawListener(this);
 
-          CityListActivity.this.contentViewHeight = titleTv.getHeight();
-          CityListActivity.this.collapseToolbar();
-          return true;
-        }
-      });
+      ViewTreeObserver viewTreeObserver = this.rootView.getViewTreeObserver();
+      if (viewTreeObserver.isAlive()) {
+        viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+          @Override public boolean onPreDraw() {
+            rootView.getViewTreeObserver().removeOnPreDrawListener(this);
+
+            CityListActivity.this.contentViewHeight = titleTv.getHeight();
+            CityListActivity.this.collapseToolbar();
+            return true;
+          }
+        });
+      }
     } else {
       CityListActivity.this.initData();
     }
