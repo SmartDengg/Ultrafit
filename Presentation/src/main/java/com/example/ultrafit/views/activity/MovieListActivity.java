@@ -11,15 +11,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 import butterknife.Bind;
+import butterknife.BindString;
 import com.example.common.Constants;
 import com.example.common.Util.BitmapUtil;
 import com.example.model.bean.entity.MovieEntity;
@@ -37,7 +41,10 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   private static final String START_LOCATION_Y = "START_LOCATION_Y";
   private static final String CITY_ID = "CITY_ID";
 
+  @NonNull @BindString(R.string.movie_title) protected String title;
+
   @NonNull @Bind(R.id.movie_layout_root_view) protected ViewGroup rootView;
+  @NonNull @Bind(R.id.toolbar) protected Toolbar toolbar;
 
   @NonNull @Bind(R.id.movie_layout_content_fl) protected FrameLayout contentLayout;
   @NonNull @Bind(R.id.movie_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
@@ -51,11 +58,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   private View itemView;
   private ImageView blurIv;
 
-  private int location;
-  private String cityId;
-
   private MovieAdapter.Callback callback = new MovieAdapter.Callback() {
-
     @Override public void onItemClick(int position, ImageView thumbIv, MovieEntity movieEntity) {
       if (viewStub.getParent() != null) {
         MovieListActivity.this.blurIv = (ImageView) viewStub.inflate();
@@ -78,7 +81,6 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   };
 
   public static void startFromLocation(AppCompatActivity startingActivity, int startingLocationY, String cityId) {
-
     Intent intent = new Intent(startingActivity, MovieListActivity.class);
     intent.putExtra(START_LOCATION_Y, startingLocationY);
     intent.putExtra(CITY_ID, cityId);
@@ -88,46 +90,48 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    MovieListActivity.this.initPresenter();
     MovieListActivity.this.initView(savedInstanceState);
-
-    this.movieListPresenter = MovieListPresenterImp.createdPresenter();
-    this.movieListPresenter.attachView(MovieListActivity.this);
   }
 
   @Override protected int getLayoutId() {
     return R.layout.movie_activity;
   }
 
+  private void initPresenter() {
+    this.movieListPresenter = MovieListPresenterImp.createdPresenter();
+    this.movieListPresenter.attachView(MovieListActivity.this);
+  }
+
   private void initView(Bundle savedInstanceState) {
 
-    swipeRefreshLayout.setColorSchemeResources(Constants.colors);
-    swipeRefreshLayout.setOnRefreshListener(listener);
-    swipeRefreshLayout.post(new Runnable() {
+    MovieListActivity.this.setSupportActionBar(toolbar);
+    MovieListActivity.this.getSupportActionBar().setTitle(title);
+    this.toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow));
+
+    this.swipeRefreshLayout.setColorSchemeResources(Constants.colors);
+    this.swipeRefreshLayout.setOnRefreshListener(listener);
+    this.swipeRefreshLayout.post(new Runnable() {
       @Override public void run() {
         swipeRefreshLayout.setRefreshing(true);
       }
     });
-    staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+    this.staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
-    recyclerView.addItemDecoration(new MarginDecoration(MovieListActivity.this));
-    recyclerView.setHasFixedSize(true);
-    recyclerView.setLayoutManager(staggeredGridLayoutManager);
-    movieAdapter = new MovieAdapter(MovieListActivity.this);
-    movieAdapter.setCallback(callback);
-    recyclerView.setAdapter(movieAdapter);
-
-    this.cityId = getIntent().getStringExtra(CITY_ID);
-    this.location = getIntent().getIntExtra(START_LOCATION_Y, 0);
+    this.recyclerView.addItemDecoration(new MarginDecoration(MovieListActivity.this));
+    this.recyclerView.setHasFixedSize(true);
+    this.recyclerView.setLayoutManager(staggeredGridLayoutManager);
+    this.movieAdapter = new MovieAdapter(MovieListActivity.this);
+    this.movieAdapter.setCallback(callback);
+    this.recyclerView.setAdapter(movieAdapter);
 
     if (savedInstanceState == null) {
-
       ViewTreeObserver viewTreeObserver = this.rootView.getViewTreeObserver();
       if (viewTreeObserver.isAlive()) {
         viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
           @Override public boolean onPreDraw() {
             rootView.getViewTreeObserver().removeOnPreDrawListener(this);
-
-            MovieListActivity.this.startEnterAnim(location);
+            MovieListActivity.this.startEnterAnim(getIntent().getIntExtra(START_LOCATION_Y, 0));
             return true;
           }
         });
@@ -138,7 +142,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   }
 
   private void initData() {
-    this.movieListPresenter.loadData(cityId);
+    this.movieListPresenter.loadData(getIntent().getStringExtra(CITY_ID));
   }
 
   @Override public void showDataList(Observable<List<MovieEntity>> data) {
@@ -181,7 +185,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     ViewCompat
         .animate(contentLayout)
         .scaleY(1.0f)
-        .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+        .setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime))
         .setInterpolator(new AccelerateInterpolator())
         .withLayer()
         .setListener(new ViewPropertyAnimatorListenerAdapter() {
@@ -191,11 +195,35 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
         });
   }
 
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        MovieListActivity.this.exit();
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
   @Override protected void onPostResume() {
     super.onPostResume();
 
     if (this.itemView != null) this.itemView.setVisibility(View.VISIBLE);
     this.viewStub.setVisibility(View.GONE);
+  }
+
+  @Override protected void exit() {
+
+    ViewCompat
+        .animate(contentLayout)
+        .translationY(contentLayout.getHeight())
+        .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
+        .setInterpolator(new LinearInterpolator())
+        .withLayer()
+        .setListener(new ViewPropertyAnimatorListenerAdapter() {
+          @Override public void onAnimationEnd(View view) {
+            MovieListActivity.this.finish();
+          }
+        });
   }
 
   @Override protected void onDestroy() {

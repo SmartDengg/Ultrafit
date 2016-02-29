@@ -22,7 +22,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
   @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-      BaseActivity.this.finish();
+      BaseActivity.this.exit();
     }
     return false;
   }
@@ -36,6 +36,8 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     super.onDestroy();
     ButterKnife.unbind(BaseActivity.this);
   }
+
+  protected abstract void exit();
 
   protected abstract int getLayoutId();
 }

@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -193,16 +192,13 @@ public class DetailActivity extends BaseActivity {
     DetailActivity.this.runExitAnimator();
   }
 
+  @Override protected void exit() {
+    DetailActivity.this.runExitAnimator();
+  }
+
   @Override public void finish() {
     super.finish();
     overridePendingTransition(0, 0);
-  }
-
-  @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-      DetailActivity.this.onCancel();
-    }
-    return false;
   }
 
   @Override protected void onDestroy() {

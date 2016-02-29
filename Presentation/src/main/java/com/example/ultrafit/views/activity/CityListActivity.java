@@ -8,10 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -36,7 +36,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
 
   @NonNull @Bind(R.id.city_layout_root_view) protected ViewGroup rootView;
 
-  @NonNull @Bind(R.id.city_layout_title_tv) protected TextView titleTv;
+  @NonNull @Bind(R.id.toolbar) protected Toolbar toolbar;
   @NonNull @Bind(R.id.city_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
   @NonNull @Bind(R.id.city_layout_rv) protected RecyclerView recyclerView;
 
@@ -47,7 +47,6 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
 
   private CityListAdapter.Callback callback = new CityListAdapter.Callback() {
     @Override public void onItemClick(View itemView, CityEntity cityEntity) {
-
       int location = DensityUtil.getLocationY(itemView);
       MovieListActivity.startFromLocation(CityListActivity.this, location, cityEntity.getCityId());
       overridePendingTransition(0, 0);
@@ -68,21 +67,27 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     super.onCreate(savedInstanceState);
     getWindow().setBackgroundDrawable(null);
 
+    CityListActivity.this.initPresenter();
     CityListActivity.this.initView(savedInstanceState);
-
-    this.cityListPresenter = CityListPresenterImp.createdPresenter();
-    this.cityListPresenter.attachView(CityListActivity.this);
   }
 
   @Override protected int getLayoutId() {
     return R.layout.city_activity;
   }
 
+  private void initPresenter() {
+    this.cityListPresenter = CityListPresenterImp.createdPresenter();
+    this.cityListPresenter.attachView(CityListActivity.this);
+  }
+
   private void initView(Bundle savedInstanceState) {
 
-    swipeRefreshLayout.setColorSchemeResources(Constants.colors);
-    swipeRefreshLayout.setOnRefreshListener(listener);
-    swipeRefreshLayout.post(new Runnable() {
+    CityListActivity.this.setSupportActionBar(toolbar);
+    CityListActivity.this.getSupportActionBar().setTitle("");
+
+    this.swipeRefreshLayout.setColorSchemeResources(Constants.colors);
+    this.swipeRefreshLayout.setOnRefreshListener(listener);
+    this.swipeRefreshLayout.post(new Runnable() {
       @Override public void run() {
         swipeRefreshLayout.setRefreshing(true);
       }
@@ -90,14 +95,16 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
 
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CityListActivity.this);
     linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-    linearLayoutManager.setSmoothScrollbarEnabled(false);
+    linearLayoutManager.setSmoothScrollbarEnabled(true);
 
-    recyclerView.addItemDecoration(new MarginDecoration(CityListActivity.this));
-    recyclerView.setHasFixedSize(true);
-    recyclerView.setLayoutManager(linearLayoutManager);
-    cityListAdapter = new CityListAdapter(CityListActivity.this);
-    cityListAdapter.setCallback(callback);
-    recyclerView.setAdapter(cityListAdapter);
+    this.recyclerView.setLayoutManager(linearLayoutManager);
+    this.recyclerView.addItemDecoration(new MarginDecoration(CityListActivity.this));
+    this.recyclerView.setHasFixedSize(true);
+    this.cityListAdapter = new CityListAdapter(CityListActivity.this);
+    this.cityListAdapter.setCallback(callback);
+    this.recyclerView.setAdapter(cityListAdapter);
+
+    CityListActivity.this.setSupportActionBar(toolbar);
 
     if (savedInstanceState == null) {
 
@@ -107,7 +114,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
           @Override public boolean onPreDraw() {
             rootView.getViewTreeObserver().removeOnPreDrawListener(this);
 
-            CityListActivity.this.contentViewHeight = titleTv.getHeight();
+            CityListActivity.this.contentViewHeight = toolbar.getHeight();
             CityListActivity.this.collapseToolbar();
             return true;
           }
@@ -125,15 +132,15 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     valueHeightAnimator.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime));
     valueHeightAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
       @Override public void onAnimationUpdate(ValueAnimator animation) {
-        ViewGroup.LayoutParams layoutParams = titleTv.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
         layoutParams.height = (Integer) animation.getAnimatedValue();
-        titleTv.setLayoutParams(layoutParams);
+        toolbar.setLayoutParams(layoutParams);
       }
     });
 
     valueHeightAnimator.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
-        CityListActivity.this.titleTv.setText(title);
+        CityListActivity.this.getSupportActionBar().setTitle(title);
         CityListActivity.this.initData();
       }
     });
@@ -156,6 +163,10 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
   @Override public void showError(String errorMessage) {
     CityListActivity.this.closeRefresh();
     Toast.makeText(CityListActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override protected void exit() {
+    CityListActivity.this.finish();
   }
 
   @Override protected void onDestroy() {

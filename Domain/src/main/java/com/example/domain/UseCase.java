@@ -32,9 +32,9 @@ public abstract class UseCase<R, S> {
       }
     }).concatMap(new Func1<R, Observable<S>>() {
       @Override public Observable<S> call(R r) {
-        
+
         RequestEntity requestEntity = UltraParser.createParser(r).parseRequestEntity();
-        Logger.d("Begin Request!!! \nType : %s \n" + "URL : %s \n" + "Params : %s \n", //
+        Logger.d("Request entity!!! \nType : %s \n" + "URL : %s \n" + "Params : %s \n", //
                  requestEntity.getRestType().name(), requestEntity.getUrl(), requestEntity.getQueryMap());
 
         return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getQueryMap());
