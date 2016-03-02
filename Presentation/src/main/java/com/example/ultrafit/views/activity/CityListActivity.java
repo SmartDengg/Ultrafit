@@ -113,7 +113,6 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
         viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
           @Override public boolean onPreDraw() {
             rootView.getViewTreeObserver().removeOnPreDrawListener(this);
-
             CityListActivity.this.contentViewHeight = toolbar.getHeight();
             CityListActivity.this.collapseToolbar();
             return true;
@@ -147,10 +146,6 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     valueHeightAnimator.start();
   }
 
-  private void closeRefresh() {
-    if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
-  }
-
   private void initData() {
     this.cityListPresenter.loadData();
   }
@@ -167,6 +162,10 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
 
   @Override protected void exit() {
     CityListActivity.this.finish();
+  }
+
+  private void closeRefresh() {
+    if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
   }
 
   @Override protected void onDestroy() {
