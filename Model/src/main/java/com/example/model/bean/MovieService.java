@@ -3,7 +3,7 @@ package com.example.model.bean;
 import android.support.annotation.NonNull;
 import com.example.common.SchedulersCompat;
 import com.example.common.ultrafit.RequestEntity;
-import com.example.common.ultrafit.UltraParser;
+import com.example.common.ultrafit.UltraParserFactory;
 import com.example.model.bean.entity.CityEntity;
 import com.example.model.bean.entity.MovieEntity;
 import com.example.model.bean.repository.ServiceGenerator;
@@ -98,7 +98,7 @@ public class MovieService {
           @Override public Observable<MovieDetailResponse> call(MovieListResponse.Result result) {
 
             RequestEntity requestEntity =
-                UltraParser.createParser(new MovieDetailRequest(result.movieId)).parseRequestEntity();
+                UltraParserFactory.createParser(new MovieDetailRequest(result.movieId)).parseRequestEntity();
             Logger.d("Request entity!!! \n Type : %s \n" + "URL : %s \n" + "Params : %s \n",//
                      requestEntity.getRestType().name(), requestEntity.getUrl(), requestEntity.getQueryMap());
 

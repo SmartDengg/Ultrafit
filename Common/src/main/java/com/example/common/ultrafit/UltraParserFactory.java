@@ -14,49 +14,49 @@ import java.util.Map;
 /**
  * Created by SmartDengg on 2016/2/21.
  */
-public class UltraParser {
+public class UltraParserFactory {
 
   private Object rawEntity;
   private RequestEntity requestEntity;
   private Class<?> clazz;
 
-  private UltraParser(Object rawEntity) {
+  private UltraParserFactory(Object rawEntity) {
     this.rawEntity = rawEntity;
     this.requestEntity = new RequestEntity();
   }
 
-  public static UltraParser createParser(Object rawEntity) {
-    return new UltraParser(rawEntity);
+  public static UltraParserFactory createParser(Object rawEntity) {
+    return new UltraParserFactory(rawEntity);
   }
 
   public String parseUrl() {
-    UltraParser.this.installRestUrl();
+    UltraParserFactory.this.installRestUrl();
     return requestEntity.getUrl();
   }
 
   private void installRestUrl() {
-    RequestEntity tempEntity = UltraParser.this.internalParseUrl();
+    RequestEntity tempEntity = UltraParserFactory.this.internalParseUrl();
     requestEntity.setRestType(tempEntity.getRestType()).setUrl(tempEntity.getUrl());
   }
 
   public Map<String, String> parseParameter() {
-    UltraParser.this.installParams();
+    UltraParserFactory.this.installParams();
     return requestEntity.getQueryMap();
   }
 
   private void installParams() {
-    RequestEntity tempEntity = UltraParser.this.internalParseParameter();
+    RequestEntity tempEntity = UltraParserFactory.this.internalParseParameter();
     requestEntity.setQueryMap(tempEntity.getQueryMap());
   }
 
   public RequestEntity parseRequestEntity() {
 
     if (requestEntity.getRestType() == null || requestEntity.getUrl() == null) {
-      UltraParser.this.installRestUrl();
+      UltraParserFactory.this.installRestUrl();
     }
 
     if (requestEntity.getQueryMap() == null) {
-      UltraParser.this.installParams();
+      UltraParserFactory.this.installParams();
     }
 
     return requestEntity;
