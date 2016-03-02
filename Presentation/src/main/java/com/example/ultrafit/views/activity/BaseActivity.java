@@ -1,7 +1,9 @@
 package com.example.ultrafit.views.activity;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import butterknife.ButterKnife;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -18,6 +20,15 @@ public abstract class BaseActivity extends RxAppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(BaseActivity.this.getLayoutId());
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        BaseActivity.this.exit();
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -39,5 +50,5 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
   protected abstract void exit();
 
-  protected abstract int getLayoutId();
+  @LayoutRes protected abstract int getLayoutId();
 }

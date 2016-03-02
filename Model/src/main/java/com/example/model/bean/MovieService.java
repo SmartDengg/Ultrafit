@@ -89,9 +89,9 @@ public class MovieService {
         })
         .concatMap(new Func1<MovieListResponse, Observable<MovieListResponse.Result>>() {
           @Override public Observable<MovieListResponse.Result> call(MovieListResponse movieListResponse) {
-            return Observable.from(movieListResponse.getResultList());
+            //return Observable.from(movieListResponse.getResultList());
 
-            //return Observable.just(movieListResponse.getResultList().get(0), movieListResponse.getResultList().get(1));
+            return Observable.just(movieListResponse.getResultList().get(0));
           }
         })
         .concatMap(new Func1<MovieListResponse.Result, Observable<MovieDetailResponse>>() {
@@ -99,7 +99,7 @@ public class MovieService {
 
             RequestEntity requestEntity =
                 UltraParser.createParser(new MovieDetailRequest(result.movieId)).parseRequestEntity();
-            Logger.d("Begin Request!!! \n Type : %s \n" + "URL : %s \n" + "Params : %s \n",//
+            Logger.d("Request entity!!! \n Type : %s \n" + "URL : %s \n" + "Params : %s \n",//
                      requestEntity.getRestType().name(), requestEntity.getUrl(), requestEntity.getQueryMap());
 
             return service

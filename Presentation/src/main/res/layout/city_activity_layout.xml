@@ -10,7 +10,7 @@
     tools:context=".views.activity.MovieListActivity">
 
   <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
+      android:id="@+id/city_layout_toolbar"
       android:layout_width="match_parent"
       android:layout_height="@dimen/material_128dp"
       android:theme="@style/ToolbarTheme"
@@ -18,24 +18,11 @@
       app:contentInsetStart="0dp"
       app:titleTextAppearance="@style/Toolbar.TitleText"
   >
-
   </android.support.v7.widget.Toolbar>
-
-  <!--  <TextView
-        android:id="@+id/city_layout_title_tv"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/material_128dp"
-        android:textSize="@dimen/material_20sp"
-        android:textColor="@color/material_white"
-        android:textStyle="italic"
-        android:gravity="center"
-        android:background="@color/colorPrimary"
-        tools:text="@string/movie_title"
-    />-->
 
   <android.support.v4.widget.SwipeRefreshLayout
       android:id="@+id/city_layout_srl"
-      android:layout_below="@id/toolbar"
+      android:layout_below="@id/city_layout_toolbar"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
   >

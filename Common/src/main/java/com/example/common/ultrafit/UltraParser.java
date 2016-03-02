@@ -30,28 +30,23 @@ public class UltraParser {
   }
 
   public String parseUrl() {
-
     UltraParser.this.installRestUrl();
-
     return requestEntity.getUrl();
   }
 
   private void installRestUrl() {
-
-    RequestEntity cloneEntity = UltraParser.this.internalParseUrl();
-    requestEntity.setRestType(cloneEntity.getRestType()).setUrl(cloneEntity.getUrl());
+    RequestEntity tempEntity = UltraParser.this.internalParseUrl();
+    requestEntity.setRestType(tempEntity.getRestType()).setUrl(tempEntity.getUrl());
   }
 
   public Map<String, String> parseParameter() {
-
     UltraParser.this.installParams();
-
     return requestEntity.getQueryMap();
   }
 
   private void installParams() {
-    RequestEntity cloneEntity = UltraParser.this.internalParseParameter();
-    requestEntity.setQueryMap(cloneEntity.getQueryMap());
+    RequestEntity tempEntity = UltraParser.this.internalParseParameter();
+    requestEntity.setQueryMap(tempEntity.getQueryMap());
   }
 
   public RequestEntity parseRequestEntity() {
@@ -105,16 +100,16 @@ public class UltraParser {
     }
 
     if (restType == null) {
-      throw Errors.methodError(clazz, "HTTP method annotation is required (e.g., @GET, @POST, etc.).");
+      throw Errors.methodError(clazz, "HTTP method annotation is required (e.g., @HttpGet, @HttpPost, etc.).");
     }
 
     if (url == null) {
-      throw Errors.methodError(clazz, "RestType is required (e.g., GET, " + "POST, etc" + ".).");
+      throw Errors.methodError(clazz, "RestType is required (e.g., HttpGet, " + "HttpPost, etc" + ".).");
     }
     return new RequestEntity(restType, url, null);
   }
 
-  public RequestEntity internalParseParameter() throws RuntimeException {
+  public RequestEntity internalParseParameter() {
 
     if (requestEntity.getRestType() == null || requestEntity.getUrl() == null) {
       throw Errors.methodError(clazz, "You should first invoke parseUrl() before call this method.");
@@ -125,9 +120,8 @@ public class UltraParser {
 
     Field[] declaredFields = clazz.getDeclaredFields();
 
-    for (int i = 0; i < declaredFields.length; i++) {
+    for (Field field : declaredFields) {
 
-      Field field = declaredFields[i];
       field.setAccessible(true);
 
       if (field.isAnnotationPresent(Argument.class)) {
@@ -154,14 +148,26 @@ public class UltraParser {
         } else if (type == Integer[].class || type == int[].class) {/** Integer[] and int[] */
           try {
             name = argument.parameter();
-            value = Arrays.toString(((Integer[]) field.get(rawEntity)));
+            Object object = field.get(rawEntity);
+
+            if (object instanceof int[]) {
+              value = Arrays.toString(((int[]) object));
+            } else {
+              value = Arrays.toString(((Integer[]) object));
+            }
           } catch (IllegalAccessException e) {
             e.printStackTrace();
           }
         } else if (type == Double[].class || type == double[].class) {/** Double[] and double[] */
           try {
             name = argument.parameter();
-            value = Arrays.toString(((Double[]) field.get(rawEntity)));
+            Object object = field.get(rawEntity);
+
+            if (object instanceof double[]) {
+              value = Arrays.toString(((double[]) object));
+            } else {
+              value = Arrays.toString(((Double[]) object));
+            }
           } catch (IllegalAccessException e) {
             e.printStackTrace();
           }
@@ -174,15 +180,12 @@ public class UltraParser {
           }
         }
 
-        /*System.out.println("name = " + name);
-        System.out.println("value = " + value);*/
-
         if (params.containsKey(name)) {
           throw Errors.methodError(field.getDeclaringClass(),
                                    "The parameter %s at least already exists one.You must choose one "
-                                      + "from these which value is '%s'"
-                                      + " or"
-                                      + " '%s'", name, params.get(name).toString(), value);
+                                       + "from these which value is '%s'"
+                                       + " or"
+                                       + " '%s'", name, params.get(name), value);
         }
         params.put(name, value);
       }

@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
  * Created by SmartDengg on 2016/2/14.
  */
 @Documented @Retention(value = RetentionPolicy.RUNTIME) @Target(value = ElementType.TYPE)
-@RestMethod(type = RestType.GET) @Inherited public @interface GET {
+@RestMethod(type = RestType.GET) @Inherited public @interface HttpGet {
   String stringUrl();
 }

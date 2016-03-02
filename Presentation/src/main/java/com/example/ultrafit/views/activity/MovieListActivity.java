@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
@@ -44,14 +43,14 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   @NonNull @BindString(R.string.movie_title) protected String title;
 
   @NonNull @Bind(R.id.movie_layout_root_view) protected ViewGroup rootView;
-  @NonNull @Bind(R.id.toolbar) protected Toolbar toolbar;
+  @NonNull @Bind(R.id.movie_layout_toolbar) protected Toolbar toolbar;
 
   @NonNull @Bind(R.id.movie_layout_content_fl) protected FrameLayout contentLayout;
   @NonNull @Bind(R.id.movie_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
   @NonNull @Bind(R.id.movie_layout_rv) protected RecyclerView recyclerView;
   @NonNull @Bind(R.id.movie_layout_viewstub) protected ViewStub viewStub;
 
-  private MovieAdapter movieAdapter;
+  private MovieAdapter movieAdapter = new MovieAdapter(MovieListActivity.this);
   private StaggeredGridLayoutManager staggeredGridLayoutManager;
   private MovieListPresenter<MovieEntity> movieListPresenter;
 
@@ -95,7 +94,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   }
 
   @Override protected int getLayoutId() {
-    return R.layout.movie_activity;
+    return R.layout.movie_activity_layout;
   }
 
   private void initPresenter() {
@@ -121,7 +120,6 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     this.recyclerView.addItemDecoration(new MarginDecoration(MovieListActivity.this));
     this.recyclerView.setHasFixedSize(true);
     this.recyclerView.setLayoutManager(staggeredGridLayoutManager);
-    this.movieAdapter = new MovieAdapter(MovieListActivity.this);
     this.movieAdapter.setCallback(callback);
     this.recyclerView.setAdapter(movieAdapter);
 
@@ -193,15 +191,6 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
             MovieListActivity.this.initData();
           }
         });
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case android.R.id.home:
-        MovieListActivity.this.exit();
-        return true;
-    }
-    return super.onOptionsItemSelected(item);
   }
 
   @Override protected void onPostResume() {

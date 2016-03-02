@@ -35,12 +35,11 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
   @NonNull @BindString(R.string.city_title) protected String title;
 
   @NonNull @Bind(R.id.city_layout_root_view) protected ViewGroup rootView;
-
-  @NonNull @Bind(R.id.toolbar) protected Toolbar toolbar;
+  @NonNull @Bind(R.id.city_layout_toolbar) protected Toolbar toolbar;
   @NonNull @Bind(R.id.city_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
   @NonNull @Bind(R.id.city_layout_rv) protected RecyclerView recyclerView;
 
-  private CityListAdapter cityListAdapter;
+  private CityListAdapter cityListAdapter = new CityListAdapter(CityListActivity.this);
   private CityListPresenter<CityEntity> cityListPresenter;
 
   private int contentViewHeight;
@@ -72,7 +71,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
   }
 
   @Override protected int getLayoutId() {
-    return R.layout.city_activity;
+    return R.layout.city_activity_layout;
   }
 
   private void initPresenter() {
@@ -83,7 +82,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
   private void initView(Bundle savedInstanceState) {
 
     CityListActivity.this.setSupportActionBar(toolbar);
-    CityListActivity.this.getSupportActionBar().setTitle("");
+    CityListActivity.this.getSupportActionBar().setTitle(null);
 
     this.swipeRefreshLayout.setColorSchemeResources(Constants.colors);
     this.swipeRefreshLayout.setOnRefreshListener(listener);
@@ -97,14 +96,11 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
     linearLayoutManager.setSmoothScrollbarEnabled(true);
 
-    this.recyclerView.setLayoutManager(linearLayoutManager);
-    this.recyclerView.addItemDecoration(new MarginDecoration(CityListActivity.this));
-    this.recyclerView.setHasFixedSize(true);
-    this.cityListAdapter = new CityListAdapter(CityListActivity.this);
     this.cityListAdapter.setCallback(callback);
+    this.recyclerView.setLayoutManager(linearLayoutManager);
+    this.recyclerView.setHasFixedSize(true);
+    this.recyclerView.addItemDecoration(new MarginDecoration(CityListActivity.this));
     this.recyclerView.setAdapter(cityListAdapter);
-
-    CityListActivity.this.setSupportActionBar(toolbar);
 
     if (savedInstanceState == null) {
 

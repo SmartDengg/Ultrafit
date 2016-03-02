@@ -11,18 +11,16 @@ import java.util.Map;
 public class RequestEntity {
 
   private RestType restType;
-
   private String url;
-
   private Map<String, String> queryMap;
 
   public RequestEntity() {
   }
 
-  public RequestEntity(@Nullable RestType restType, @Nullable String url, @Nullable Map<String, String> queryMap) {
+  public RequestEntity(@Nullable RestType restType, @Nullable String url, @Nullable Map<String, String> paramsMap) {
     this.restType = restType;
     this.url = url;
-    this.queryMap = queryMap;
+    this.queryMap = paramsMap;
   }
 
   public RestType getRestType() {
