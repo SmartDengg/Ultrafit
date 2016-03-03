@@ -34,7 +34,7 @@ public abstract class UseCase<R, S> {
       @Override public Observable<S> call(R r) {
 
         RequestEntity requestEntity = UltraParserFactory.createParser(r).parseRequestEntity();
-        Logger.d("Request entity!!! \nType : %s \n" + "URL : %s \n" + "Params : %s \n", //
+        Logger.d("Request entity!!!\nType : %s \n" + "URL : %s \n" + "Params : %s \n", //
                  requestEntity.getRestType().name(), requestEntity.getUrl(), requestEntity.getQueryMap());
 
         return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getQueryMap());

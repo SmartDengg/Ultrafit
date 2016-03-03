@@ -16,6 +16,7 @@
 package com.example.model.bean.repository.adapter.rxadapter;
 
 import com.example.common.Constants;
+import com.example.model.bean.repository.adapter.callAdapter.SmartCallAdapter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -55,8 +56,6 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
 
     CallAdapter<Observable<?>> callAdapter = getCallAdapter(returnType);
     if (isSingle) {
-      // Add Single-converter wrapper from a separate class. This defers classloading such that
-      // regular Observable operation can be leveraged without relying on this unstable RxJava API.
       return SingleHelper.makeSingle(callAdapter);
     }
     return callAdapter;
@@ -77,10 +76,8 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
     }
 
     @Override public void call(final Subscriber<? super Response<T>> subscriber) {
-      // Since Call is a one-shot type, clone it for each new subscriber.
       final Call<T> call = originalCall.clone();
 
-      // Attempt to cancel the call if it is still in-flight on unsubscription.
       subscriber.add(Subscriptions.create(new Action0() {
         @Override public void call() {
           call.cancel();
@@ -98,7 +95,6 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
         if (!subscriber.isUnsubscribed()) {
           subscriber.onError(t);
         }
-        return;
       }
     }
   }
@@ -121,7 +117,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
 
           Integer code = response.code();
 
-          if (response.isSuccess() && code != 204 && code != 205) {
+          if (response.isSuccess() && code != SmartCallAdapter.CODE_204 && code != SmartCallAdapter.CODE_205) {
             return Observable.just(response.body());
           }
           return Observable.error(new RetrofitHttpException(response));
@@ -129,21 +125,23 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<Long>>() {
         @Override public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
 
-          return errorObservable.zipWith(Observable.range(1, Constants.MAX_RETRY),
-                                         new Func2<Throwable, Integer, InnerThrowable>() {
-                                           @Override public InnerThrowable call(Throwable throwable, Integer i) {
-                                             return new InnerThrowable(throwable, i);
-                                           }
-                                         }).flatMap(new Func1<InnerThrowable, Observable<Long>>() {
-            @Override public Observable<Long> call(InnerThrowable innerThrowable) {
+          return errorObservable
+              .zipWith(Observable.range(1, Constants.MAX_RETRY), new Func2<Throwable, Integer, InnerThrowable>() {
+                @Override public InnerThrowable call(Throwable throwable, Integer i) {
+                  return new InnerThrowable(throwable, i);
+                }
+              })
+              .flatMap(new Func1<InnerThrowable, Observable<Long>>() {
+                @Override public Observable<Long> call(InnerThrowable innerThrowable) {
 
-              Integer retryCount = innerThrowable.getRetryCount();
-              if (retryCount == Constants.MAX_RETRY) {
-                return Observable.error(innerThrowable.getThrowable());
-              }
-              return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS);
-            }
-          });
+                  Integer retryCount = innerThrowable.getRetryCount();
+
+                  if (retryCount.equals(Constants.MAX_RETRY)) {
+                    return Observable.error(innerThrowable.getThrowable());
+                  }
+                  return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS);
+                }
+              });
         }
       });
     }

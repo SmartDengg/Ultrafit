@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -12,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -97,19 +97,16 @@ public class DetailActivity extends BaseActivity {
     }
   }
 
-  private void runEnterAnimation(Bundle bundle) {
+  @SuppressLint("SetTextI18n") private void runEnterAnimation(Bundle bundle) {
 
-    MovieEntity movieEntity = (MovieEntity) bundle.getSerializable(ENTITY);
+    MovieEntity movieEntity = bundle.getParcelable(ENTITY);
     if (movieEntity == null) return;
 
     this.movieNameTv.setText(movieEntity.getMovieName());
     this.movieCategoryTv.setText(movieEntity.getMovieCategory());
-    this.movieReleaseTv.setText(movieEntity.getMovieReleaseTime());
+    this.movieReleaseTv.setText("上映时间：" + movieEntity.getMovieReleaseTime());
 
-    String movieCountry = movieEntity.getMovieCountry();
-    this.movieWritersTv.setVisibility(TextUtils.isEmpty(movieCountry) ? View.GONE : View.VISIBLE);
-
-    this.movieCountryTv.setText("地区:" + movieCountry);
+    this.movieCountryTv.setText("地区:" + movieEntity.getMovieCountry());
     this.movieWritersTv.setText("编剧:" + movieEntity.getMovieWriters());
     this.movieDirectorTv.setText("导演:" + movieEntity.getMovieDirector());
     this.movieActorTv.setText("演员:" + movieEntity.getMovieActor());

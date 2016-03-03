@@ -44,6 +44,7 @@
   <dimen name="material_16sp">16sp</dimen>
   <dimen name="material_18sp">18sp</dimen>
   <dimen name="material_20sp">20sp</dimen>
+  <dimen name="material_21sp">21sp</dimen>
   <dimen name="material_24sp">24sp</dimen>
   <dimen name="material_32sp">32sp</dimen>
   <dimen name="material_40sp">40sp</dimen>

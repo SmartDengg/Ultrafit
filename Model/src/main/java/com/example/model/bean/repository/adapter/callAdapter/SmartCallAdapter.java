@@ -15,8 +15,8 @@ import retrofit2.Response;
 public class SmartCallAdapter<T> implements SmartCall<T> {
 
   private static int CODE_200 = 200;
-  private static int CODE_204 = 204;
-  private static int CODE_205 = 205;
+  public static int CODE_204 = 204;
+  public static int CODE_205 = 205;
   private static int CODE_300 = 300;
   private static int CODE_400 = 400;
   private static int CODE_401 = 401;

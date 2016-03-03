@@ -1,11 +1,12 @@
 package com.example.model.bean.entity;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by SmartDengg on 2016/2/21.
  */
-public class MovieEntity implements Cloneable, Serializable {
+public class MovieEntity implements Cloneable, Parcelable {
 
   private String movieThumbUrl;
   private String movieName;
@@ -108,4 +109,40 @@ public class MovieEntity implements Cloneable, Serializable {
     }
     return null;
   }
+
+  @Override public int describeContents() { return 0; }
+
+  @Override public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(this.movieThumbUrl);
+    dest.writeString(this.movieName);
+    dest.writeString(this.movieSketch);
+    dest.writeString(this.movieWriters);
+    dest.writeString(this.movieDirector);
+    dest.writeString(this.movieActor);
+    dest.writeString(this.movieCategory);
+    dest.writeString(this.movieScore);
+    dest.writeString(this.movieReleaseTime);
+    dest.writeString(this.movieCountry);
+  }
+
+  public MovieEntity() {}
+
+  protected MovieEntity(Parcel in) {
+    this.movieThumbUrl = in.readString();
+    this.movieName = in.readString();
+    this.movieSketch = in.readString();
+    this.movieWriters = in.readString();
+    this.movieDirector = in.readString();
+    this.movieActor = in.readString();
+    this.movieCategory = in.readString();
+    this.movieScore = in.readString();
+    this.movieReleaseTime = in.readString();
+    this.movieCountry = in.readString();
+  }
+
+  public static final Creator<MovieEntity> CREATOR = new Creator<MovieEntity>() {
+    public MovieEntity createFromParcel(Parcel source) {return new MovieEntity(source);}
+
+    public MovieEntity[] newArray(int size) {return new MovieEntity[size];}
+  };
 }
