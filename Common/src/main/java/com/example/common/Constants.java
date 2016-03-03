@@ -15,6 +15,7 @@ public class Constants {
 
   public static final String LOGGER_TAG = "OkHttp";
   public static final Integer RESULT_OK = 0;
+  public static final Integer MAX_RETRY = 4;
 
   public static boolean isDebugChrome = true;
   public static boolean isDebugJsonLog = true;

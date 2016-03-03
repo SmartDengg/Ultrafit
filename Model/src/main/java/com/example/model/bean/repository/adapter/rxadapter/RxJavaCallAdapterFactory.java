@@ -15,6 +15,7 @@
  */
 package com.example.model.bean.repository.adapter.rxadapter;
 
+import com.example.common.Constants;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -90,6 +91,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
         Response<T> response = call.execute();
         if (!subscriber.isUnsubscribed()) {
           subscriber.onNext(response);
+          subscriber.onCompleted();
         }
       } catch (Throwable t) {
         Exceptions.throwIfFatal(t);
@@ -97,10 +99,6 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
           subscriber.onError(t);
         }
         return;
-      }
-
-      if (!subscriber.isUnsubscribed()) {
-        subscriber.onCompleted();
       }
     }
   }
@@ -131,18 +129,42 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<Long>>() {
         @Override public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
 
-          return errorObservable.zipWith(Observable.range(1, 3), new Func2<Throwable, Integer, Integer>() {
-            @Override public Integer call(Throwable throwable, Integer i) {
-              return i;
-            }
-          }).flatMap(new Func1<Integer, Observable<Long>>() {
-            @Override public Observable<Long> call(Integer retryCount) {
+          return errorObservable.zipWith(Observable.range(1, Constants.MAX_RETRY),
+                                         new Func2<Throwable, Integer, InnerThrowable>() {
+                                           @Override public InnerThrowable call(Throwable throwable, Integer i) {
+                                             return new InnerThrowable(throwable, i);
+                                           }
+                                         }).flatMap(new Func1<InnerThrowable, Observable<Long>>() {
+            @Override public Observable<Long> call(InnerThrowable innerThrowable) {
 
-              return Observable.timer((long) Math.pow(5, retryCount), TimeUnit.SECONDS);
+              Integer retryCount = innerThrowable.getRetryCount();
+              if (retryCount == Constants.MAX_RETRY) {
+                return Observable.error(innerThrowable.getThrowable());
+              }
+              return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS);
             }
           });
         }
       });
+    }
+  }
+
+  private static class InnerThrowable {
+
+    private Throwable throwable;
+    private Integer retryCount;
+
+    public InnerThrowable(Throwable throwable, Integer retryCount) {
+      this.throwable = throwable;
+      this.retryCount = retryCount;
+    }
+
+    public Throwable getThrowable() {
+      return throwable;
+    }
+
+    public Integer getRetryCount() {
+      return retryCount;
     }
   }
 }

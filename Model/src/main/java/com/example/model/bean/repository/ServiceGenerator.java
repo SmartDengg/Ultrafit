@@ -20,23 +20,21 @@ public class ServiceGenerator {
   private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
 
   static {
-    Gson gson = new GsonBuilder()
-        .excludeFieldsWithoutExposeAnnotation()
-        .enableComplexMapKeySerialization()
-        .serializeNulls()
-        .create();
+    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                                 .enableComplexMapKeySerialization()
+                                 .serializeNulls()
+                                 .create();
 
-    ServiceGenerator.httpClientBuilder
-        .addNetworkInterceptor((Constants.isDebugChrome) ? new StethoInterceptor() : null)
-        .addInterceptor(HeaderInterceptor.createdInterceptor())
-        .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
+    ServiceGenerator.httpClientBuilder.addNetworkInterceptor(new StethoInterceptor())
+                                      .addInterceptor(HeaderInterceptor.createdInterceptor())
+                                      .addInterceptor(
+                                          new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
 
-    ServiceGenerator.retrofitBuilder
-        .baseUrl(Constants.BASE_URL)
-        .addCallAdapterFactory(SmartCallAdapterFactory.create())
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(httpClientBuilder.build());
+    ServiceGenerator.retrofitBuilder.baseUrl(Constants.BASE_URL)
+                                    .addCallAdapterFactory(SmartCallAdapterFactory.create())
+                                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                                    .addConverterFactory(GsonConverterFactory.create(gson))
+                                    .client(httpClientBuilder.build());
   }
 
   public static <S> S createService(Class<S> serviceClass) {
