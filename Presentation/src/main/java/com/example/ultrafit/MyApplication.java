@@ -6,7 +6,6 @@ import android.net.Uri;
 import com.example.common.Constants;
 import com.example.common.Util.FileUtil;
 import com.facebook.stetho.Stetho;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -33,13 +32,9 @@ public class MyApplication extends Application {
       Stetho.initializeWithDefaults(MyApplication.this);
     }
 
-    File cacheFile = FileUtil.createCacheDir(MyApplication.this);
+    File cacheFile = FileUtil.createDiskCacheDir(MyApplication.this);
     long cacheSize = FileUtil.calculateDiskCacheSize(cacheFile);
-
-    OkHttpClient okHttpClient = new OkHttpClient.Builder()
-        .addNetworkInterceptor(new StethoInterceptor())
-        .cache(new Cache(cacheFile, cacheSize))
-        .build();
+    OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(new Cache(cacheFile, cacheSize)).build();
 
     Picasso picasso = new Picasso.Builder(MyApplication.this)
         .downloader(new OkHttp3Downloader(okHttpClient))

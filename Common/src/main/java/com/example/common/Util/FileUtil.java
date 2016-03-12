@@ -14,7 +14,7 @@ public class FileUtil {
   private static final int MIN_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5MB
   private static final int MAX_DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
-  public static File createCacheDir(Context context) {
+  public static File createDiskCacheDir(Context context) {
     File cache = new File(context.getApplicationContext().getCacheDir(), ULTRA_CACHE);
     if (!cache.exists()) {
       cache.mkdirs();
