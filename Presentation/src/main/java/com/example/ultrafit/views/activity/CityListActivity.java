@@ -84,7 +84,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     CityListActivity.this.setSupportActionBar(toolbar);
     CityListActivity.this.getSupportActionBar().setTitle(null);
 
-    this.swipeRefreshLayout.setColorSchemeResources(Constants.colors);
+    this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
     this.swipeRefreshLayout.setOnRefreshListener(listener);
     this.swipeRefreshLayout.post(new Runnable() {
       @Override public void run() {

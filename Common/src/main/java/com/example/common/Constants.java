@@ -1,5 +1,7 @@
 package com.example.common;
 
+import android.graphics.Color;
+
 /**
  * Created by SmartDengg on 2016/2/22.
  */
@@ -21,6 +23,6 @@ public class Constants {
   public static boolean isDebugJsonLog = true;
 
   public static int[] colors = new int[] {
-      android.R.color.holo_blue_light, android.R.color.holo_purple, android.R.color.holo_red_light
+      Color.parseColor("#70AF41"), Color.parseColor("#42A5F5"), Color.parseColor("#42A5F5")
   };
 }

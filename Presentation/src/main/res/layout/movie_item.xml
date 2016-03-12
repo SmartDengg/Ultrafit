@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardBackgroundColor="@android:color/holo_purple"
+    app:cardBackgroundColor="@color/colorAccent"
     app:contentPadding="@dimen/material_1dp"
     app:cardCornerRadius="@dimen/material_2dp"
     app:cardElevation="@dimen/material_2dp">

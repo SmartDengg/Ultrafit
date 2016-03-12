@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.OnClick;
+import com.example.common.Util.DateUtil;
 import com.example.common.Util.DensityUtil;
 import com.example.model.bean.entity.MovieEntity;
 import com.example.ultrafit.R;
@@ -104,7 +105,7 @@ public class DetailActivity extends BaseActivity {
 
     this.movieNameTv.setText(movieEntity.getMovieName());
     this.movieCategoryTv.setText(movieEntity.getMovieCategory());
-    this.movieReleaseTv.setText("上映时间：" + movieEntity.getMovieReleaseTime());
+    this.movieReleaseTv.setText("上映时间：" + DateUtil.coverToDate(movieEntity.getMovieReleaseTime()));
 
     this.movieCountryTv.setText("地区:" + movieEntity.getMovieCountry());
     this.movieWritersTv.setText("编剧:" + movieEntity.getMovieWriters());

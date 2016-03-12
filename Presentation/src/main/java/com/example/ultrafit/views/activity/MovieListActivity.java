@@ -109,9 +109,9 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
     MovieListActivity.this.setSupportActionBar(toolbar);
     MovieListActivity.this.getSupportActionBar().setTitle(title);
-    this.toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow));
+    this.toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
 
-    this.swipeRefreshLayout.setColorSchemeResources(Constants.colors);
+    this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
     this.swipeRefreshLayout.setOnRefreshListener(listener);
     this.swipeRefreshLayout.post(new Runnable() {
       @Override public void run() {
@@ -165,7 +165,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     this.itemView = staggeredGridLayoutManager.findViewByPosition(position).findViewById(R.id.movie_item_thumb_iv);
     this.itemView.setVisibility(View.INVISIBLE);
 
-    BitmapUtil.blurImage(MovieListActivity.this, this.blurIv, BitmapUtil.retrieveScreen(MovieListActivity.this));
+    BitmapUtil.blurImage(MovieListActivity.this, this.blurIv, BitmapUtil.retrieveScreenSnapshot(MovieListActivity.this));
 
     Rect startBounds = new Rect();
     thumbIv.getGlobalVisibleRect(startBounds);

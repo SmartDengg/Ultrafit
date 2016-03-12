@@ -13,18 +13,23 @@ import android.widget.ImageView;
  */
 public class BitmapUtil {
 
-  protected static final int BLUR_RADIUS = 10;
-  protected static final float BLUR_SCALE = 0.0f;
+  protected static final int BLUR_RADIUS = 6;
+  protected static final float BLUR_DESATURATE = 0.0f;
+  protected static final int BLUR_SCALE = BLUR_RADIUS / 2;
 
-  public static void blurImage(Context context, ImageView imageView, Bitmap bitmap) {
+  public static void blurImage(Context context, ImageView target, Bitmap screenSnapshot) {
 
     BestBlur bestBlur = new BestBlur(context);
-    Bitmap blurBitmap = bestBlur.blurBitmap(bitmap, BLUR_RADIUS, BLUR_SCALE);
-    imageView.setImageBitmap(blurBitmap);
+    Bitmap scaledBitmap = Bitmap.createScaledBitmap(screenSnapshot, screenSnapshot.getWidth() / BLUR_SCALE,
+                                                    screenSnapshot.getHeight() / BLUR_SCALE, true);
+    Bitmap blurBitmap = bestBlur.blurBitmap(scaledBitmap, BLUR_RADIUS, BLUR_DESATURATE);
+    target.setImageBitmap(blurBitmap);
+
+    if (screenSnapshot != scaledBitmap) scaledBitmap.recycle();
     bestBlur.destroy();
   }
 
-  public static Bitmap retrieveScreen(AppCompatActivity activity) {
+  public static Bitmap retrieveScreenSnapshot(AppCompatActivity activity) {
 
     View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
 

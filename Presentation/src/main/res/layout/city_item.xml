@@ -18,7 +18,7 @@
       android:padding="@dimen/material_16dp"
       android:layout_centerVertical="true"
       android:gravity="center"
-      android:textColor="@color/material_purple_400"
+      android:textColor="@color/colorAccent"
       android:textSize="@dimen/material_24sp"
       tools:text="北京"/>
 
