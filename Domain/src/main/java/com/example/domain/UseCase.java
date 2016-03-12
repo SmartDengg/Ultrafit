@@ -4,7 +4,6 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.example.common.ultrafit.RequestEntity;
 import com.example.common.ultrafit.UltraParserFactory;
-import com.orhanobut.logger.Logger;
 import java.util.Map;
 import rx.Observable;
 import rx.Observer;
@@ -34,8 +33,7 @@ public abstract class UseCase<R, S> {
       @Override public Observable<S> call(R r) {
 
         RequestEntity requestEntity = UltraParserFactory.createParser(r).parseRequestEntity();
-        Logger.d("Request entity!!!\nType : %s \n" + "URL : %s \n" + "Params : %s \n", //
-                 requestEntity.getRestType().name(), requestEntity.getUrl(), requestEntity.getQueryMap());
+        UltraParserFactory.outputs(requestEntity);
 
         return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getQueryMap());
       }

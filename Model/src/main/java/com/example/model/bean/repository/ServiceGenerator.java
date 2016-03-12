@@ -28,7 +28,7 @@ public class ServiceGenerator {
     ServiceGenerator.httpClientBuilder.addNetworkInterceptor(new StethoInterceptor())
                                       .addInterceptor(HeaderInterceptor.createdInterceptor())
                                       .addInterceptor(
-                                          new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
+                                          new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
 
     ServiceGenerator.retrofitBuilder.baseUrl(Constants.BASE_URL)
                                     .addCallAdapterFactory(SmartCallAdapterFactory.create())

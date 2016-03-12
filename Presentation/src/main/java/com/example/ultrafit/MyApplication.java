@@ -4,12 +4,15 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import com.example.common.Constants;
+import com.example.common.Util.FileUtil;
 import com.facebook.stetho.Stetho;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.squareup.picasso.Picasso;
-import java.util.concurrent.Executors;
+import java.io.File;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 /**
@@ -18,8 +21,6 @@ import okhttp3.OkHttpClient;
 public class MyApplication extends Application {
 
   private Picasso.Listener picassoListener = new Picasso.Listener() {
-    public final String TAG = Picasso.class.getSimpleName();
-
     @Override public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
       Logger.e(exception.getMessage());
     }
@@ -28,11 +29,20 @@ public class MyApplication extends Application {
   @Override public void onCreate() {
     super.onCreate();
 
-    if (Constants.isDebugChrome) Stetho.initializeWithDefaults(MyApplication.this);
+    if (Constants.isDebugChrome) {
+      Stetho.initializeWithDefaults(MyApplication.this);
+    }
+
+    File cacheFile = FileUtil.createCacheDir(MyApplication.this);
+    long cacheSize = FileUtil.calculateDiskCacheSize(cacheFile);
+
+    OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        .addNetworkInterceptor(new StethoInterceptor())
+        .cache(new Cache(cacheFile, cacheSize))
+        .build();
 
     Picasso picasso = new Picasso.Builder(MyApplication.this)
-        .downloader(new OkHttp3Downloader(new OkHttpClient()))
-        .executor(Executors.newCachedThreadPool())
+        .downloader(new OkHttp3Downloader(okHttpClient))
         .listener(picassoListener)
         .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
         .build();

@@ -1,12 +1,16 @@
 package com.example.ultrafit.views.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -178,19 +181,27 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   private void startEnterAnim(int startLocationY) {
 
     ViewCompat.setPivotY(contentLayout, startLocationY);
-    ViewCompat.setScaleY(contentLayout, 0.0f);
 
-    ViewCompat
-        .animate(contentLayout)
-        .scaleY(1.0f)
-        .setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime))
-        .setInterpolator(new AccelerateInterpolator())
-        .withLayer()
-        .setListener(new ViewPropertyAnimatorListenerAdapter() {
-          @Override public void onAnimationEnd(View view) {
-            MovieListActivity.this.initData();
-          }
-        });
+    toolbar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+    contentLayout.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+    ObjectAnimator toolbarInAnim = ObjectAnimator.ofFloat(toolbar, View.TRANSLATION_Y, -toolbar.getHeight(), 0.0f);
+    ObjectAnimator contentInAnim = ObjectAnimator.ofFloat(contentLayout, View.SCALE_Y, 0.0f, 1.0f);
+
+    AnimatorSet animatorSet = new AnimatorSet();
+    animatorSet.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime));
+    animatorSet.setInterpolator(new LinearInterpolator());
+    animatorSet.playTogether(toolbarInAnim, contentInAnim);
+    animatorSet.addListener(new AnimatorListenerAdapter() {
+      @Override public void onAnimationEnd(Animator animation) {
+
+        toolbar.setLayerType(View.LAYER_TYPE_NONE, null);
+        contentLayout.setLayerType(View.LAYER_TYPE_NONE, null);
+        MovieListActivity.this.initData();
+      }
+    });
+
+    animatorSet.start();
   }
 
   @Override protected void onPostResume() {
@@ -202,17 +213,27 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
   @Override protected void exit() {
 
-    ViewCompat
-        .animate(contentLayout)
-        .translationY(contentLayout.getHeight())
-        .setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
-        .setInterpolator(new LinearInterpolator())
-        .withLayer()
-        .setListener(new ViewPropertyAnimatorListenerAdapter() {
-          @Override public void onAnimationEnd(View view) {
-            MovieListActivity.this.finish();
-          }
-        });
+    toolbar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+    contentLayout.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+    ObjectAnimator toolbarExitAnim = ObjectAnimator.ofFloat(toolbar, View.TRANSLATION_Y, 0.0f, -toolbar.getHeight());
+    ObjectAnimator contentExitAnim =
+        ObjectAnimator.ofFloat(contentLayout, View.TRANSLATION_Y, 0.0f, contentLayout.getHeight());
+
+    AnimatorSet animatorSet = new AnimatorSet();
+    animatorSet.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime));
+    animatorSet.setInterpolator(new LinearOutSlowInInterpolator());
+    animatorSet.playTogether(toolbarExitAnim, contentExitAnim);
+    animatorSet.addListener(new AnimatorListenerAdapter() {
+      @Override public void onAnimationEnd(Animator animation) {
+
+        toolbar.setLayerType(View.LAYER_TYPE_NONE, null);
+        contentLayout.setLayerType(View.LAYER_TYPE_NONE, null);
+        MovieListActivity.this.finish();
+      }
+    });
+
+    animatorSet.start();
   }
 
   @Override protected void onDestroy() {

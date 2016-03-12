@@ -19,7 +19,7 @@ public class CityListPresenterImp implements CityListPresenter<CityEntity> {
   private UseCase<CityListRequest, List<CityEntity>> listUseCase;
 
   private CityListPresenterImp() {
-    this.listUseCase = CityListUseCase.createdUseCase();
+    this.listUseCase = CityListUseCase.<CityListRequest>createdUseCase();
   }
 
   public static CityListPresenterImp createdPresenter() {

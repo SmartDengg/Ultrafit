@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.example.common.ultrafit.annotation.Argument;
 import com.example.common.ultrafit.annotation.RestMethod;
 import com.example.common.ultrafit.type.RestType;
+import com.orhanobut.logger.Logger;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -15,6 +16,20 @@ import java.util.Map;
  * Created by SmartDengg on 2016/2/21.
  */
 public class UltraParserFactory {
+
+  public static void outputs(@NonNull RequestEntity requestEntity) {
+
+    Logger.d("Request entity !!!!" +
+                 "\n  ⇢ " +
+                 " Type   : " +
+                 requestEntity.getRestType().name() +
+                 "\n  ⇢ " +
+                 " Url    : " +
+                 requestEntity.getUrl() +
+                 "\n  ⇢ " +
+                 " Params : " +
+                 requestEntity.getQueryMap());
+  }
 
   private Object rawEntity;
   private RequestEntity requestEntity;

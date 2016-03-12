@@ -11,7 +11,6 @@ import com.example.model.bean.request.MovieDetailRequest;
 import com.example.model.bean.response.CityListResponse;
 import com.example.model.bean.response.MovieDetailResponse;
 import com.example.model.bean.response.MovieListResponse;
-import com.orhanobut.logger.Logger;
 import java.util.List;
 import java.util.Map;
 import retrofit2.http.GET;
@@ -99,8 +98,7 @@ public class MovieService {
 
             RequestEntity requestEntity =
                 UltraParserFactory.createParser(new MovieDetailRequest(result.movieId)).parseRequestEntity();
-            Logger.d("Request entity!!! \n Type : %s \n" + "URL : %s \n" + "Params : %s \n",//
-                     requestEntity.getRestType().name(), requestEntity.getUrl(), requestEntity.getQueryMap());
+            UltraParserFactory.outputs(requestEntity);
 
             return service
                 .getMovieDetail(requestEntity.getUrl(), requestEntity.getQueryMap())
