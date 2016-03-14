@@ -1,5 +1,6 @@
 package com.example.ultrafit.presenter;
 
+import com.example.common.SimpleSubscriber;
 import com.example.domain.MovieListUseCase;
 import com.example.domain.UseCase;
 import com.example.model.bean.entity.MovieEntity;
@@ -7,7 +8,6 @@ import com.example.model.bean.request.MovieIdRequest;
 import com.example.ultrafit.views.ListView;
 import java.util.List;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func0;
 
 /**
@@ -51,12 +51,10 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
     this.listView.showError(errorMessage);
   }
 
-  private final class ListSubscriber extends Subscriber<List<MovieEntity>> {
-
-    @Override public void onCompleted() {
-    }
+  private final class ListSubscriber extends SimpleSubscriber<List<MovieEntity>> {
 
     @Override public void onError(Throwable e) {
+      super.onError(e);
       MovieListPresenterImp.this.showError(e.getMessage());
     }
 

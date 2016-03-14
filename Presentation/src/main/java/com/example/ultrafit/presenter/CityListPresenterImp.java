@@ -1,5 +1,6 @@
 package com.example.ultrafit.presenter;
 
+import com.example.common.SimpleSubscriber;
 import com.example.domain.CityListUseCase;
 import com.example.domain.UseCase;
 import com.example.model.bean.entity.CityEntity;
@@ -7,7 +8,6 @@ import com.example.model.bean.request.CityListRequest;
 import com.example.ultrafit.views.ListView;
 import java.util.List;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func0;
 
 /**
@@ -51,12 +51,10 @@ public class CityListPresenterImp implements CityListPresenter<CityEntity> {
     this.listView.showError(errorMessage);
   }
 
-  private final class ListSubscriber extends Subscriber<List<CityEntity>> {
-
-    @Override public void onCompleted() {
-    }
+  private final class ListSubscriber extends SimpleSubscriber<List<CityEntity>> {
 
     @Override public void onError(Throwable e) {
+      super.onError(e);
       CityListPresenterImp.this.showError(e.getMessage());
     }
 
