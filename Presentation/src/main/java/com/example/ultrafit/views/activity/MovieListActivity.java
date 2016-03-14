@@ -162,10 +162,12 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
   private void navigateToDetail(int position, View thumbIv, MovieEntity movieEntity) {
 
-    this.itemView = staggeredGridLayoutManager.findViewByPosition(position).findViewById(R.id.movie_item_thumb_iv);
+    RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForLayoutPosition(position);
+    this.itemView = viewHolder.itemView;
     this.itemView.setVisibility(View.INVISIBLE);
 
-    BitmapUtil.blurImage(MovieListActivity.this, this.blurIv, BitmapUtil.retrieveScreenSnapshot(MovieListActivity.this));
+    BitmapUtil.blurImage(MovieListActivity.this, this.blurIv,
+                         BitmapUtil.retrieveScreenSnapshot(MovieListActivity.this));
 
     Rect startBounds = new Rect();
     thumbIv.getGlobalVisibleRect(startBounds);

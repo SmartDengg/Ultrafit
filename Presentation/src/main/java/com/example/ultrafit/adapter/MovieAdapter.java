@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,6 +102,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
   }
 
   public class ItemHolder extends RecyclerView.ViewHolder {
+
+    @Nullable @Bind(R.id.movie_item_root_view) CardView rootView;
 
     @Nullable @Bind(R.id.movie_item_thumb_iv) ImageView thumbIv;
     @Nullable @Bind(R.id.movie_item_name_tv) TextView nameTv;

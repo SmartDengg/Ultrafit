@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.example.common.ultrafit.annotation.Argument;
 import com.example.common.ultrafit.annotation.RestMethod;
 import com.example.common.ultrafit.type.RestType;
+import com.example.common.ultrafit.type.Types;
 import com.orhanobut.logger.Logger;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -142,47 +143,17 @@ public class UltraParserFactory {
       if (field.isAnnotationPresent(Argument.class)) {
 
         Argument argument = field.getAnnotation(Argument.class);
-        Class<?> type = field.getType();
+        Class<?> parameterType = field.getType();
+        Class<?> rawParameterType = Types.getRawType(parameterType);
 
         String name = null;
         String value = null;
 
-        if (type == String.class) { /** String */
+        if (rawParameterType.isArray()) {
+          Class<?> arrayComponentType = UltraParserFactory.this.boxIfPrimitive(rawParameterType.getComponentType());
           try {
             name = argument.parameter();
-            value = (String) field.get(rawEntity);
-          } catch (IllegalAccessException ignored) {
-          }
-        } else if (type == String[].class) { /** String[] */
-          try {
-            name = argument.parameter();
-            value = Arrays.toString(((String[]) field.get(rawEntity)));
-          } catch (IllegalAccessException e) {
-            e.printStackTrace();
-          }
-        } else if (type == Integer[].class || type == int[].class) {/** Integer[] and int[] */
-          try {
-            name = argument.parameter();
-            Object object = field.get(rawEntity);
-
-            if (object instanceof int[]) {
-              value = Arrays.toString(((int[]) object));
-            } else {
-              value = Arrays.toString(((Integer[]) object));
-            }
-          } catch (IllegalAccessException e) {
-            e.printStackTrace();
-          }
-        } else if (type == Double[].class || type == double[].class) {/** Double[] and double[] */
-          try {
-            name = argument.parameter();
-            Object object = field.get(rawEntity);
-
-            if (object instanceof double[]) {
-              value = Arrays.toString(((double[]) object));
-            } else {
-              value = Arrays.toString(((Double[]) object));
-            }
+            value = UltraParserFactory.this.arrayToString(field, rawEntity, arrayComponentType);
           } catch (IllegalAccessException e) {
             e.printStackTrace();
           }
@@ -190,8 +161,7 @@ public class UltraParserFactory {
           try {
             name = argument.parameter();
             value = field.get(rawEntity).toString();
-          } catch (IllegalAccessException e) {
-            e.printStackTrace();
+          } catch (IllegalAccessException ignored) {
           }
         }
 
@@ -206,5 +176,77 @@ public class UltraParserFactory {
       }
     }
     return new RequestEntity(null, null, Collections.unmodifiableMap(params));
+  }
+
+  private Class<?> boxIfPrimitive(Class<?> type) {
+    if (boolean.class == type) return Boolean.class;
+    if (byte.class == type) return Byte.class;
+    if (char.class == type) return Character.class;
+    if (double.class == type) return Double.class;
+    if (float.class == type) return Float.class;
+    if (int.class == type) return Integer.class;
+    if (long.class == type) return Long.class;
+    if (short.class == type) return Short.class;
+    return type;
+  }
+
+  private String arrayToString(Field field, Object rawEntity, Class<?> rawParameterType) throws IllegalAccessException {
+
+    Object object = field.get(rawEntity);
+    String value;
+
+    if (rawParameterType == Boolean.class) {/** Boolean[] */
+      try {
+        value = Arrays.toString(((Boolean[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((boolean[]) object));
+      }
+    } else if (rawParameterType == Byte.class) {/** Byte[] */
+      try {
+        value = Arrays.toString(((Byte[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((byte[]) object));
+      }
+    } else if (rawParameterType == Character.class) {/** Character[] */
+      try {
+        value = Arrays.toString(((Character[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((char[]) object));
+      }
+    } else if (rawParameterType == Double.class) {/** Double[] */
+      try {
+        value = Arrays.toString(((Double[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((double[]) object));
+      }
+    } else if (rawParameterType == Float.class) {/** Float[] */
+      try {
+        value = Arrays.toString(((Float[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((float[]) object));
+      }
+    } else if (rawParameterType == Integer.class) {/** Integer[] */
+      try {
+        value = Arrays.toString(((Integer[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((int[]) object));
+      }
+    } else if (rawParameterType == Long.class) {/** Long[] */
+      try {
+        value = Arrays.toString(((Long[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((long[]) object));
+      }
+    } else if (rawParameterType == Short.class) {/** Short[] */
+      try {
+        value = Arrays.toString(((Short[]) object));
+      } catch (ClassCastException e) {
+        value = Arrays.toString(((short[]) object));
+      }
+    } else {
+      value = object.toString();
+    }
+
+    return value;
   }
 }
