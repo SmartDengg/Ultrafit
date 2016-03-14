@@ -103,8 +103,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
 
   public class ItemHolder extends RecyclerView.ViewHolder {
 
-    @Nullable @Bind(R.id.movie_item_root_view) CardView rootView;
-
     @Nullable @Bind(R.id.movie_item_thumb_iv) ImageView thumbIv;
     @Nullable @Bind(R.id.movie_item_name_tv) TextView nameTv;
     @Nullable @Bind(R.id.movie_item_score_tv) TextView scoreTv;
