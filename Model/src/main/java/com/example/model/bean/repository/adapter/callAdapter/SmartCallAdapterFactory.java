@@ -1,7 +1,7 @@
 package com.example.model.bean.repository.adapter.callAdapter;
 
 import com.example.common.ExecutorsManager;
-import com.example.model.bean.repository.utils.Types;
+import com.example.common.ultrafit.type.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

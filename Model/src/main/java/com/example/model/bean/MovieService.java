@@ -101,7 +101,7 @@ public class MovieService {
             UltraParserFactory.outputs(requestEntity);
 
             return service
-                .getMovieDetail(requestEntity.getUrl(), requestEntity.getQueryMap())
+                .getMovieDetail(requestEntity.getUrl(), requestEntity.getParamMap())
                 .concatMap(new Func1<MovieDetailResponse, Observable<MovieDetailResponse>>() {
                   @Override public Observable<MovieDetailResponse> call(MovieDetailResponse movieDetailResponse) {
                     return movieDetailResponse.filterWebServiceErrors();

@@ -12,7 +12,7 @@ public class RequestEntity {
 
   private RestType restType;
   private String url;
-  private Map<String, String> queryMap;
+  private Map<String, String> paramMap;
 
   public RequestEntity() {
   }
@@ -20,7 +20,7 @@ public class RequestEntity {
   public RequestEntity(@Nullable RestType restType, @Nullable String url, @Nullable Map<String, String> paramsMap) {
     this.restType = restType;
     this.url = url;
-    this.queryMap = paramsMap;
+    this.paramMap = paramsMap;
   }
 
   public RestType getRestType() {
@@ -41,12 +41,12 @@ public class RequestEntity {
     return RequestEntity.this;
   }
 
-  public Map<String, String> getQueryMap() {
-    return queryMap;
+  public Map<String, String> getParamMap() {
+    return paramMap;
   }
 
-  public RequestEntity setQueryMap(@Nullable Map<String, String> queryMap) {
-    this.queryMap = queryMap;
+  public RequestEntity setParamMap(@Nullable Map<String, String> paramMap) {
+    this.paramMap = paramMap;
     return RequestEntity.this;
   }
 
@@ -54,7 +54,7 @@ public class RequestEntity {
     return "RequestEntity{" +
         "restType=" + restType +
         ", url='" + url + '\'' +
-        ", queryMap=" + queryMap +
+        ", paramMap=" + paramMap +
         '}';
   }
 }

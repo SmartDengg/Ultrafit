@@ -27,6 +27,7 @@ public abstract class UseCase<R, S> {
       }
     }).switchMap(new Func1<R, Observable<R>>() {
       @Override public Observable<R> call(R r) {
+        /*unused*/
         return Observable.just(r);
       }
     }).concatMap(new Func1<R, Observable<S>>() {
@@ -35,7 +36,7 @@ public abstract class UseCase<R, S> {
         RequestEntity requestEntity = UltraParserFactory.createParser(r).parseRequestEntity();
         UltraParserFactory.outputs(requestEntity);
 
-        return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getQueryMap());
+        return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParamMap());
       }
     }).onBackpressureBuffer().takeFirst(new Func1<S, Boolean>() {
       @Override public Boolean call(S s) {

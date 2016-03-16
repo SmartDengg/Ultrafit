@@ -29,7 +29,7 @@ public class UltraParserFactory {
                  requestEntity.getUrl() +
                  "\n  ⇢ " +
                  " Params : " +
-                 requestEntity.getQueryMap());
+                 requestEntity.getParamMap());
   }
 
   private Object rawEntity;
@@ -57,12 +57,12 @@ public class UltraParserFactory {
 
   public Map<String, String> parseParameter() {
     UltraParserFactory.this.installParams();
-    return requestEntity.getQueryMap();
+    return requestEntity.getParamMap();
   }
 
   private void installParams() {
     RequestEntity tempEntity = UltraParserFactory.this.internalParseParameter();
-    requestEntity.setQueryMap(tempEntity.getQueryMap());
+    requestEntity.setParamMap(tempEntity.getParamMap());
   }
 
   public RequestEntity parseRequestEntity() {
@@ -71,7 +71,7 @@ public class UltraParserFactory {
       UltraParserFactory.this.installRestUrl();
     }
 
-    if (requestEntity.getQueryMap() == null) {
+    if (requestEntity.getParamMap() == null) {
       UltraParserFactory.this.installParams();
     }
 
