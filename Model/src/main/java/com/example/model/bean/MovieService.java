@@ -6,7 +6,7 @@ import com.example.common.ultrafit.RequestEntity;
 import com.example.common.ultrafit.UltraParserFactory;
 import com.example.model.bean.entity.CityEntity;
 import com.example.model.bean.entity.MovieEntity;
-import com.example.model.bean.repository.ServiceGenerator;
+import com.example.common.repository.ServiceGenerator;
 import com.example.model.bean.request.MovieDetailRequest;
 import com.example.model.bean.response.CityListResponse;
 import com.example.model.bean.response.MovieDetailResponse;

@@ -1,4 +1,4 @@
-package com.example.model.bean.repository.adapter.callAdapter;
+package com.example.common.repository.adapter.callAdapter;
 
 import com.example.common.ExecutorsManager;
 import com.example.common.ultrafit.type.Types;

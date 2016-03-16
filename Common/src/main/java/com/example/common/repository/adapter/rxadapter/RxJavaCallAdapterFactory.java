@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.model.bean.repository.adapter.rxadapter;
+package com.example.common.repository.adapter.rxadapter;
 
 import com.example.common.Constants;
-import com.example.model.bean.repository.adapter.callAdapter.SmartCallAdapter;
+import com.example.common.repository.adapter.callAdapter.SmartCallAdapter;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;

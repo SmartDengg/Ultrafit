@@ -1,4 +1,4 @@
-package com.example.model.bean.repository;
+package com.example.common.repository;
 
 import java.io.IOException;
 import okhttp3.Interceptor;

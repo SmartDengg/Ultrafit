@@ -1,7 +1,7 @@
-package com.example.model.bean.repository.adapter.callAdapter;
+package com.example.common.repository.adapter.callAdapter;
 
 import com.example.common.ExecutorsManager;
-import com.example.model.bean.repository.callback.SmartCallback;
+import com.example.common.repository.callback.SmartCallback;
 import java.io.IOException;
 import okhttp3.Request;
 import retrofit2.Call;

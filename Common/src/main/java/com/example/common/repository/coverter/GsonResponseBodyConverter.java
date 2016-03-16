@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.model.bean.repository.coverter;
+package com.example.common.repository.coverter;
 
 import com.example.common.Constants;
 import com.google.gson.TypeAdapter;

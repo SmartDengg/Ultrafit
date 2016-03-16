@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.model.bean.repository.adapter.rxadapter;
+package com.example.common.repository.adapter.rxadapter;
 
 import java.lang.reflect.Type;
 import retrofit2.Call;

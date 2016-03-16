@@ -1,4 +1,4 @@
-package com.example.model.bean.repository.callback;
+package com.example.common.repository.callback;
 
 import java.io.IOException;
 import retrofit2.Response;

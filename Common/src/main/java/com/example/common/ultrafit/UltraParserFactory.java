@@ -146,24 +146,27 @@ public class UltraParserFactory {
         Class<?> parameterType = field.getType();
         Class<?> rawParameterType = Types.getRawType(parameterType);
 
-        String name = null;
-        String value = null;
+        String name;
+        String value;
+        Object object;
+
+        try {
+          object = field.get(rawEntity);
+        } catch (IllegalAccessException e) {
+          throw Errors.methodError(field.getDeclaringClass(),
+                                   "IllegalAccessException was happened when access " + " %s field",
+                                   field.getName());
+        }
+
+        if (object == null) continue;
 
         if (rawParameterType.isArray()) {
           Class<?> arrayComponentType = UltraParserFactory.this.boxIfPrimitive(rawParameterType.getComponentType());
-          try {
-            name = argument.parameter();
-            value = UltraParserFactory.this.arrayToString(field, rawEntity, arrayComponentType);
-          } catch (IllegalAccessException e) {
-            e.printStackTrace();
-          }
+          name = argument.parameter();
+          value = UltraParserFactory.this.arrayToString(object, arrayComponentType);
         } else {
-          try {
-            name = argument.parameter();
-            Object o = field.get(rawEntity);
-            value = (o != null) ? o.toString() : "";
-          } catch (IllegalAccessException ignored) {
-          }
+          name = argument.parameter();
+          value = object.toString();
         }
 
         if (params.containsKey(name)) {
@@ -191,14 +194,11 @@ public class UltraParserFactory {
     return type;
   }
 
-  private String arrayToString(Field field, Object rawEntity, Class<?> rawParameterType) throws IllegalAccessException {
+  private String arrayToString(Object object, Class<?> rawParameterType) {
 
-    Object object = field.get(rawEntity);
     String value;
 
-    if (object == null) {
-      value = "";
-    } else if (rawParameterType == Boolean.class) {/** Boolean[] */
+    if (rawParameterType == Boolean.class) {/** Boolean[] */
       try {
         value = Arrays.toString(((Boolean[]) object));
       } catch (ClassCastException e) {
@@ -247,7 +247,7 @@ public class UltraParserFactory {
         value = Arrays.toString(((short[]) object));
       }
     } else {
-      value = object.toString();
+      value = object != null ? Arrays.toString((Object[]) object) : null;
     }
 
     return value;

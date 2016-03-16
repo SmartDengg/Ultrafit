@@ -1,4 +1,4 @@
-package com.example.model.bean.repository.callback;
+package com.example.common.repository.callback;
 
 import com.orhanobut.logger.Logger;
 import java.io.IOException;

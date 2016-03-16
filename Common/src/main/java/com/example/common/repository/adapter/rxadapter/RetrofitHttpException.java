@@ -1,4 +1,4 @@
-package com.example.model.bean.repository.adapter.rxadapter;
+package com.example.common.repository.adapter.rxadapter;
 
 import retrofit2.Response;
 

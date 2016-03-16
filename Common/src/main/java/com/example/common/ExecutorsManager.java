@@ -35,8 +35,7 @@ public class ExecutorsManager {
   }
 
   public class SynchronizeExecutor implements Executor {
-
-    @Override public void execute(Runnable command) {
+    @Override public void execute(@NonNull Runnable command) {
       command.run();
     }
   }
