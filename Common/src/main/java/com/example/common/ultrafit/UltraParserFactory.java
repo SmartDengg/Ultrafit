@@ -160,7 +160,8 @@ public class UltraParserFactory {
         } else {
           try {
             name = argument.parameter();
-            value = field.get(rawEntity).toString();
+            Object o = field.get(rawEntity);
+            value = (o != null) ? o.toString() : "";
           } catch (IllegalAccessException ignored) {
           }
         }
@@ -195,7 +196,9 @@ public class UltraParserFactory {
     Object object = field.get(rawEntity);
     String value;
 
-    if (rawParameterType == Boolean.class) {/** Boolean[] */
+    if (object == null) {
+      value = "";
+    } else if (rawParameterType == Boolean.class) {/** Boolean[] */
       try {
         value = Arrays.toString(((Boolean[]) object));
       } catch (ClassCastException e) {
