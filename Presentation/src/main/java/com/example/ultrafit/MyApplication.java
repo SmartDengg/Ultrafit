@@ -4,7 +4,7 @@ import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import com.example.common.Constants;
-import com.example.common.Util.FileUtil;
+import com.example.common.util.FileUtil;
 import com.facebook.stetho.Stetho;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.orhanobut.logger.LogLevel;

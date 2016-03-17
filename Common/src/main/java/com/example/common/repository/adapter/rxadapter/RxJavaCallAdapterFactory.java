@@ -16,6 +16,7 @@
 package com.example.common.repository.adapter.rxadapter;
 
 import com.example.common.Constants;
+import com.example.common.errors.RetrofitHttpException;
 import com.example.common.repository.adapter.callAdapter.SmartCallAdapter;
 import java.io.IOException;
 import java.lang.annotation.Annotation;

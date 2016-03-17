@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.common.Util;
+package com.example.common.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;

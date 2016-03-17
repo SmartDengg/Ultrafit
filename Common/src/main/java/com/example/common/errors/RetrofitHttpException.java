@@ -1,4 +1,4 @@
-package com.example.common.repository.adapter.rxadapter;
+package com.example.common.errors;
 
 import retrofit2.Response;
 

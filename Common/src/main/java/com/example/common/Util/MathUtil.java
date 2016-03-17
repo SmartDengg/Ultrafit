@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.common.Util;
+package com.example.common.util;
 
 public class MathUtil {
     public static float constrain(float min, float max, float v) {

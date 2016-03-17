@@ -3,7 +3,7 @@ package com.example.model.bean.response;
 import android.annotation.TargetApi;
 import android.os.Build;
 import com.example.common.Constants;
-import com.example.model.bean.WebServiceException;
+import com.example.common.errors.WebServiceException;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;

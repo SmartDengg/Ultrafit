@@ -16,7 +16,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import com.example.common.Constants;
-import com.example.common.Util.DensityUtil;
+import com.example.common.util.DensityUtil;
 import com.example.model.bean.entity.CityEntity;
 import com.example.ultrafit.R;
 import com.example.ultrafit.adapter.CityListAdapter;
