@@ -26,6 +26,10 @@ public abstract class UseCase<R, S> {
       @Override public R call() {
         return requestEntity;
       }
+    }).switchMap(new Func1<R, Observable<R>>() {
+      @Override public Observable<R> call(R r) {
+        return Observable.just(r);
+      }
     }).concatMap(new Func1<R, Observable<S>>() {
       @Override public Observable<S> call(R r) {
 
