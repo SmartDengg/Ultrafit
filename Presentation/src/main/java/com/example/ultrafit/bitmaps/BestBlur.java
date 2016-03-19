@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.common.util;
+package com.example.ultrafit.bitmaps;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -42,8 +42,6 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
   private CityListAdapter cityListAdapter = new CityListAdapter(CityListActivity.this);
   private CityListPresenter<CityEntity> cityListPresenter;
 
-  private int contentViewHeight;
-
   private CityListAdapter.Callback callback = new CityListAdapter.Callback() {
     @Override public void onItemClick(View itemView, CityEntity cityEntity) {
       int location = DensityUtil.getLocationY(itemView);
@@ -109,7 +107,6 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
         viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
           @Override public boolean onPreDraw() {
             rootView.getViewTreeObserver().removeOnPreDrawListener(this);
-            CityListActivity.this.contentViewHeight = toolbar.getHeight();
             CityListActivity.this.collapseToolbar();
             return true;
           }
@@ -122,6 +119,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
 
   private void collapseToolbar() {
 
+    int contentViewHeight = toolbar.getHeight();
     int toolBarHeight = DensityUtil.getActionBarSize(CityListActivity.this);
     ValueAnimator valueHeightAnimator = ValueAnimator.ofInt(contentViewHeight, toolBarHeight);
     valueHeightAnimator.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime));

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public class MovieDetailResponse extends BaseResponse {
+public class MovieDetailResponse {
 
   /*result": [
         {
@@ -31,14 +31,6 @@ public class MovieDetailResponse extends BaseResponse {
         },
        ]*/
 
-  @Expose @SerializedName("result") private MovieDetail movieDetail;
-
-  public MovieDetail getMovieDetail() {
-    return movieDetail;
-  }
-
-  public class MovieDetail {
-
     @Expose @SerializedName("poster") public String movieThumbUrl;
     @Expose @SerializedName("title") public String movieName;
     @Expose @SerializedName("plot_simple") public String movieSketch;
@@ -51,5 +43,4 @@ public class MovieDetailResponse extends BaseResponse {
 
     @Expose @SerializedName("release_date") public String movieReleaseTime;
     @Expose @SerializedName("country") public String movieCountry;
-  }
 }

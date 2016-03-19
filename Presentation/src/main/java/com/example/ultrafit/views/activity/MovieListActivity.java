@@ -27,7 +27,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import com.example.common.Constants;
-import com.example.common.util.BitmapUtil;
+import com.example.ultrafit.bitmaps.BitmapUtil;
 import com.example.model.bean.entity.MovieEntity;
 import com.example.ultrafit.R;
 import com.example.ultrafit.adapter.MovieAdapter;

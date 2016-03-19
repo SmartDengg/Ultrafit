@@ -1,4 +1,4 @@
-package com.example.common.util;
+package com.example.ultrafit.bitmaps;
 
 import android.annotation.SuppressLint;
 

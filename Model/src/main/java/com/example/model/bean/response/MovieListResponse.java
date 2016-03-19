@@ -1,13 +1,11 @@
 package com.example.model.bean.response;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-import java.util.List;
 
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public class MovieListResponse  extends BaseResponse{
+public class MovieListResponse {
 
 
   /*result": [
@@ -18,13 +16,5 @@ public class MovieListResponse  extends BaseResponse{
         },
        ]*/
 
-  @Expose @SerializedName("result") private List<Result> resultList;
-
-  public List<Result> getResultList() {
-    return resultList;
-  }
-
-  public class Result {
-    @Expose public String movieId;
-  }
+  @Expose public String movieId;
 }

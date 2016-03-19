@@ -23,10 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.OnClick;
-import com.example.common.util.DateUtil;
 import com.example.common.util.DensityUtil;
 import com.example.model.bean.entity.MovieEntity;
 import com.example.ultrafit.R;
+import com.example.ultrafit.bitmaps.DateUtil;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 

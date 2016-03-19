@@ -2,15 +2,17 @@ package com.example.model.bean;
 
 import android.support.annotation.NonNull;
 import com.example.common.SchedulersCompat;
+import com.example.common.repository.ServiceGenerator;
 import com.example.common.ultrafit.RequestEntity;
 import com.example.common.ultrafit.UltraParserFactory;
 import com.example.model.bean.entity.CityEntity;
 import com.example.model.bean.entity.MovieEntity;
-import com.example.common.repository.ServiceGenerator;
 import com.example.model.bean.request.MovieDetailRequest;
 import com.example.model.bean.response.CityListResponse;
 import com.example.model.bean.response.MovieDetailResponse;
 import com.example.model.bean.response.MovieListResponse;
+import com.example.model.bean.response.base.ResponseS;
+import com.example.model.bean.response.base.ResponseX;
 import java.util.List;
 import java.util.Map;
 import retrofit2.http.GET;
@@ -28,11 +30,12 @@ public class MovieService {
 
   private interface InternalService {
 
-    @GET Observable<CityListResponse> getCityList(@Url String url, @QueryMap Map<String, String> params);
+    @GET Observable<ResponseS<CityListResponse>> getCityList(@Url String url, @QueryMap Map<String, String> params);
 
-    @GET Observable<MovieListResponse> getMovieList(@Url String url, @QueryMap Map<String, String> params);
+    @GET Observable<ResponseS<MovieListResponse>> getMovieList(@Url String url, @QueryMap Map<String, String> params);
 
-    @GET Observable<MovieDetailResponse> getMovieDetail(@Url String url, @QueryMap Map<String, String> params);
+    @GET Observable<ResponseX<MovieDetailResponse>> getMovieDetail(@Url String url,
+                                                                   @QueryMap Map<String, String> params);
   }
 
   private MovieService() {
@@ -49,23 +52,23 @@ public class MovieService {
 
     return MovieService.this.service
         .getCityList(url, params)
-        .concatMap(new Func1<CityListResponse, Observable<CityListResponse>>() {
-          @Override public Observable<CityListResponse> call(CityListResponse cityListResponse) {
-            return cityListResponse.filterWebServiceErrors();
+        .concatMap(new Func1<ResponseS<CityListResponse>, Observable<List<CityListResponse>>>() {
+          @Override public Observable<List<CityListResponse>> call(ResponseS<CityListResponse> responseS) {
+            return responseS.filterWebServiceErrors();
           }
         })
-        .concatMap(new Func1<CityListResponse, Observable<CityListResponse.Result>>() {
-          @Override public Observable<CityListResponse.Result> call(CityListResponse cityListResponse) {
-            return Observable.from(cityListResponse.getResultList());
+        .concatMap(new Func1<List<CityListResponse>, Observable<CityListResponse>>() {
+          @Override public Observable<CityListResponse> call(List<CityListResponse> cityListResponses) {
+            return Observable.from(cityListResponses);
           }
         })
-        .map(new Func1<CityListResponse.Result, CityEntity>() {
-          @Override public CityEntity call(CityListResponse.Result result) {
+        .map(new Func1<CityListResponse, CityEntity>() {
+          @Override public CityEntity call(CityListResponse cityListResponse) {
 
             CityEntity clone = cityEntityInstance.newInstance();
 
-            clone.setCityId(result.cityId);
-            clone.setCityName(result.cityName);
+            clone.setCityId(cityListResponse.cityId);
+            clone.setCityName(cityListResponse.cityName);
 
             return clone;
           }
@@ -81,30 +84,30 @@ public class MovieService {
 
     return MovieService.this.service
         .getMovieList(url, params)
-        .concatMap(new Func1<MovieListResponse, Observable<MovieListResponse>>() {
-          @Override public Observable<MovieListResponse> call(MovieListResponse movieListResponse) {
-            return movieListResponse.filterWebServiceErrors();
+        .concatMap(new Func1<ResponseS<MovieListResponse>, Observable<List<MovieListResponse>>>() {
+          @Override public Observable<List<MovieListResponse>> call(ResponseS<MovieListResponse> responseS) {
+            return responseS.filterWebServiceErrors();
           }
         })
-        .concatMap(new Func1<MovieListResponse, Observable<MovieListResponse.Result>>() {
-          @Override public Observable<MovieListResponse.Result> call(MovieListResponse movieListResponse) {
+        .concatMap(new Func1<List<MovieListResponse>, Observable<MovieListResponse>>() {
+          @Override public Observable<MovieListResponse> call(List<MovieListResponse> movieListResponses) {
             //return Observable.from(movieListResponse.getResultList());
 
-            return Observable.just(movieListResponse.getResultList().get(0));
+            return Observable.just(movieListResponses.get(0));
           }
         })
-        .concatMap(new Func1<MovieListResponse.Result, Observable<MovieDetailResponse>>() {
-          @Override public Observable<MovieDetailResponse> call(MovieListResponse.Result result) {
+        .concatMap(new Func1<MovieListResponse, Observable<MovieDetailResponse>>() {
+          @Override public Observable<MovieDetailResponse> call(MovieListResponse response) {
 
             RequestEntity requestEntity =
-                UltraParserFactory.createParser(new MovieDetailRequest(result.movieId)).parseRequestEntity();
+                UltraParserFactory.createParser(new MovieDetailRequest(response.movieId)).parseRequestEntity();
             UltraParserFactory.outputs(requestEntity);
 
             return service
                 .getMovieDetail(requestEntity.getUrl(), requestEntity.getParamMap())
-                .concatMap(new Func1<MovieDetailResponse, Observable<MovieDetailResponse>>() {
-                  @Override public Observable<MovieDetailResponse> call(MovieDetailResponse movieDetailResponse) {
-                    return movieDetailResponse.filterWebServiceErrors();
+                .concatMap(new Func1<ResponseX<MovieDetailResponse>, Observable<MovieDetailResponse>>() {
+                  @Override public Observable<MovieDetailResponse> call(ResponseX<MovieDetailResponse> responseX) {
+                    return responseX.filterWebServiceErrors();
                   }
                 });
           }
@@ -112,22 +115,20 @@ public class MovieService {
         .map(new Func1<MovieDetailResponse, MovieEntity>() {
           @Override public MovieEntity call(MovieDetailResponse movieDetailResponse) {
 
-            MovieDetailResponse.MovieDetail movieDetail = movieDetailResponse.getMovieDetail();
-
             MovieEntity clone = movieEntityInstance.newInstance();
 
-            clone.setMovieThumbUrl(movieDetail.movieThumbUrl);
-            clone.setMovieName(movieDetail.movieName);
-            clone.setMovieSketch(movieDetail.movieSketch);
+            clone.setMovieThumbUrl(movieDetailResponse.movieThumbUrl);
+            clone.setMovieName(movieDetailResponse.movieName);
+            clone.setMovieSketch(movieDetailResponse.movieSketch);
 
-            clone.setMovieWriters(movieDetail.movieWriters);
-            clone.setMovieDirector(movieDetail.movieDirectors);
-            clone.setMovieActor(movieDetail.movieActors);
-            clone.setMovieCategory(movieDetail.movieCategory);
-            clone.setMovieScore(movieDetail.movieScore);
+            clone.setMovieWriters(movieDetailResponse.movieWriters);
+            clone.setMovieDirector(movieDetailResponse.movieDirectors);
+            clone.setMovieActor(movieDetailResponse.movieActors);
+            clone.setMovieCategory(movieDetailResponse.movieCategory);
+            clone.setMovieScore(movieDetailResponse.movieScore);
 
-            clone.setMovieReleaseTime(movieDetail.movieReleaseTime);
-            clone.setMovieCountry(movieDetail.movieCountry);
+            clone.setMovieReleaseTime(movieDetailResponse.movieReleaseTime);
+            clone.setMovieCountry(movieDetailResponse.movieCountry);
 
             return clone;
           }
