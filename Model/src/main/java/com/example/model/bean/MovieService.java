@@ -1,7 +1,6 @@
 package com.example.model.bean;
 
 import android.support.annotation.NonNull;
-import com.example.common.SchedulersCompat;
 import com.example.common.repository.ServiceGenerator;
 import com.example.common.ultrafit.RequestEntity;
 import com.example.common.ultrafit.UltraParserFactory;
@@ -73,8 +72,7 @@ public class MovieService {
             return clone;
           }
         })
-        .toList()
-        .compose(SchedulersCompat.<List<CityEntity>>applyExecutorSchedulers());
+        .toList();
   }
 
   @SuppressWarnings("unchecked")
@@ -133,7 +131,6 @@ public class MovieService {
             return clone;
           }
         })
-        .toList()
-        .compose(SchedulersCompat.<List<MovieEntity>>applyExecutorSchedulers());
+        .toList();
   }
 }

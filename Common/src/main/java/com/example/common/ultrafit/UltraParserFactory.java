@@ -1,6 +1,7 @@
 package com.example.common.ultrafit;
 
 import android.support.annotation.NonNull;
+import com.example.common.Constants;
 import com.example.common.ultrafit.annotation.Argument;
 import com.example.common.ultrafit.annotation.RestMethod;
 import com.example.common.ultrafit.type.RestType;
@@ -26,7 +27,7 @@ public class UltraParserFactory {
                  requestEntity.getRestType().name() +
                  "\n  ⇢ " +
                  " Url    : " +
-                 requestEntity.getUrl() +
+                 Constants.BASE_URL + requestEntity.getUrl() +
                  "\n  ⇢ " +
                  " Params : " +
                  requestEntity.getParamMap());
@@ -154,8 +155,7 @@ public class UltraParserFactory {
           object = field.get(rawEntity);
         } catch (IllegalAccessException e) {
           throw Errors.methodError(field.getDeclaringClass(),
-                                   "IllegalAccessException was happened when access " + " %s field",
-                                   field.getName());
+                                   "IllegalAccessException was happened when access " + " %s field", field.getName());
         }
 
         if (object == null) continue;

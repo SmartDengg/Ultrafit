@@ -2,6 +2,7 @@ package com.example.domain;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.example.common.SchedulersCompat;
 import com.example.common.ultrafit.RequestEntity;
 import com.example.common.ultrafit.UltraParserFactory;
 import java.util.Map;
@@ -37,7 +38,7 @@ public abstract class UseCase<R, S> {
       @Override public Boolean call(S s) {
         return !subscription.isUnsubscribed();
       }
-    }).subscribe(useCaseSubscriber);
+    }).compose(SchedulersCompat.<S>applyExecutorSchedulers()).subscribe(useCaseSubscriber);
   }
 
   public void unsubscribe() {
