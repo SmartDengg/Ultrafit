@@ -3,7 +3,6 @@ package com.example.common.util;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 
 public class DensityUtil {
@@ -21,8 +20,6 @@ public class DensityUtil {
     item.getGlobalVisibleRect(viewRect);
 
     startingLocation[0] = viewRect.top + viewRect.bottom;
-
-    Log.e(TAG, viewRect.toString());
 
     return startingLocation[0] / 2 - DensityUtil.getStatusBarHeight(item.getContext()) - DensityUtil.getActionBarSize(
         item.getContext());

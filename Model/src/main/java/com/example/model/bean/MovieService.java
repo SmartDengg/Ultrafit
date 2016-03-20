@@ -89,7 +89,7 @@ public class MovieService {
         })
         .concatMap(new Func1<List<MovieListResponse>, Observable<MovieListResponse>>() {
           @Override public Observable<MovieListResponse> call(List<MovieListResponse> movieListResponses) {
-            //return Observable.from(movieListResponse.getResultList());
+            //return Observable.from(movieListResponses);
 
             return Observable.just(movieListResponses.get(0));
           }

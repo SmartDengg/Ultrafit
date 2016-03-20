@@ -47,21 +47,21 @@ public class UltraParserFactory {
   }
 
   public String parseUrl() {
-    UltraParserFactory.this.installRestUrl();
+    UltraParserFactory.this.parseRestUrl();
     return requestEntity.getUrl();
   }
 
-  private void installRestUrl() {
+  private void parseRestUrl() {
     RequestEntity tempEntity = UltraParserFactory.this.internalParseUrl();
     requestEntity.setRestType(tempEntity.getRestType()).setUrl(tempEntity.getUrl());
   }
 
   public Map<String, String> parseParameter() {
-    UltraParserFactory.this.installParams();
+    UltraParserFactory.this.parseParams();
     return requestEntity.getParamMap();
   }
 
-  private void installParams() {
+  private void parseParams() {
     RequestEntity tempEntity = UltraParserFactory.this.internalParseParameter();
     requestEntity.setParamMap(tempEntity.getParamMap());
   }
@@ -69,11 +69,11 @@ public class UltraParserFactory {
   public RequestEntity parseRequestEntity() {
 
     if (requestEntity.getRestType() == null || requestEntity.getUrl() == null) {
-      UltraParserFactory.this.installRestUrl();
+      UltraParserFactory.this.parseRestUrl();
     }
 
     if (requestEntity.getParamMap() == null) {
-      UltraParserFactory.this.installParams();
+      UltraParserFactory.this.parseParams();
     }
 
     return requestEntity;
