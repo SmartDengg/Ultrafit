@@ -89,9 +89,9 @@ public class MovieService {
         })
         .concatMap(new Func1<List<MovieListResponse>, Observable<MovieListResponse>>() {
           @Override public Observable<MovieListResponse> call(List<MovieListResponse> movieListResponses) {
-            //return Observable.from(movieListResponses);
+            return Observable.from(movieListResponses);
 
-            return Observable.just(movieListResponses.get(0));
+            //return Observable.just(movieListResponses.get(0));
           }
         })
         .concatMap(new Func1<MovieListResponse, Observable<MovieDetailResponse>>() {

@@ -33,7 +33,6 @@ public class BitmapUtil {
 
     View rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
 
-    rootView.destroyDrawingCache();
     rootView.setDrawingCacheEnabled(true);
     Bitmap drawingCache = rootView.getDrawingCache();
 
