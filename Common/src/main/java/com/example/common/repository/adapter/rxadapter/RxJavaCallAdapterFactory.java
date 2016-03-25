@@ -47,11 +47,16 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
 
     Class<?> rawType = getRawType(returnType);
     boolean isSingle = "rx.Single".equals(rawType.getCanonicalName());
-    if (rawType != Observable.class && !isSingle) {
+    boolean isCompletable = "rx.Completable".equals(rawType.getCanonicalName());
+
+    if (rawType != Observable.class && !isSingle && !isCompletable) {
       return null;
     }
     if (!(returnType instanceof ParameterizedType)) {
-      String name = isSingle ? "Single" : "Observable";
+
+      String name = "Observable";
+      if (isSingle) name = "Single";
+      if (isCompletable) name = "Completable";
       throw new IllegalStateException(
           name + " return type must be parameterized" + " as " + name + "<Foo> or " + name + "<? extends Foo>");
     }
@@ -59,8 +64,11 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
     CallAdapter<Observable<?>> callAdapter = getCallAdapter(returnType);
     if (isSingle) {
       return SingleHelper.makeSingle(callAdapter);
+    } else if (isCompletable) {
+      return CompletableHelper.makeCompletable(callAdapter);
+    } else {
+      return callAdapter;
     }
-    return callAdapter;
   }
 
   private CallAdapter<Observable<?>> getCallAdapter(Type returnType) {
