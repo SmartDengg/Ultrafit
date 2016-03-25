@@ -17,28 +17,25 @@ import retrofit2.Retrofit;
 public class ServiceGenerator {
 
   private static OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-  private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder();
   private static Retrofit retrofit;
 
   static {
-    Gson gson = new GsonBuilder()
-        .excludeFieldsWithoutExposeAnnotation()
-        .enableComplexMapKeySerialization()
-        .serializeNulls()
-        .create();
+    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                                 .enableComplexMapKeySerialization()
+                                 .serializeNulls()
+                                 .create();
 
-    ServiceGenerator.httpClientBuilder
-        .addNetworkInterceptor(new StethoInterceptor())
-        .addInterceptor(HeaderInterceptor.createdInterceptor())
-        .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
+    ServiceGenerator.httpClientBuilder.addNetworkInterceptor(new StethoInterceptor())
+                                      .addInterceptor(HeaderInterceptor.createdInterceptor())
+                                      .addInterceptor(
+                                          new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS));
 
-    retrofit = ServiceGenerator.retrofitBuilder
-        .baseUrl(Constants.BASE_URL)
-        .addCallAdapterFactory(SmartCallAdapterFactory.create())
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(httpClientBuilder.build())
-        .build();
+    retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
+                                     .addCallAdapterFactory(SmartCallAdapterFactory.create())
+                                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                                     .addConverterFactory(GsonConverterFactory.create(gson))
+                                     .client(httpClientBuilder.build())
+                                     .build();
   }
 
   public static <S> S createService(Class<S> serviceClass) {
