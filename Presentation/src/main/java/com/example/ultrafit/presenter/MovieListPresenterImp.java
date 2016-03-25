@@ -1,6 +1,7 @@
 package com.example.ultrafit.presenter;
 
 import com.example.common.SimpleSubscriber;
+import com.example.common.errors.WebServiceException;
 import com.example.domain.MovieListUseCase;
 import com.example.domain.UseCase;
 import com.example.model.bean.entity.MovieEntity;
@@ -55,7 +56,9 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
 
     @Override public void onError(Throwable e) {
       super.onError(e);
-      MovieListPresenterImp.this.showError(e.getMessage());
+      if (e instanceof WebServiceException) {
+        MovieListPresenterImp.this.showError(e.getMessage());
+      }
     }
 
     @Override public void onNext(List<MovieEntity> movieEntities) {

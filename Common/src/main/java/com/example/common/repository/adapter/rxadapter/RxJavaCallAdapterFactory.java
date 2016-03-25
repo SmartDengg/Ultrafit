@@ -93,6 +93,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
           subscriber.onCompleted();
         }
       } catch (Throwable t) {
+        /*https://github.com/ReactiveX/RxJava/issues/748#issuecomment-32471495*/
         Exceptions.throwIfFatal(t);
         if (!subscriber.isUnsubscribed()) {
           subscriber.onError(t);

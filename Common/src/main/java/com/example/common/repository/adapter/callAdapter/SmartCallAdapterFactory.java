@@ -1,6 +1,6 @@
 package com.example.common.repository.adapter.callAdapter;
 
-import com.example.common.ExecutorsManager;
+import com.example.common.Executors;
 import com.example.common.ultrafit.type.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -14,10 +14,10 @@ import retrofit2.Retrofit;
  */
 public class SmartCallAdapterFactory extends CallAdapter.Factory {
 
-  private ExecutorsManager.MainThreadExecutor mainThreadExecutor;
+  private Executors.MainThreadExecutor mainThreadExecutor;
 
   private SmartCallAdapterFactory() {
-    this.mainThreadExecutor = ExecutorsManager.getInstance().mainThreadExecutor();
+    this.mainThreadExecutor = Executors.getInstance().mainThreadExecutor();
   }
 
   public static SmartCallAdapterFactory create() {

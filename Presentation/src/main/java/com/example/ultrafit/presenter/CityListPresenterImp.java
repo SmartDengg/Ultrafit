@@ -1,6 +1,7 @@
 package com.example.ultrafit.presenter;
 
 import com.example.common.SimpleSubscriber;
+import com.example.common.errors.WebServiceException;
 import com.example.domain.CityListUseCase;
 import com.example.domain.UseCase;
 import com.example.model.bean.entity.CityEntity;
@@ -55,7 +56,9 @@ public class CityListPresenterImp implements CityListPresenter<CityEntity> {
 
     @Override public void onError(Throwable e) {
       super.onError(e);
-      CityListPresenterImp.this.showError(e.getMessage());
+      if (e instanceof WebServiceException) {
+        CityListPresenterImp.this.showError(e.getMessage());
+      }
     }
 
     @Override public void onNext(List<CityEntity> cityEntities) {
