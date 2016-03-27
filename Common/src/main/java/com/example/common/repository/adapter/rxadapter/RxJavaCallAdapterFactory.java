@@ -33,6 +33,7 @@ import rx.exceptions.Exceptions;
 import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
 public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
@@ -152,7 +153,9 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
               if (retryCount.equals(Constants.MAX_CONNECT)) {
                 return Observable.error(innerThrowable.getThrowable());
               }
-              return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS);
+
+              /*use Schedulers#immediate() to keep on same thread */
+              return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS, Schedulers.immediate());
             }
           });
         }
