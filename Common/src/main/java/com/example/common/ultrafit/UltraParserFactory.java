@@ -9,6 +9,7 @@ import com.example.common.ultrafit.type.Types;
 import com.orhanobut.logger.Logger;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -133,13 +134,28 @@ public class UltraParserFactory {
     }
 
     Map<String, String> params = new HashMap<>();
-    Class<?> clazz = rawEntity.getClass();
+    Class<?> subClazz = rawEntity.getClass();
+    Class<?> superClazz = subClazz.getSuperclass();
 
-    Field[] declaredFields = clazz.getDeclaredFields();
+    while (superClazz != null) {
 
+      Field[] superFields = superClazz.getDeclaredFields();
+      superClazz = superClazz.getSuperclass();
+
+      if (superFields == null || superFields.length == 0) continue;
+      UltraParserFactory.this.hunter(params, superFields);
+    }
+
+    Field[] subFields = subClazz.getDeclaredFields();
+    UltraParserFactory.this.hunter(params, subFields);
+
+    return new RequestEntity(null, null, Collections.unmodifiableMap(params));
+  }
+
+  private void hunter(Map<String, String> params, Field[] declaredFields) {
     for (Field field : declaredFields) {
 
-      field.setAccessible(true);
+      if (Modifier.isPrivate(field.getModifiers())) field.setAccessible(true);
 
       if (field.isAnnotationPresent(Argument.class)) {
 
@@ -148,25 +164,25 @@ public class UltraParserFactory {
         Class<?> rawParameterType = Types.getRawType(parameterType);
 
         String name;
-        String value;
-        Object object;
+        Object value;
+        String ultra;
 
         try {
-          object = field.get(rawEntity);
+          value = field.get(rawEntity);
         } catch (IllegalAccessException e) {
           throw Errors.methodError(field.getDeclaringClass(),
-                                   "IllegalAccessException was happened when access " + " %s field", field.getName());
+                                   "IllegalAccessException was happened when access " + "%s field", field.getName());
         }
 
-        if (object == null) continue;
+        if (value == null) continue;
 
         if (rawParameterType.isArray()) {
           Class<?> arrayComponentType = UltraParserFactory.this.boxIfPrimitive(rawParameterType.getComponentType());
           name = argument.parameter();
-          value = UltraParserFactory.this.arrayToString(object, arrayComponentType);
+          ultra = UltraParserFactory.this.arrayToString(value, arrayComponentType);
         } else {
           name = argument.parameter();
-          value = object.toString();
+          ultra = value.toString();
         }
 
         if (params.containsKey(name)) {
@@ -174,12 +190,11 @@ public class UltraParserFactory {
                                    "The parameter %s at least already exists one.You must choose one "
                                        + "from these which value is '%s'"
                                        + " or"
-                                       + " '%s'", name, params.get(name), value);
+                                       + " '%s'", name, params.get(name), ultra);
         }
-        params.put(name, value);
+        params.put(name, ultra);
       }
     }
-    return new RequestEntity(null, null, Collections.unmodifiableMap(params));
   }
 
   private Class<?> boxIfPrimitive(Class<?> type) {
