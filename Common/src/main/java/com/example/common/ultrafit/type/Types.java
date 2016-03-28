@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 /**
  * Created by Joker on 2016/2/19.
- * thanks to square,best wishes 4 u.
+ * thanks to square
  */
 public class Types {
 
@@ -47,7 +47,7 @@ public class Types {
     }
   }
 
- public static Type getParameterUpperBound(int index, ParameterizedType type) {
+  public static Type getParameterUpperBound(int index, ParameterizedType type) {
     Type[] types = type.getActualTypeArguments();
     if (types.length <= index) {
       throw new IllegalArgumentException(
@@ -59,5 +59,4 @@ public class Types {
     }
     return paramType;
   }
-
 }

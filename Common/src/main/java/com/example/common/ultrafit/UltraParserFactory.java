@@ -85,57 +85,47 @@ public class UltraParserFactory {
     RestType restType = null;
     String url = null;
 
-    clazz = rawEntity.getClass();
-    Annotation[] annotations = clazz.getAnnotations();
+    this.clazz = rawEntity.getClass();
+    Annotation[] annotations = this.clazz.getAnnotations();
 
     for (Annotation classAnnotation : annotations) {
 
       Class<? extends Annotation> annotationType = classAnnotation.annotationType();
-      RestMethod restMethod = null;
+      if (!annotationType.isAnnotationPresent(RestMethod.class)) continue;
 
-      for (Annotation innerAnnotation : annotationType.getAnnotations()) {
-        if (innerAnnotation instanceof RestMethod) {
-          restMethod = (RestMethod) innerAnnotation;
-          break;
-        }
+      RestMethod restMethod = annotationType.getAnnotation(RestMethod.class);
+
+      if (restType != null) {
+        throw Errors.methodError(this.clazz,
+                                 "Only one HTTP method is allowed.Found: %s and %s.You should choose one from these.",
+                                 restType.name(), restMethod.type());
       }
+        /*Only HttpGet or HttpPost*/
+      restType = restMethod.type();
 
-      if (restMethod != null) {
-        if (restType != null) {
-          throw Errors.methodError(clazz,
-                                   "Only one HTTP method is allowed.Found: %s and %s.You should choose one from these.",
-                                   restType.name(), restMethod.type());
-        }
-
-        try {
-          url = (String) annotationType.getMethod("stringUrl").invoke(classAnnotation);
-        } catch (Exception ignored) {
-          throw Errors.methodError(clazz, "Failed to extract String 'value' from @%s annotation.",
-                                   annotationType.getSimpleName());
-        }
-        restType = restMethod.type();
+      try {
+        url = (String) annotationType.getMethod("stringUrl").invoke(classAnnotation);
+      } catch (Exception ignored) {
+        throw Errors.methodError(this.clazz, "Failed to extract String 'value' from @%s annotation.",
+                                 annotationType.getSimpleName());
       }
     }
 
-    if (restType == null) {
-      throw Errors.methodError(clazz, "HTTP method annotation is required (e.g., @HttpGet, @HttpPost, etc.).");
+    if (restType == null || url == null) {
+      throw Errors.methodError(this.clazz, "Http method annotation is required (e.g.@HttpGet, @HttpPost, etc.).");
     }
 
-    if (url == null) {
-      throw Errors.methodError(clazz, "RestType is required (e.g., HttpGet, " + "HttpPost, etc" + ".).");
-    }
     return new RequestEntity(restType, url, null);
   }
 
   public RequestEntity internalParseParameter() {
 
     if (requestEntity.getRestType() == null || requestEntity.getUrl() == null) {
-      throw Errors.methodError(clazz, "You should first invoke parseUrl() before call this method.");
+      throw Errors.methodError(this.clazz, "You should first invoke parseUrl() before call this method.");
     }
 
     Map<String, String> params = new HashMap<>();
-    Class<?> subClazz = rawEntity.getClass();
-    Class<?> superClazz = subClazz.getSuperclass();
+    Class<?> superClazz = this.clazz.getSuperclass();
 
     while (superClazz != null) {
 
@@ -146,7 +136,7 @@ public class UltraParserFactory {
       UltraParserFactory.this.hunter(params, superFields);
     }
 
-    Field[] subFields = subClazz.getDeclaredFields();
+    Field[] subFields = this.clazz.getDeclaredFields();
     UltraParserFactory.this.hunter(params, subFields);
 
     return new RequestEntity(null, null, Collections.unmodifiableMap(params));
@@ -197,6 +187,12 @@ public class UltraParserFactory {
     }
   }
 
+  /**
+   * If the type of this field is a primitive type, the field value is automatically boxed.
+   *
+   * @param type
+   * @return
+   */
   private Class<?> boxIfPrimitive(Class<?> type) {
     if (boolean.class == type) return Boolean.class;
     if (byte.class == type) return Byte.class;
