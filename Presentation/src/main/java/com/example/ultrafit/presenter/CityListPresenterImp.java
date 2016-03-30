@@ -58,6 +58,8 @@ public class CityListPresenterImp implements CityListPresenter<CityEntity> {
       super.onError(e);
       if (e instanceof WebServiceException) {
         CityListPresenterImp.this.showError(e.getMessage());
+      }else {
+        CityListPresenterImp.this.showError(null);
       }
     }
 

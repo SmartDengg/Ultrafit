@@ -1,5 +1,6 @@
 package com.example.common.repository.callback;
 
+import com.example.common.Constants;
 import com.orhanobut.logger.Logger;
 import java.io.IOException;
 import retrofit2.Response;
@@ -60,7 +61,7 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    * @param e
    */
   @Override public void networkError(IOException e) {
-    Logger.d(e.getMessage());
+    Logger.t(Constants.OKHTTP_TAG).d(e.getMessage());
   }
 
   /**
@@ -69,6 +70,6 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    * @param t
    */
   @Override public void unexpectedError(Throwable t) {
-    Logger.d(t.getMessage());
+    Logger.t(Constants.OKHTTP_TAG).d(t.getMessage());
   }
 }

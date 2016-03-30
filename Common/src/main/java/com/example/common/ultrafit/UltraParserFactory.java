@@ -20,18 +20,20 @@ import java.util.Map;
  */
 public class UltraParserFactory {
 
+  private static final String HttpMethod = "stringUrl";
+
   public static void outputs(@NonNull RequestEntity requestEntity) {
 
-    Logger.d("Request entity !!!!" +
-                 "\n  ⇢ " +
-                 " Type   : " +
-                 requestEntity.getRestType().name() +
-                 "\n  ⇢ " +
-                 " Url    : " +
-                 Constants.BASE_URL + requestEntity.getUrl() +
-                 "\n  ⇢ " +
-                 " Params : " +
-                 requestEntity.getParamMap());
+    Logger.t(Constants.OKHTTP_TAG).d("Request entity !!!!" +
+                                        "\n  ⇢ " +
+                                        " Type   : " +
+                                        requestEntity.getRestType().name() +
+                                        "\n  ⇢ " +
+                                        " Url    : " +
+                                        Constants.BASE_URL + requestEntity.getUrl() +
+                                        "\n  ⇢ " +
+                                        " Params : " +
+                                        requestEntity.getParamMap());
   }
 
   private Object rawEntity;
@@ -90,24 +92,24 @@ public class UltraParserFactory {
 
     for (Annotation classAnnotation : annotations) {
 
-      Class<? extends Annotation> annotationType = classAnnotation.annotationType();
-      if (!annotationType.isAnnotationPresent(RestMethod.class)) continue;
+      Class<? extends Annotation> clazz = classAnnotation.annotationType();
+      if (!clazz.isAnnotationPresent(RestMethod.class)) continue;
 
-      RestMethod restMethod = annotationType.getAnnotation(RestMethod.class);
+      RestMethod restMethod = clazz.getAnnotation(RestMethod.class);
 
       if (restType != null) {
         throw Errors.methodError(this.clazz,
                                  "Only one HTTP method is allowed.Found: %s and %s.You should choose one from these.",
                                  restType.name(), restMethod.type());
       }
-        /*Only HttpGet or HttpPost*/
+      /*Only HttpGet or HttpPost*/
       restType = restMethod.type();
 
       try {
-        url = (String) annotationType.getMethod("stringUrl").invoke(classAnnotation);
+        url = (String) clazz.getMethod(HttpMethod).invoke(classAnnotation);
       } catch (Exception ignored) {
         throw Errors.methodError(this.clazz, "Failed to extract String 'value' from @%s annotation.",
-                                 annotationType.getSimpleName());
+                                 clazz.getSimpleName());
       }
     }
 

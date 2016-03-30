@@ -113,6 +113,10 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
         });
       }
     } else {
+
+      ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
+      layoutParams.height = DensityUtil.getActionBarSize(CityListActivity.this);
+      toolbar.setLayoutParams(layoutParams);
       CityListActivity.this.initData();
     }
   }
@@ -151,7 +155,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
 
   @Override public void showError(String errorMessage) {
     CityListActivity.this.closeRefresh();
-    Toast.makeText(CityListActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+    if (errorMessage != null) Toast.makeText(CityListActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
   }
 
   @Override protected void exit() {

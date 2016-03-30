@@ -15,6 +15,7 @@
  */
 package com.example.common.repository.adapter.rxadapter;
 
+import android.support.annotation.NonNull;
 import com.example.common.Constants;
 import com.example.common.errors.RetrofitHttpException;
 import com.example.common.repository.adapter.callAdapter.SmartCallAdapter;
@@ -137,27 +138,28 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<Long>>() {
         @Override public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
 
-          return errorObservable.zipWith(Observable.range(1, Constants.MAX_CONNECT),
-                                         new Func2<Throwable, Integer, InnerThrowable>() {
-                                           @Override public InnerThrowable call(Throwable throwable, Integer i) {
+          return errorObservable
+              .zipWith(Observable.range(1, Constants.MAX_CONNECT), new Func2<Throwable, Integer, InnerThrowable>() {
+                @Override public InnerThrowable call(Throwable throwable, Integer i) {
 
-                                             if (throwable instanceof IOException) {
-                                               return new InnerThrowable(throwable, i);
-                                             }
-                                             return new InnerThrowable(throwable, Constants.MAX_CONNECT);
-                                           }
-                                         }).flatMap(new Func1<InnerThrowable, Observable<Long>>() {
-            @Override public Observable<Long> call(InnerThrowable innerThrowable) {
+                  if (throwable instanceof IOException) {
+                    return new InnerThrowable(throwable, i);
+                  }
+                  return new InnerThrowable(throwable, Constants.MAX_CONNECT);
+                }
+              })
+              .flatMap(new Func1<InnerThrowable, Observable<Long>>() {
+                @Override public Observable<Long> call(InnerThrowable innerThrowable) {
 
-              Integer retryCount = innerThrowable.getRetryCount();
-              if (retryCount.equals(Constants.MAX_CONNECT)) {
-                return Observable.error(innerThrowable.getThrowable());
-              }
+                  Integer retryCount = innerThrowable.getRetryCount();
+                  if (retryCount.equals(Constants.MAX_CONNECT)) {
+                    return Observable.error(innerThrowable.getThrowable());
+                  }
 
               /*use Schedulers#immediate() to keep on same thread */
-              return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS, Schedulers.immediate());
-            }
-          });
+                  return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS, Schedulers.immediate());
+                }
+              });
         }
       });
     }
@@ -168,7 +170,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
     private Throwable throwable;
     private Integer retryCount;
 
-    public InnerThrowable(Throwable throwable, Integer retryCount) {
+    public InnerThrowable(@NonNull Throwable throwable, @NonNull Integer retryCount) {
       this.throwable = throwable;
       this.retryCount = retryCount;
     }

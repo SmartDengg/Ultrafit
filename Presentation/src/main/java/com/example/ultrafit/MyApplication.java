@@ -44,6 +44,6 @@ public class MyApplication extends Application {
 
     Picasso.setSingletonInstance(picasso);
 
-    Logger.init(Constants.LOGGER_TAG).setMethodOffset(0).setMethodCount(4).setLogLevel(LogLevel.FULL);
+    Logger.init(Constants.BASE_TAG).setMethodOffset(0).setMethodCount(4).setLogLevel(LogLevel.FULL);
   }
 }

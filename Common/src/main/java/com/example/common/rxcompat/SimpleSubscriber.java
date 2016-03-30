@@ -1,6 +1,7 @@
 package com.example.common.rxcompat;
 
 import android.support.annotation.CallSuper;
+import com.example.common.Constants;
 import com.example.common.errors.RetrofitHttpException;
 import com.orhanobut.logger.Logger;
 import retrofit2.Response;
@@ -18,7 +19,7 @@ public class SimpleSubscriber<T> extends Subscriber<T> {
     Logger.e(e.toString());
     if (e instanceof RetrofitHttpException) {
       Response<?> response = ((RetrofitHttpException) e).response();
-      if (response != null) Logger.e(((RetrofitHttpException) e).response().raw().toString());
+      if (response != null)  Logger.t(Constants.OKHTTP_TAG).e(((RetrofitHttpException) e).response().raw().toString());
     }
   }
 

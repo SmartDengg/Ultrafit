@@ -27,10 +27,10 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
 import com.example.common.Constants;
-import com.example.ultrafit.bitmaps.BitmapUtil;
 import com.example.model.bean.entity.MovieEntity;
 import com.example.ultrafit.R;
 import com.example.ultrafit.adapter.MovieAdapter;
+import com.example.ultrafit.bitmaps.BitmapUtil;
 import com.example.ultrafit.presenter.MovieListPresenter;
 import com.example.ultrafit.presenter.MovieListPresenterImp;
 import com.example.ultrafit.ui.MarginDecoration;
@@ -157,7 +157,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
   @Override public void showError(String errorMessage) {
     MovieListActivity.this.closeRefresh();
-    Toast.makeText(MovieListActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+    if (errorMessage != null) Toast.makeText(MovieListActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
   }
 
   private void navigateToDetail(int position, View thumbIv, MovieEntity movieEntity) {

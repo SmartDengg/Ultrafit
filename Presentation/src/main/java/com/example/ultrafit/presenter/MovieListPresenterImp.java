@@ -58,6 +58,8 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
       super.onError(e);
       if (e instanceof WebServiceException) {
         MovieListPresenterImp.this.showError(e.getMessage());
+      }else {
+        MovieListPresenterImp.this.showError(null);
       }
     }
 
