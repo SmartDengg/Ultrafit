@@ -1,6 +1,6 @@
 package com.example.ultrafit.presenter;
 
-import com.example.common.SimpleSubscriber;
+import com.example.common.rxcompat.SimpleSubscriber;
 import com.example.common.errors.WebServiceException;
 import com.example.domain.MovieListUseCase;
 import com.example.domain.UseCase;

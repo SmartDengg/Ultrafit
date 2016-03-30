@@ -1,5 +1,6 @@
-package com.example.common;
+package com.example.common.rxcompat;
 
+import com.example.common.SmartExecutors;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

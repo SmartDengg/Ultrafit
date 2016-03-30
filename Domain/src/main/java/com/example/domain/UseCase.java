@@ -2,7 +2,7 @@ package com.example.domain;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.example.common.SchedulersCompat;
+import com.example.common.rxcompat.SchedulersCompat;
 import com.example.common.ultrafit.RequestEntity;
 import com.example.common.ultrafit.UltraParserFactory;
 import java.util.Map;

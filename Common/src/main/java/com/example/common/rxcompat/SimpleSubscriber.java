@@ -1,4 +1,4 @@
-package com.example.common;
+package com.example.common.rxcompat;
 
 import android.support.annotation.CallSuper;
 import com.example.common.errors.RetrofitHttpException;
