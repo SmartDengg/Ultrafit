@@ -6,9 +6,8 @@ package com.example.common.ultrafit;
 public class Errors {
 
   public static RuntimeException methodError(Class clazz, String message, Object... args) {
-    if (args.length > 0) {
-      message = String.format(message, args);
-    }
+
+    message = (args.length == 0) ? message : String.format(message, args);
     return new IllegalArgumentException(clazz.getSimpleName() + ": " + message);
   }
 }
