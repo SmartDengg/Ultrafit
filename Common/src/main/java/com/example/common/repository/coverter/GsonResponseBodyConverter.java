@@ -34,7 +34,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 
       String content = value.string();
 
-      if (Constants.isDebugJsonLog) Logger.t(Constants.OKHTTP_TAG).json(content);
+      if (Constants.isDebugJsonLog) Logger.t(Constants.OKHTTP_TAG, 0).json(content);
 
       return adapter.fromJson(ResponseBody.create(value.contentType(), content).charStream());
     } finally {

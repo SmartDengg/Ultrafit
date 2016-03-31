@@ -24,16 +24,16 @@ public class UltraParserFactory {
 
   public static void outputs(@NonNull RequestEntity requestEntity) {
 
-    Logger.t(Constants.OKHTTP_TAG).d("Request entity !!!!" +
-                                        "\n  ⇢ " +
-                                        " Type   : " +
-                                        requestEntity.getRestType().name() +
-                                        "\n  ⇢ " +
-                                        " Url    : " +
-                                        Constants.BASE_URL + requestEntity.getUrl() +
-                                        "\n  ⇢ " +
-                                        " Params : " +
-                                        requestEntity.getParamMap());
+    Logger.t(Constants.OKHTTP_TAG, 3).d("Request entity !!!!" +
+                                            "\n  ⇢ " +
+                                            " Type   : " +
+                                            requestEntity.getRestType().name() +
+                                            "\n  ⇢ " +
+                                            " Url    : " +
+                                            Constants.BASE_URL + requestEntity.getUrl() +
+                                            "\n  ⇢ " +
+                                            " Params : " +
+                                            requestEntity.getParamMap());
   }
 
   private Object rawEntity;
