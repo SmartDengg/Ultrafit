@@ -1,5 +1,10 @@
 package com.example.common.repository;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+import com.example.common.Constants;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +17,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okhttp3.internal.Platform;
 import okhttp3.internal.http.HttpEngine;
 import okio.Buffer;
 import okio.BufferedSource;
@@ -21,7 +25,11 @@ import okio.BufferedSource;
  * Created by SmartDengg on 2016/3/31.
  */
 public class SmartHttpLoggingInterceptor implements Interceptor {
+
   private static final Charset UTF8 = Charset.forName("UTF-8");
+
+  private final Logger logger;
+  private volatile Level level = Level.NONE;
 
   public enum Level {
     /** No logs. */
@@ -79,41 +87,57 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
     void logMiddleBorder();
 
     void logBottomBorder();
+  }
 
-    /** A {@link Logger} defaults output appropriate for the current platform. */
-    Logger DEFAULT = new Logger() {
-      @Override public void log(String message) {
-        Platform.get().log(message);
+  /** A {@link Logger} defaults output appropriate for the current platform. */
+  private static Logger DEFAULT = new Logger() {
+
+    private Gson gson = new GsonBuilder()
+        .excludeFieldsWithoutExposeAnnotation()
+        .enableComplexMapKeySerialization()
+        .serializeNulls()
+        .create();
+
+    @Override public void log(String message) {
+      for (int i = 0, length = message.length(); i < length; i++) {
+        int newline = message.indexOf('\n', i);
+        newline = newline != -1 ? newline : length;
+        do {
+          int end = Math.min(newline, i + Constants.MAX_LOG_LENGTH);
+          Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG,
+                Constants.HORIZONTAL_DOUBLE_LINE + message.substring(i, end));
+          i = end;
+        } while (i < newline);
       }
+    }
 
-      @Override public void logTopBorder() {
+    @Override public void logTopBorder() {
+      Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.TOP_BORDER);
+    }
 
-      }
+    @Override public void logMiddleBorder() {
+      Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.MIDDLE_BORDER);
+    }
 
-      @Override public void logMiddleBorder() {
+    @Override public void logBottomBorder() {
+      Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.BOTTOM_BORDER);
+    }
+  };
 
-      }
-
-      @Override public void logBottomBorder() {
-
-      }
-    };
+  public static SmartHttpLoggingInterceptor createLoggingInterceptor() {
+    return new SmartHttpLoggingInterceptor();
   }
 
   public SmartHttpLoggingInterceptor() {
-    this(Logger.DEFAULT);
+    this(DEFAULT);
   }
 
   public SmartHttpLoggingInterceptor(Logger logger) {
     this.logger = logger;
   }
 
-  private final Logger logger;
-
-  private volatile Level level = Level.NONE;
-
   /** Change the level at which this interceptor logs. */
-  public SmartHttpLoggingInterceptor setLevel(Level level) {
+  public SmartHttpLoggingInterceptor setLevel(@NonNull Level level) {
     if (level == null) throw new NullPointerException("level == null. Use Level.NONE instead.");
     this.level = level;
     return this;
@@ -202,7 +226,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
     String bodySize = contentLength != -1 ? contentLength + "-byte" : "unknown-length";
     logger.log(
         "<-- " + response.code() + ' ' + response.message() + ' ' + response.request().url() + " (" + tookMs + "ms" + (
-            !logHeaders                             ? ", " + bodySize + " body" : "") + ')');
+            !logHeaders ? ", " + bodySize + " body" : "") + ')');
 
     if (logHeaders) {
       Headers headers = response.headers();

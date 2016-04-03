@@ -156,7 +156,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
                     return Observable.error(innerThrowable.getThrowable());
                   }
 
-              /*use Schedulers#immediate() to keep on same thread */
+                  /*use Schedulers#immediate() to keep on same thread */
                   return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS, Schedulers.immediate());
                 }
               });
