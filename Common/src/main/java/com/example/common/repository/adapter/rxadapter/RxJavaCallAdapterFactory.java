@@ -37,6 +37,9 @@ import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
+/**
+ * created by SmartDengg
+ */
 public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
   public static RxJavaCallAdapterFactory create() {
     return new RxJavaCallAdapterFactory();
@@ -63,7 +66,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
           name + " return type must be parameterized" + " as " + name + "<Foo> or " + name + "<? extends Foo>");
     }
 
-    CallAdapter<Observable<?>> callAdapter = getCallAdapter(returnType);
+    CallAdapter<Observable<?>> callAdapter = RxJavaCallAdapterFactory.this.getCallAdapter(returnType);
     if (isSingle) {
       return SingleHelper.makeSingle(callAdapter);
     } else if (isCompletable) {
