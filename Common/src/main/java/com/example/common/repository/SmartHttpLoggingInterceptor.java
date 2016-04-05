@@ -3,8 +3,6 @@ package com.example.common.repository;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.example.common.Constants;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
@@ -91,12 +89,6 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
 
   /** A {@link Logger} defaults output appropriate for the current platform. */
   private static Logger DEFAULT = new Logger() {
-
-    private Gson gson = new GsonBuilder()
-        .excludeFieldsWithoutExposeAnnotation()
-        .enableComplexMapKeySerialization()
-        .serializeNulls()
-        .create();
 
     @Override public void log(String message) {
       for (int i = 0, length = message.length(); i < length; i++) {

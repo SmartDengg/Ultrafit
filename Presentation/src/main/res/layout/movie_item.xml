@@ -40,7 +40,6 @@
           android:textColor="@color/material_blue_400"
           android:textSize="@dimen/material_24sp"
           tools:text="9.6 分"/>
-
     </RelativeLayout>
 
     <TextView

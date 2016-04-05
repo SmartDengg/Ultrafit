@@ -24,7 +24,7 @@ public class UltraParserFactory {
 
   public static void outputs(@NonNull RequestEntity requestEntity) {
 
-    Logger.t(Constants.OKHTTP_TAG, 3).d("Request entity !!!!" +
+    Logger.t(Constants.OKHTTP_TAG, 0).d("Request entity !!!!" +
                                             "\n  ⇢ " +
                                             " Type   : " +
                                             requestEntity.getRestType().name() +
