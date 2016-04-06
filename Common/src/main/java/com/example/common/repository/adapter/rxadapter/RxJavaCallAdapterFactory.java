@@ -99,37 +99,36 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
 
     @Override public <R> Observable<R> adapt(Call<R> call) {
 
-      return Observable.create(new CallOnSubscribe<>(call))
-                       .lift(OperatorMapResponseToBodyOrError.<R>instance())
-                       .retryWhen(new Func1<Observable<? extends Throwable>, Observable<Long>>() {
-                         @Override public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
+      return Observable
+          .create(new CallOnSubscribe<>(call))
+          .lift(OperatorMapResponseToBodyOrError.<R>instance())
+          .retryWhen(new Func1<Observable<? extends Throwable>, Observable<Long>>() {
+            @Override public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
 
-                           return errorObservable.zipWith(Observable.range(1, Constants.MAX_CONNECT),
-                                                          new Func2<Throwable, Integer, InnerThrowable>() {
-                                                            @Override
-                                                            public InnerThrowable call(Throwable throwable, Integer i) {
+              return errorObservable
+                  .zipWith(Observable.range(1, Constants.MAX_CONNECT), new Func2<Throwable, Integer, InnerThrowable>() {
+                    @Override public InnerThrowable call(Throwable throwable, Integer i) {
 
-                                                              if (throwable instanceof IOException) {
-                                                                return new InnerThrowable(throwable, i);
-                                                              }
-                                                              return new InnerThrowable(throwable,
-                                                                                        Constants.MAX_CONNECT);
-                                                            }
-                                                          }).concatMap(new Func1<InnerThrowable, Observable<Long>>() {
-                             @Override public Observable<Long> call(InnerThrowable innerThrowable) {
+                      if (throwable instanceof IOException) {
+                        return new InnerThrowable(throwable, i);
+                      }
+                      return new InnerThrowable(throwable, Constants.MAX_CONNECT);
+                    }
+                  })
+                  .concatMap(new Func1<InnerThrowable, Observable<Long>>() {
+                    @Override public Observable<Long> call(InnerThrowable innerThrowable) {
 
-                               Integer retryCount = innerThrowable.getRetryCount();
-                               if (retryCount.equals(Constants.MAX_CONNECT)) {
-                                 return Observable.error(innerThrowable.getThrowable());
-                               }
+                      Integer retryCount = innerThrowable.getRetryCount();
+                      if (retryCount.equals(Constants.MAX_CONNECT)) {
+                        return Observable.error(innerThrowable.getThrowable());
+                      }
 
                                /*use Schedulers#immediate() to keep on same thread */
-                               return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS,
-                                                       Schedulers.immediate());
-                             }
-                           });
-                         }
-                       });
+                      return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS, Schedulers.immediate());
+                    }
+                  });
+            }
+          });
     }
   }
 
@@ -167,6 +166,8 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       if (n == 0) return; // Nothing to do when requesting 0.
       if (!this.compareAndSet(false, true)) return; // Request was already triggered.
 
+      if (subscriber.isUnsubscribed()) return;
+
       try {
         Response<T> response = call.execute();
         if (!subscriber.isUnsubscribed()) {
@@ -186,7 +187,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
     }
 
     @Override public boolean isUnsubscribed() {
-      return unsubscribed.get() && call.isCanceled();
+      return this.unsubscribed.get() && call.isCanceled();
     }
   }
 
