@@ -80,6 +80,8 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
   public interface Logger {
     void log(String message);
 
+    void logRequestBody(String message);
+
     void logTopBorder();
 
     void logMiddleBorder();
@@ -101,6 +103,10 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
           i = end;
         } while (i < newline);
       }
+    }
+
+    @Override public void logRequestBody(String message) {
+      this.log(" ⇢⇢⇢ " + message);
     }
 
     @Override public void logTopBorder() {
@@ -200,7 +206,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
         }
 
         logger.log("");
-        logger.log(buffer.readString(charset));
+        logger.logRequestBody(buffer.readString(charset));
 
         logger.log("--> END " + request.method() + " (" + requestBody.contentLength() + "-byte body)");
       }
@@ -238,7 +244,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
         source.request(Long.MAX_VALUE); // Buffer the entire body.
         Buffer buffer = source.buffer();
 
-        Charset charset = UTF8;
+        /*Charset charset = UTF8;
         MediaType contentType = responseBody.contentType();
         if (contentType != null) {
           charset = contentType.charset(UTF8);
@@ -247,7 +253,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
         if (contentLength != 0) {
           logger.log("");
           logger.log(buffer.clone().readString(charset));
-        }
+        }*/
 
         logger.log("<-- END HTTP (" + buffer.size() + "-byte body)");
       }
