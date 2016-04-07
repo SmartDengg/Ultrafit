@@ -1,3 +1,4 @@
+/*
 package com.example.ultrafit;
 
 import android.support.annotation.IntegerRes;
@@ -19,18 +20,24 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+*/
 /**
  * Created by Joker on 2016/4/7.
- */
+ *//*
+
 @HttpGet(stringUrl = "")
 @HttpPost(stringUrl = "")
 @SuppressWarnings("")
 public class AfterFormat extends RxAppCompatActivity {
 
-    /** 属性只有一个@Annotation时不会折行 */
+    */
+/** 属性只有一个@Annotation时不会折行 *//*
+
     @Bind(R.id.city_layout_root_view) protected View view1;
 
-    /** 属性持有两个以上@Annotation时折行显示 */
+    */
+/** 属性持有两个以上@Annotation时折行显示 *//*
+
     @Bind(R.id.city_layout_root_view)
     @SuppressWarnings("")
     protected View view;
@@ -51,7 +58,8 @@ public class AfterFormat extends RxAppCompatActivity {
     @StringDef({ android, iOS, 休息视频, 福利, 拓展资源, 前端, 瞎推荐, App })
     public @interface Type {}
 
-    /***
+    */
+/***
      * 考虑到内部类的实现，所以method上的注解，只有当前行无法放下全部@Annotation时才会折行 chop down if long
      *
      * @param id
@@ -61,7 +69,8 @@ public class AfterFormat extends RxAppCompatActivity {
      * @param s4
      * @param s5
      * @param s6
-     */
+     *//*
+
     @NonNull
     @SuppressWarnings("")
     @Deprecated
@@ -115,6 +124,9 @@ public class AfterFormat extends RxAppCompatActivity {
                .into(new ImageView(this));
     }
 
-    /***/
+    */
+/***//*
+
     class TestInnerClass {}
 }
+*/

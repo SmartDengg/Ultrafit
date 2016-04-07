@@ -1,3 +1,4 @@
+/*
 package com.example.ultrafit;
 
 import android.support.annotation.CallSuper;
@@ -20,9 +21,11 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+*/
 /**
  * Created by Joker on 2016/4/7.
- */
+ *//*
+
 @HttpGet(stringUrl = "")
 @HttpPost(stringUrl = "")
 @SuppressWarnings("")
@@ -53,12 +56,14 @@ public class BeforeFormat extends RxAppCompatActivity
 	{
 	}
 
-	/***
+	*/
+/***
 	 * @param id
 	 * @param s1
 	 * @param s2
 	 * @param s3
-	 */
+	 *//*
+
 	@SuppressWarnings("")
 	@Deprecated
 	@NonNull
@@ -113,3 +118,4 @@ public class BeforeFormat extends RxAppCompatActivity
 	{
 	}
 }
+*/
