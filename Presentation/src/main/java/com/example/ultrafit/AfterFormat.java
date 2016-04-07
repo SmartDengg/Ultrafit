@@ -1,10 +1,12 @@
-/*
 package com.example.ultrafit;
 
+import android.net.Uri;
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringDef;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import butterknife.Bind;
@@ -20,27 +22,12 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-*/
-/**
- * Created by Joker on 2016/4/7.
- *//*
-
 @HttpGet(stringUrl = "")
 @HttpPost(stringUrl = "")
 @SuppressWarnings("")
-public class AfterFormat extends RxAppCompatActivity {
-
-    */
-/** 属性只有一个@Annotation时不会折行 *//*
-
-    @Bind(R.id.city_layout_root_view) protected View view1;
-
-    */
-/** 属性持有两个以上@Annotation时折行显示 *//*
-
-    @Bind(R.id.city_layout_root_view)
-    @SuppressWarnings("")
-    protected View view;
+public class AfterFormat extends RxAppCompatActivity
+        implements View.OnClickListener, Picasso.Listener, View.OnTouchListener,
+                   RecyclerView.OnItemTouchListener {
 
     private static final String android = "Android";
     private static final String iOS = "iOS";
@@ -50,34 +37,44 @@ public class AfterFormat extends RxAppCompatActivity {
     private static final String 前端 = "前端";
     private static final String 瞎推荐 = "瞎推荐";
     private static final String App = "App";
+    @Bind(R.id.city_layout_root_view)
+    protected View view1;
+    @Bind(R.id.city_layout_root_view)
+    @SuppressWarnings("")
+    protected View view;
+    int[] a = new int[] { 1, 2, 0x0052, 0x0053, 0x0054 };
 
-    @Retention(RetentionPolicy.SOURCE)
-    @Target(value = {
-            ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD
-    })
-    @StringDef({ android, iOS, 休息视频, 福利, 拓展资源, 前端, 瞎推荐, App })
-    public @interface Type {}
+    @Override
+    public void onClick(View v) {}
 
-    */
-/***
-     * 考虑到内部类的实现，所以method上的注解，只有当前行无法放下全部@Annotation时才会折行 chop down if long
-     *
-     * @param id
-     * @param s1
-     * @param s2
-     * @param s3
-     * @param s4
-     * @param s5
-     * @param s6
-     *//*
+    @Override
+    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {}
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return false;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
 
     @NonNull
     @SuppressWarnings("")
     @Deprecated
-    public void ChainCode(@IntegerRes @Nullable @NonNull int id, String s1, String s2, String s3,
-                          String s4, String s5, String s6) {
+    public void ChainCode(@IntegerRes @Nullable @NonNull int id, String s1, @NonNull String s2,
+                          @NonNull String s3, @NonNull String s4, @NonNull String s5, String s6) {
 
-        if (true) Observable.just(1);
+        if (false) {
+            Observable.just(1);
+        }
 
         Observable.just(1)
                   .map(new Func1<Integer, Integer>() {
@@ -112,7 +109,9 @@ public class AfterFormat extends RxAppCompatActivity {
                   .observeOn(Schedulers.io())
                   .subscribe();
 
-        Picasso.with(this).load("").into(new ImageView(this));
+        Picasso.with(this)
+               .load("")
+               .into(new ImageView(this));
 
         Picasso.with(this)
                .load("")
@@ -124,9 +123,13 @@ public class AfterFormat extends RxAppCompatActivity {
                .into(new ImageView(this));
     }
 
-    */
-/***//*
+    @Retention(RetentionPolicy.SOURCE)
+    @Target(value = { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @StringDef({ android, iOS, 休息视频, 福利, 拓展资源, 前端, 瞎推荐, App })
+    public @interface Type {}
 
     class TestInnerClass {}
+
+    class Text {}
+
 }
-*/
