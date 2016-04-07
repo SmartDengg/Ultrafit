@@ -35,8 +35,7 @@ public class Executors {
   }
 
   public class SynchronizeExecutor implements Executor {
-    @Override
-    public void execute(@NonNull Runnable command) {
+    @Override public void execute(@NonNull Runnable command) {
       command.run();
     }
   }
@@ -44,8 +43,7 @@ public class Executors {
   public class MainThreadExecutor implements Executor {
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    @Override
-    public void execute(@NonNull Runnable command) {
+    @Override public void execute(@NonNull Runnable command) {
       mainHandler.post(command);
     }
   }

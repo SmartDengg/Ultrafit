@@ -9,8 +9,7 @@ import rx.Observable;
  */
 abstract class BaseResponse<T> {
 
-  @Expose
-  protected String reason;
+  @Expose protected String reason;
   @Expose
   @SerializedName("error_code")
   protected Integer errorCode;

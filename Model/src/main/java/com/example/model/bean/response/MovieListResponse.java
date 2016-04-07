@@ -16,6 +16,5 @@ public class MovieListResponse {
         },
        ]*/
 
-  @Expose
-  public String movieId;
+  @Expose public String movieId;
 }
