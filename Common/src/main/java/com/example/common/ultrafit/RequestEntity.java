@@ -50,7 +50,8 @@ public class RequestEntity {
     return RequestEntity.this;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "RequestEntity{" +
         "restType=" + restType +
         ", url='" + url + '\'' +

@@ -34,11 +34,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
     this.context = context;
   }
 
-  @Override public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public ItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     return new ItemHolder(LayoutInflater.from(context).inflate(R.layout.movie_item, parent, false));
   }
 
-  @Override public void onBindViewHolder(ItemHolder holder, int position) {
+  @Override
+  public void onBindViewHolder(ItemHolder holder, int position) {
 
     MovieAdapter.this.bindValue(holder, position);
     MovieAdapter.this.runEnterAnimation(holder.itemView, position);
@@ -48,7 +50,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
     final MovieEntity movieEntity = items.get(position);
 
     holder.itemView.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
+      @Override
+      public void onClick(View v) {
         if (callback != null) callback.onItemClick(position, holder.thumbIv, movieEntity);
       }
     });
@@ -68,43 +71,53 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
       ViewCompat.setTranslationY(itemView, 100);
       ViewCompat.setAlpha(itemView, 0.0f);
 
-      ViewCompat
-          .animate(itemView)
-          .translationY(0.0f)
-          .alpha(1.0f)
-          .setStartDelay(position * 20)
-          .setInterpolator(new DecelerateInterpolator(2.0f))
-          .setDuration(context.getResources().getInteger(android.R.integer.config_mediumAnimTime))
-          .withLayer()
-          .setListener(new ViewPropertyAnimatorListenerAdapter() {
-            @Override public void onAnimationEnd(View view) {
-              MovieAdapter.this.animationsLocked = true;
-            }
-          });
+      ViewCompat.animate(itemView)
+                .translationY(0.0f)
+                .alpha(1.0f)
+                .setStartDelay(position * 20)
+                .setInterpolator(new DecelerateInterpolator(2.0f))
+                .setDuration(context.getResources().getInteger(android.R.integer.config_mediumAnimTime))
+                .withLayer()
+                .setListener(new ViewPropertyAnimatorListenerAdapter() {
+                  @Override
+                  public void onAnimationEnd(View view) {
+                    MovieAdapter.this.animationsLocked = true;
+                  }
+                });
     }
   }
 
-  @Override public int getItemCount() {
+  @Override
+  public int getItemCount() {
     return (this.items != null) ? this.items.size() : 0;
   }
 
-  @Override public void onCompleted() {
+  @Override
+  public void onCompleted() {
     MovieAdapter.this.notifyDataSetChanged();
   }
 
-  @Override public void onError(Throwable e) {
+  @Override
+  public void onError(Throwable e) {
     if (callback != null) this.callback.onError(e);
   }
 
-  @Override public void onNext(List<MovieEntity> movieEntities) {
+  @Override
+  public void onNext(List<MovieEntity> movieEntities) {
     this.items = movieEntities;
   }
 
   public class ItemHolder extends RecyclerView.ViewHolder {
 
-    @Nullable @Bind(R.id.movie_item_thumb_iv) ImageView thumbIv;
-    @Nullable @Bind(R.id.movie_item_name_tv) TextView nameTv;
-    @Nullable @Bind(R.id.movie_item_score_tv) TextView scoreTv;
+    @Nullable
+    @Bind(R.id.movie_item_thumb_iv)
+    ImageView thumbIv;
+    @Nullable
+    @Bind(R.id.movie_item_name_tv)
+    TextView nameTv;
+    @Nullable
+    @Bind(R.id.movie_item_score_tv)
+    TextView scoreTv;
 
     public ItemHolder(View itemView) {
       super(itemView);

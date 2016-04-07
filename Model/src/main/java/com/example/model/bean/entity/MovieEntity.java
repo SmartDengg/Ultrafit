@@ -110,9 +110,11 @@ public class MovieEntity implements Cloneable, Parcelable {
     return null;
   }
 
-  @Override public int describeContents() { return 0; }
+  @Override
+  public int describeContents() { return 0; }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.movieThumbUrl);
     dest.writeString(this.movieName);
     dest.writeString(this.movieSketch);

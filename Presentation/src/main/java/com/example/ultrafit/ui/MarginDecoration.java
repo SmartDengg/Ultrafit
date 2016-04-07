@@ -13,7 +13,8 @@ public class MarginDecoration extends RecyclerView.ItemDecoration {
     margin = context.getResources().getDimensionPixelSize(R.dimen.material_2dp);
   }
 
-  @Override public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+  @Override
+  public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
     outRect.set(margin, margin, margin, margin);
   }
 }

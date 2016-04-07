@@ -22,7 +22,8 @@ public class ResponseS<S> extends BaseResponse<List<S>> {
       "error_code": 10012
     }*/
 
-  @Override public Observable<List<S>> filterWebServiceErrors() {
+  @Override
+  public Observable<List<S>> filterWebServiceErrors() {
     if (Constants.RESULT_OK.equals(errorCode)) {
       return Observable.just(data);
     } else {

@@ -9,9 +9,14 @@ import rx.Observable;
  */
 abstract class BaseResponse<T> {
 
-  @Expose protected String reason;
-  @Expose @SerializedName("error_code") protected Integer errorCode;
-  @Expose @SerializedName("result") protected T data;
+  @Expose
+  protected String reason;
+  @Expose
+  @SerializedName("error_code")
+  protected Integer errorCode;
+  @Expose
+  @SerializedName("result")
+  protected T data;
 
   public abstract Observable<T> filterWebServiceErrors();
 }

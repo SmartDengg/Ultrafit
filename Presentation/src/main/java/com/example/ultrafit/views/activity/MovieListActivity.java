@@ -43,15 +43,29 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   private static final String START_LOCATION_Y = "START_LOCATION_Y";
   private static final String CITY_ID = "CITY_ID";
 
-  @NonNull @BindString(R.string.movie_title) protected String title;
+  @NonNull
+  @BindString(R.string.movie_title)
+  protected String title;
 
-  @NonNull @Bind(R.id.movie_layout_root_view) protected ViewGroup rootView;
-  @NonNull @Bind(R.id.movie_layout_toolbar) protected Toolbar toolbar;
+  @NonNull
+  @Bind(R.id.movie_layout_root_view)
+  protected ViewGroup rootView;
+  @NonNull
+  @Bind(R.id.movie_layout_toolbar)
+  protected Toolbar toolbar;
 
-  @NonNull @Bind(R.id.movie_layout_content_fl) protected FrameLayout contentLayout;
-  @NonNull @Bind(R.id.movie_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
-  @NonNull @Bind(R.id.movie_layout_rv) protected RecyclerView recyclerView;
-  @NonNull @Bind(R.id.movie_layout_viewstub) protected ViewStub viewStub;
+  @NonNull
+  @Bind(R.id.movie_layout_content_fl)
+  protected FrameLayout contentLayout;
+  @NonNull
+  @Bind(R.id.movie_layout_srl)
+  protected SwipeRefreshLayout swipeRefreshLayout;
+  @NonNull
+  @Bind(R.id.movie_layout_rv)
+  protected RecyclerView recyclerView;
+  @NonNull
+  @Bind(R.id.movie_layout_viewstub)
+  protected ViewStub viewStub;
 
   private MovieAdapter movieAdapter = new MovieAdapter(MovieListActivity.this);
   private StaggeredGridLayoutManager staggeredGridLayoutManager;
@@ -61,7 +75,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   private ImageView blurIv;
 
   private MovieAdapter.Callback callback = new MovieAdapter.Callback() {
-    @Override public void onItemClick(int position, ImageView thumbIv, MovieEntity movieEntity) {
+    @Override
+    public void onItemClick(int position, ImageView thumbIv, MovieEntity movieEntity) {
       if (viewStub.getParent() != null) {
         MovieListActivity.this.blurIv = (ImageView) viewStub.inflate();
       } else {
@@ -71,13 +86,15 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
       MovieListActivity.this.navigateToDetail(position, thumbIv, movieEntity);
     }
 
-    @Override public void onError(Throwable error) {
+    @Override
+    public void onError(Throwable error) {
       MovieListActivity.this.closeRefresh();
     }
   };
 
   private SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
-    @Override public void onRefresh() {
+    @Override
+    public void onRefresh() {
       MovieListActivity.this.initData();
     }
   };
@@ -89,14 +106,16 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     startingActivity.startActivity(intent);
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     MovieListActivity.this.initPresenter();
     MovieListActivity.this.initView(savedInstanceState);
   }
 
-  @Override protected int getLayoutId() {
+  @Override
+  protected int getLayoutId() {
     return R.layout.movie_activity_layout;
   }
 
@@ -114,7 +133,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
     this.swipeRefreshLayout.setOnRefreshListener(listener);
     this.swipeRefreshLayout.post(new Runnable() {
-      @Override public void run() {
+      @Override
+      public void run() {
         swipeRefreshLayout.setRefreshing(true);
       }
     });
@@ -130,7 +150,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
       ViewTreeObserver viewTreeObserver = this.rootView.getViewTreeObserver();
       if (viewTreeObserver.isAlive()) {
         viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-          @Override public boolean onPreDraw() {
+          @Override
+          public boolean onPreDraw() {
             rootView.getViewTreeObserver().removeOnPreDrawListener(this);
             MovieListActivity.this.startEnterAnim(getIntent().getIntExtra(START_LOCATION_Y, 0));
             return true;
@@ -146,7 +167,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     this.movieListPresenter.loadData(getIntent().getStringExtra(CITY_ID));
   }
 
-  @Override public void showDataList(Observable<List<MovieEntity>> data) {
+  @Override
+  public void showDataList(Observable<List<MovieEntity>> data) {
     MovieListActivity.this.closeRefresh();
     data.subscribe(this.movieAdapter);
   }
@@ -155,7 +177,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) swipeRefreshLayout.setRefreshing(false);
   }
 
-  @Override public void showError(String errorMessage) {
+  @Override
+  public void showError(String errorMessage) {
     MovieListActivity.this.closeRefresh();
     if (errorMessage != null) Toast.makeText(MovieListActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
   }
@@ -195,7 +218,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     animatorSet.setInterpolator(new LinearInterpolator());
     animatorSet.playTogether(toolbarInAnim, contentInAnim);
     animatorSet.addListener(new AnimatorListenerAdapter() {
-      @Override public void onAnimationEnd(Animator animation) {
+      @Override
+      public void onAnimationEnd(Animator animation) {
 
         toolbar.setLayerType(View.LAYER_TYPE_NONE, null);
         contentLayout.setLayerType(View.LAYER_TYPE_NONE, null);
@@ -206,14 +230,16 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     animatorSet.start();
   }
 
-  @Override protected void onPostResume() {
+  @Override
+  protected void onPostResume() {
     super.onPostResume();
 
     if (this.itemView != null) this.itemView.setVisibility(View.VISIBLE);
     this.viewStub.setVisibility(View.GONE);
   }
 
-  @Override protected void exit() {
+  @Override
+  protected void exit() {
 
     toolbar.setLayerType(View.LAYER_TYPE_HARDWARE, null);
     contentLayout.setLayerType(View.LAYER_TYPE_HARDWARE, null);
@@ -227,7 +253,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     animatorSet.setInterpolator(new LinearOutSlowInInterpolator());
     animatorSet.playTogether(toolbarExitAnim, contentExitAnim);
     animatorSet.addListener(new AnimatorListenerAdapter() {
-      @Override public void onAnimationEnd(Animator animation) {
+      @Override
+      public void onAnimationEnd(Animator animation) {
 
         toolbar.setLayerType(View.LAYER_TYPE_NONE, null);
         contentLayout.setLayerType(View.LAYER_TYPE_NONE, null);
@@ -238,7 +265,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     animatorSet.start();
   }
 
-  @Override protected void onDestroy() {
+  @Override
+  protected void onDestroy() {
     super.onDestroy();
     this.movieListPresenter.detachView();
   }

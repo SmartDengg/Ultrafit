@@ -65,7 +65,8 @@ public class SmartExecutors {
   }
 
   private static final FileFilter CPU_FILTER = new FileFilter() {
-    @Override public boolean accept(File pathname) {
+    @Override
+    public boolean accept(File pathname) {
 
       String path = pathname.getName();
       if (path.startsWith("cpu")) {
@@ -85,7 +86,8 @@ public class SmartExecutors {
       super(runnable, threadName);
     }
 
-    @Override public void run() {
+    @Override
+    public void run() {
       Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND);
       super.run();
     }

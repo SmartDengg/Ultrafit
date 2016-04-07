@@ -92,7 +92,8 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
   /** A {@link Logger} defaults output appropriate for the current platform. */
   private static Logger DEFAULT = new Logger() {
 
-    @Override public void log(String message) {
+    @Override
+    public void log(String message) {
       for (int i = 0, length = message.length(); i < length; i++) {
         int newline = message.indexOf('\n', i);
         newline = newline != -1 ? newline : length;
@@ -105,19 +106,23 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
       }
     }
 
-    @Override public void logRequestBody(String message) {
+    @Override
+    public void logRequestBody(String message) {
       this.log(" ⇢⇢⇢ " + message);
     }
 
-    @Override public void logTopBorder() {
+    @Override
+    public void logTopBorder() {
       Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.TOP_BORDER);
     }
 
-    @Override public void logMiddleBorder() {
+    @Override
+    public void logMiddleBorder() {
       Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.MIDDLE_BORDER);
     }
 
-    @Override public void logBottomBorder() {
+    @Override
+    public void logBottomBorder() {
       Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.BOTTOM_BORDER);
     }
   };
@@ -145,7 +150,8 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
     return level;
   }
 
-  @Override public Response intercept(Chain chain) throws IOException {
+  @Override
+  public Response intercept(Chain chain) throws IOException {
     Level level = this.level;
 
     Request request = chain.request();

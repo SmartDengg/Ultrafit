@@ -27,22 +27,27 @@ public class CityListPresenterImp implements CityListPresenter<CityEntity> {
     return new CityListPresenterImp();
   }
 
-  @Override public void attachView(ListView<CityEntity> view) {
+  @Override
+  public void attachView(ListView<CityEntity> view) {
     this.listView = view;
   }
 
-  @Override public void loadData() {
+  @Override
+  public void loadData() {
     this.listUseCase.subscribe(new CityListRequest(), new ListSubscriber());
   }
 
-  @Override public void detachView() {
+  @Override
+  public void detachView() {
     this.listUseCase.unsubscribe();
   }
 
-  @SuppressWarnings("unchecked") private void showContent(final List<CityEntity> cityEntities) {
+  @SuppressWarnings("unchecked")
+  private void showContent(final List<CityEntity> cityEntities) {
 
     this.listView.showDataList(Observable.fromCallable(new Func0<List<CityEntity>>() {
-      @Override public List call() {
+      @Override
+      public List call() {
         return cityEntities;
       }
     }));
@@ -54,16 +59,18 @@ public class CityListPresenterImp implements CityListPresenter<CityEntity> {
 
   private final class ListSubscriber extends SimpleSubscriber<List<CityEntity>> {
 
-    @Override public void onError(Throwable e) {
+    @Override
+    public void onError(Throwable e) {
       super.onError(e);
       if (e instanceof WebServiceException) {
         CityListPresenterImp.this.showError(e.getMessage());
-      }else {
+      } else {
         CityListPresenterImp.this.showError(null);
       }
     }
 
-    @Override public void onNext(List<CityEntity> cityEntities) {
+    @Override
+    public void onNext(List<CityEntity> cityEntities) {
       CityListPresenterImp.this.showContent(cityEntities);
     }
   }

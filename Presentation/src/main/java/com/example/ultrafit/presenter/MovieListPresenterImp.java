@@ -27,22 +27,27 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
     return new MovieListPresenterImp();
   }
 
-  @Override public void attachView(ListView<MovieEntity> view) {
+  @Override
+  public void attachView(ListView<MovieEntity> view) {
     this.listView = view;
   }
 
-  @Override public void loadData(String cityId) {
+  @Override
+  public void loadData(String cityId) {
     this.listUseCase.subscribe(new MovieIdRequest(Integer.parseInt(cityId)), new ListSubscriber());
   }
 
-  @Override public void detachView() {
+  @Override
+  public void detachView() {
     this.listUseCase.unsubscribe();
   }
 
-  @SuppressWarnings("unchecked") private void showContent(final List<MovieEntity> movieEntities) {
+  @SuppressWarnings("unchecked")
+  private void showContent(final List<MovieEntity> movieEntities) {
 
     this.listView.showDataList(Observable.fromCallable(new Func0<List<MovieEntity>>() {
-      @Override public List call() {
+      @Override
+      public List call() {
         return movieEntities;
       }
     }));
@@ -54,16 +59,18 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
 
   private final class ListSubscriber extends SimpleSubscriber<List<MovieEntity>> {
 
-    @Override public void onError(Throwable e) {
+    @Override
+    public void onError(Throwable e) {
       super.onError(e);
       if (e instanceof WebServiceException) {
         MovieListPresenterImp.this.showError(e.getMessage());
-      }else {
+      } else {
         MovieListPresenterImp.this.showError(null);
       }
     }
 
-    @Override public void onNext(List<MovieEntity> movieEntities) {
+    @Override
+    public void onNext(List<MovieEntity> movieEntities) {
       MovieListPresenterImp.this.showContent(movieEntities);
     }
   }

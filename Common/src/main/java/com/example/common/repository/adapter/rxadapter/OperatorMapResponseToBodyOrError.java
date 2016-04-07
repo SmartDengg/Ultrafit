@@ -35,9 +35,11 @@ final class OperatorMapResponseToBodyOrError<T> implements Operator<T, Response<
     return (OperatorMapResponseToBodyOrError<R>) INSTANCE;
   }
 
-  @Override public Subscriber<? super Response<T>> call(final Subscriber<? super T> child) {
+  @Override
+  public Subscriber<? super Response<T>> call(final Subscriber<? super T> child) {
     return new Subscriber<Response<T>>(child) {
-      @Override public void onNext(Response<T> response) {
+      @Override
+      public void onNext(Response<T> response) {
 
         Integer code = response.code();
 
@@ -48,11 +50,13 @@ final class OperatorMapResponseToBodyOrError<T> implements Operator<T, Response<
         }
       }
 
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         child.onCompleted();
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         child.onError(e);
       }
     };

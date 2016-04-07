@@ -39,20 +39,42 @@ public class DetailActivity extends BaseActivity {
   private static final String GLOBAL_OFFSET = "globalOffset";
   private static final String ENTITY = "entity";
 
-  @NonNull @Bind(R.id.detail_layout_root_view) protected ViewGroup rootView;
+  @NonNull
+  @Bind(R.id.detail_layout_root_view)
+  protected ViewGroup rootView;
 
-  @NonNull @Bind(R.id.detail_layout_thumb_iv) protected ImageView movieThumbIv;
-  @NonNull @Bind(R.id.detail_layout_content_fl) protected FrameLayout contentLayout;
+  @NonNull
+  @Bind(R.id.detail_layout_thumb_iv)
+  protected ImageView movieThumbIv;
+  @NonNull
+  @Bind(R.id.detail_layout_content_fl)
+  protected FrameLayout contentLayout;
 
-  @NonNull @Bind(R.id.detail_layout_name_tv) protected TextView movieNameTv;
-  @NonNull @Bind(R.id.detail_layout_category_tv) protected TextView movieCategoryTv;
-  @NonNull @Bind(R.id.detail_layout_release_tv) protected TextView movieReleaseTv;
+  @NonNull
+  @Bind(R.id.detail_layout_name_tv)
+  protected TextView movieNameTv;
+  @NonNull
+  @Bind(R.id.detail_layout_category_tv)
+  protected TextView movieCategoryTv;
+  @NonNull
+  @Bind(R.id.detail_layout_release_tv)
+  protected TextView movieReleaseTv;
 
-  @NonNull @Bind(R.id.detail_layout_area_tv) protected TextView movieCountryTv;
-  @NonNull @Bind(R.id.detail_layout_writers_tv) protected TextView movieWritersTv;
-  @NonNull @Bind(R.id.detail_layout_director_tv) protected TextView movieDirectorTv;
-  @NonNull @Bind(R.id.detail_layout_actor_tv) protected TextView movieActorTv;
-  @NonNull @Bind(R.id.detail_layout_sketch_tv) protected TextView movieSketchTv;
+  @NonNull
+  @Bind(R.id.detail_layout_area_tv)
+  protected TextView movieCountryTv;
+  @NonNull
+  @Bind(R.id.detail_layout_writers_tv)
+  protected TextView movieWritersTv;
+  @NonNull
+  @Bind(R.id.detail_layout_director_tv)
+  protected TextView movieDirectorTv;
+  @NonNull
+  @Bind(R.id.detail_layout_actor_tv)
+  protected TextView movieActorTv;
+  @NonNull
+  @Bind(R.id.detail_layout_sketch_tv)
+  protected TextView movieSketchTv;
 
   private Rect startBounds;
   private float scale;
@@ -70,13 +92,15 @@ public class DetailActivity extends BaseActivity {
     startingActivity.startActivity(intent);
   }
 
-  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+  @Override
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     DetailActivity.this.initView(savedInstanceState);
   }
 
-  @Override protected int getLayoutId() {
+  @Override
+  protected int getLayoutId() {
     return R.layout.detail_activity;
   }
 
@@ -87,7 +111,8 @@ public class DetailActivity extends BaseActivity {
       ViewTreeObserver viewTreeObserver = this.rootView.getViewTreeObserver();
       if (viewTreeObserver.isAlive()) {
         viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-          @Override public boolean onPreDraw() {
+          @Override
+          public boolean onPreDraw() {
             rootView.getViewTreeObserver().removeOnPreDrawListener(this);
 
             DetailActivity.this.runEnterAnimation(getIntent().getExtras());
@@ -98,7 +123,8 @@ public class DetailActivity extends BaseActivity {
     }
   }
 
-  @SuppressLint("SetTextI18n") private void runEnterAnimation(Bundle bundle) {
+  @SuppressLint("SetTextI18n")
+  private void runEnterAnimation(Bundle bundle) {
 
     MovieEntity movieEntity = bundle.getParcelable(ENTITY);
     if (movieEntity == null) return;
@@ -129,15 +155,15 @@ public class DetailActivity extends BaseActivity {
     ViewCompat.setAlpha(contentLayout, 0.0f);
 
     animatorSet = new AnimatorSet();
-    animatorSet
-        .play(ObjectAnimator.ofFloat(this.movieThumbIv, View.X, startBounds.left, finalBounds.left))
-        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.Y, startBounds.top, finalBounds.top))
-        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_X, scale, 1.0f))
-        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_Y, scale, 1.0f));
+    animatorSet.play(ObjectAnimator.ofFloat(this.movieThumbIv, View.X, startBounds.left, finalBounds.left))
+               .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.Y, startBounds.top, finalBounds.top))
+               .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_X, scale, 1.0f))
+               .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_Y, scale, 1.0f));
     animatorSet.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
     animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
     animatorSet.addListener(new AnimatorListenerAdapter() {
-      @Override public void onAnimationEnd(Animator animation) {
+      @Override
+      public void onAnimationEnd(Animator animation) {
 
         ViewCompat.animate(contentLayout).alpha(1.0f).withLayer();
 
@@ -146,15 +172,15 @@ public class DetailActivity extends BaseActivity {
       }
     });
 
-    Picasso
-        .with(DetailActivity.this)
-        .load(movieEntity.getMovieThumbUrl())
-        .noFade()
-        .into(movieThumbIv, new Callback.EmptyCallback() {
-          @Override public void onSuccess() {
-            animatorSet.start();
-          }
-        });
+    Picasso.with(DetailActivity.this)
+           .load(movieEntity.getMovieThumbUrl())
+           .noFade()
+           .into(movieThumbIv, new Callback.EmptyCallback() {
+             @Override
+             public void onSuccess() {
+               animatorSet.start();
+             }
+           });
   }
 
   protected void runExitAnimator() {
@@ -164,19 +190,20 @@ public class DetailActivity extends BaseActivity {
     this.movieThumbIv.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
     animatorSet = new AnimatorSet();
-    animatorSet
-        .play(ObjectAnimator.ofFloat(this.movieThumbIv, View.X, startBounds.left))
-        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.Y, startBounds.top))
-        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_X, scale))
-        .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_Y, scale));
+    animatorSet.play(ObjectAnimator.ofFloat(this.movieThumbIv, View.X, startBounds.left))
+               .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.Y, startBounds.top))
+               .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_X, scale))
+               .with(ObjectAnimator.ofFloat(this.movieThumbIv, View.SCALE_Y, scale));
     animatorSet.setDuration(getResources().getInteger(android.R.integer.config_mediumAnimTime));
     animatorSet.setInterpolator(new DecelerateInterpolator());
     animatorSet.addListener(new AnimatorListenerAdapter() {
-      @Override public void onAnimationStart(Animator animation) {
+      @Override
+      public void onAnimationStart(Animator animation) {
         DetailActivity.this.contentLayout.setVisibility(View.GONE);
       }
 
-      @Override public void onAnimationEnd(Animator animation) {
+      @Override
+      public void onAnimationEnd(Animator animation) {
 
         DetailActivity.this.animatorSet = null;
         DetailActivity.this.movieThumbIv.setLayerType(View.LAYER_TYPE_NONE, null);
@@ -186,20 +213,25 @@ public class DetailActivity extends BaseActivity {
     animatorSet.start();
   }
 
-  @NonNull @OnClick(R.id.detail_layout_cancel_iv) protected void onCancel() {
+  @NonNull
+  @OnClick(R.id.detail_layout_cancel_iv)
+  protected void onCancel() {
     DetailActivity.this.runExitAnimator();
   }
 
-  @Override protected void exit() {
+  @Override
+  protected void exit() {
     DetailActivity.this.runExitAnimator();
   }
 
-  @Override public void finish() {
+  @Override
+  public void finish() {
     super.finish();
     overridePendingTransition(0, 0);
   }
 
-  @Override protected void onDestroy() {
+  @Override
+  protected void onDestroy() {
     super.onDestroy();
 
     Picasso.with(DetailActivity.this).cancelRequest(this.movieThumbIv);

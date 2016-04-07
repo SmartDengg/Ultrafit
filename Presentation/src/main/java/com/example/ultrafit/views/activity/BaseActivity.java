@@ -12,17 +12,20 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
  */
 public abstract class BaseActivity extends RxAppCompatActivity {
 
-  @Override public void setContentView(int layoutResID) {
+  @Override
+  public void setContentView(int layoutResID) {
     super.setContentView(layoutResID);
     ButterKnife.bind(BaseActivity.this);
   }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(BaseActivity.this.getLayoutId());
   }
 
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
         BaseActivity.this.exit();
@@ -31,24 +34,28 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
       BaseActivity.this.exit();
     }
     return false;
   }
 
-  @Override public void finish() {
+  @Override
+  public void finish() {
     super.finish();
     overridePendingTransition(0, 0);
   }
 
-  @Override protected void onDestroy() {
+  @Override
+  protected void onDestroy() {
     super.onDestroy();
     ButterKnife.unbind(BaseActivity.this);
   }
 
   protected abstract void exit();
 
-  @LayoutRes protected abstract int getLayoutId();
+  @LayoutRes
+  protected abstract int getLayoutId();
 }

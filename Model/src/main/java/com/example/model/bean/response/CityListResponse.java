@@ -19,6 +19,10 @@ public class CityListResponse {
       },
     ]*/
 
-  @Expose @SerializedName("id") public String cityId;
-  @Expose @SerializedName("city_name") public String cityName;
+  @Expose
+  @SerializedName("id")
+  public String cityId;
+  @Expose
+  @SerializedName("city_name")
+  public String cityName;
 }

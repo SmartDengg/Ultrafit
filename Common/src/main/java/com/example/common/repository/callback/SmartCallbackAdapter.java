@@ -15,7 +15,8 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    *
    * @param entity
    */
-  @Override public void success(T entity) {
+  @Override
+  public void success(T entity) {
 
   }
 
@@ -24,7 +25,8 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    *
    * @param response
    */
-  @Override public void noContent(Response<?> response) {
+  @Override
+  public void noContent(Response<?> response) {
 
   }
 
@@ -33,7 +35,8 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    *
    * @param response
    */
-  @Override public void unauthenticated(Response<?> response) {
+  @Override
+  public void unauthenticated(Response<?> response) {
 
   }
 
@@ -42,7 +45,8 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    *
    * @param response
    */
-  @Override public void clientError(Response<?> response) {
+  @Override
+  public void clientError(Response<?> response) {
 
   }
 
@@ -51,7 +55,8 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    *
    * @param response
    */
-  @Override public void serverError(Response<?> response) {
+  @Override
+  public void serverError(Response<?> response) {
 
   }
 
@@ -60,7 +65,8 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    *
    * @param e
    */
-  @Override public void networkError(IOException e) {
+  @Override
+  public void networkError(IOException e) {
     Logger.t(Constants.OKHTTP_TAG).d(e.getMessage());
   }
 
@@ -69,7 +75,8 @@ public class SmartCallbackAdapter<T> implements SmartCallback<T> {
    *
    * @param t
    */
-  @Override public void unexpectedError(Throwable t) {
+  @Override
+  public void unexpectedError(Throwable t) {
     Logger.t(Constants.OKHTTP_TAG).d(t.getMessage());
   }
 }

@@ -20,12 +20,14 @@ import okhttp3.OkHttpClient;
 public class MyApplication extends Application {
 
   private Picasso.Listener picassoListener = new Picasso.Listener() {
-    @Override public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+    @Override
+    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
       Logger.e(exception.getMessage());
     }
   };
 
-  @Override public void onCreate() {
+  @Override
+  public void onCreate() {
     super.onCreate();
 
     if (Constants.isDebugChrome) {
@@ -36,11 +38,10 @@ public class MyApplication extends Application {
     long cacheSize = CacheUtil.calculateDiskCacheSize(cacheFile);
     OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(new Cache(cacheFile, cacheSize)).build();
 
-    Picasso picasso = new Picasso.Builder(MyApplication.this)
-        .downloader(new OkHttp3Downloader(okHttpClient))
-        .listener(picassoListener)
-        .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
-        .build();
+    Picasso picasso = new Picasso.Builder(MyApplication.this).downloader(new OkHttp3Downloader(okHttpClient))
+                                                             .listener(picassoListener)
+                                                             .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
+                                                             .build();
 
     Picasso.setSingletonInstance(picasso);
 

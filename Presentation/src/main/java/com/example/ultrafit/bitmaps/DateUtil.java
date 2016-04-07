@@ -5,7 +5,8 @@ import android.annotation.SuppressLint;
 /**
  * Created by SmartDengg on 2016/3/12.
  */
-@SuppressLint("SimpleDateFormat") public class DateUtil {
+@SuppressLint("SimpleDateFormat")
+public class DateUtil {
 
   public static String coverToDate(String date) {
     //example 20160311

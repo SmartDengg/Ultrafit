@@ -31,16 +31,36 @@ public class MovieDetailResponse {
         },
        ]*/
 
-    @Expose @SerializedName("poster") public String movieThumbUrl;
-    @Expose @SerializedName("title") public String movieName;
-    @Expose @SerializedName("plot_simple") public String movieSketch;
+  @Expose
+  @SerializedName("poster")
+  public String movieThumbUrl;
+  @Expose
+  @SerializedName("title")
+  public String movieName;
+  @Expose
+  @SerializedName("plot_simple")
+  public String movieSketch;
 
-    @Expose @SerializedName("writers") public String movieWriters;
-    @Expose @SerializedName("directors") public String movieDirectors;
-    @Expose @SerializedName("actors") public String movieActors;
-    @Expose @SerializedName("genres") public String movieCategory;
-    @Expose @SerializedName("rating") public String movieScore;
+  @Expose
+  @SerializedName("writers")
+  public String movieWriters;
+  @Expose
+  @SerializedName("directors")
+  public String movieDirectors;
+  @Expose
+  @SerializedName("actors")
+  public String movieActors;
+  @Expose
+  @SerializedName("genres")
+  public String movieCategory;
+  @Expose
+  @SerializedName("rating")
+  public String movieScore;
 
-    @Expose @SerializedName("release_date") public String movieReleaseTime;
-    @Expose @SerializedName("country") public String movieCountry;
+  @Expose
+  @SerializedName("release_date")
+  public String movieReleaseTime;
+  @Expose
+  @SerializedName("country")
+  public String movieCountry;
 }

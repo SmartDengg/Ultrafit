@@ -13,7 +13,8 @@ public class Rxbus {
   private SerializedSubject<Object, Object> rxBus;
   private SerializedSubject<Object, Object> rxStickBus;
 
-  @SuppressWarnings("unchecked") private Rxbus() {
+  @SuppressWarnings("unchecked")
+  private Rxbus() {
     this.rxBus = new SerializedSubject(PublishSubject.create());
     this.rxStickBus = new SerializedSubject(BehaviorSubject.create());
   }

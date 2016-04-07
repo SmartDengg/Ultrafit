@@ -82,7 +82,8 @@ public class UltraParserFactory {
     return requestEntity;
   }
 
-  @NonNull private RequestEntity internalParseUrl() {
+  @NonNull
+  private RequestEntity internalParseUrl() {
 
     RestType restType = null;
     String url = null;

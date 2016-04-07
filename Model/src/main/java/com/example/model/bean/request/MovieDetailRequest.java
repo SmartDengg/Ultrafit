@@ -7,11 +7,15 @@ import com.example.common.ultrafit.annotation.HttpGet;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-@HttpGet(stringUrl = Constants.MOVIE_DETAIL_URL) public class MovieDetailRequest {
+@HttpGet(stringUrl = Constants.MOVIE_DETAIL_URL)
+public class MovieDetailRequest {
 
-  @Argument(parameter = "movieid") private String movieId;
-  @Argument(parameter = "key") private String appKey = Constants.APP_KEY;
-  @Argument(parameter = "dtype") private String dtype = "json";
+  @Argument(parameter = "movieid")
+  private String movieId;
+  @Argument(parameter = "key")
+  private String appKey = Constants.APP_KEY;
+  @Argument(parameter = "dtype")
+  private String dtype = "json";
 
   public MovieDetailRequest(String movieId) {
     this.movieId = movieId;

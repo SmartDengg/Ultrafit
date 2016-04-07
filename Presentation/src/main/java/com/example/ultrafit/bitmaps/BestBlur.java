@@ -88,16 +88,13 @@ public class BestBlur {
 
   private void doDesaturate(float normalizedAmount, Allocation input, Allocation output) {
     Matrix3f m = new Matrix3f(new float[] {
-        MathUtil.interpolate(1, 0.299f, normalizedAmount),
-        MathUtil.interpolate(0, 0.299f, normalizedAmount),
+        MathUtil.interpolate(1, 0.299f, normalizedAmount), MathUtil.interpolate(0, 0.299f, normalizedAmount),
         MathUtil.interpolate(0, 0.299f, normalizedAmount),
 
-        MathUtil.interpolate(0, 0.587f, normalizedAmount),
-        MathUtil.interpolate(1, 0.587f, normalizedAmount),
+        MathUtil.interpolate(0, 0.587f, normalizedAmount), MathUtil.interpolate(1, 0.587f, normalizedAmount),
         MathUtil.interpolate(0, 0.587f, normalizedAmount),
 
-        MathUtil.interpolate(0, 0.114f, normalizedAmount),
-        MathUtil.interpolate(0, 0.114f, normalizedAmount),
+        MathUtil.interpolate(0, 0.114f, normalizedAmount), MathUtil.interpolate(0, 0.114f, normalizedAmount),
         MathUtil.interpolate(1, 0.114f, normalizedAmount),
     });
     mSIGrey.setColorMatrix(m);

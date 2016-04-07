@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 /**
  * Created by SmartDengg on 2016/2/14.
  */
-@Documented @Retention(value = RetentionPolicy.RUNTIME) @Target(value = ElementType.FIELD) public @interface Argument {
+@Documented
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target(value = ElementType.FIELD)
+public @interface Argument {
   String parameter();
 }

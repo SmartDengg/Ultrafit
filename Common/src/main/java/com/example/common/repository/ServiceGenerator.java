@@ -19,27 +19,25 @@ public class ServiceGenerator {
   private static Retrofit retrofit;
 
   static {
-    Gson gson = new GsonBuilder()
-        .excludeFieldsWithoutExposeAnnotation()
-        .enableComplexMapKeySerialization()
-        .serializeNulls()
-        .setPrettyPrinting()
-        .create();
+    Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                                 .enableComplexMapKeySerialization()
+                                 .serializeNulls()
+                                 .setPrettyPrinting()
+                                 .create();
 
-    ServiceGenerator.httpClientBuilder
-        .addNetworkInterceptor(new StethoInterceptor())
-        .addInterceptor(HeaderInterceptor.createdInterceptor())
-        .addInterceptor(
-            SmartHttpLoggingInterceptor.createLoggingInterceptor().setLevel(SmartHttpLoggingInterceptor.Level.HEADERS));
+    ServiceGenerator.httpClientBuilder.addNetworkInterceptor(new StethoInterceptor())
+                                      .addInterceptor(HeaderInterceptor.createdInterceptor())
+                                      .addInterceptor(SmartHttpLoggingInterceptor.createLoggingInterceptor()
+                                                                                 .setLevel(
+                                                                                     SmartHttpLoggingInterceptor.Level.HEADERS));
 
-    retrofit = new Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
-        .addCallAdapterFactory(SmartCallAdapterFactory.create())
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-        .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(httpClientBuilder.build())
-        .validateEagerly(true)
-        .build();
+    retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
+                                     .addCallAdapterFactory(SmartCallAdapterFactory.create())
+                                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                                     .addConverterFactory(GsonConverterFactory.create(gson))
+                                     .client(httpClientBuilder.build())
+                                     .validateEagerly(true)
+                                     .build();
   }
 
   public static <S> S createService(Class<S> serviceClass) {

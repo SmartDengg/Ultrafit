@@ -47,7 +47,8 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
   private RxJavaCallAdapterFactory() {
   }
 
-  @Override public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
+  @Override
+  public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
 
     Class<?> rawType = getRawType(returnType);
     boolean isSingle = "rx.Single".equals(rawType.getCanonicalName());
@@ -93,16 +94,19 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       this.responseType = responseType;
     }
 
-    @Override public Type responseType() {
+    @Override
+    public Type responseType() {
       return responseType;
     }
 
-    @Override public <R> Observable<R> adapt(Call<R> call) {
+    @Override
+    public <R> Observable<R> adapt(Call<R> call) {
 
       return Observable.create(new CallOnSubscribe<>(call))
                        .lift(OperatorMapResponseToBodyOrError.<R>instance())
                        .retryWhen(new Func1<Observable<? extends Throwable>, Observable<Long>>() {
-                         @Override public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
+                         @Override
+                         public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
 
                            return errorObservable.zipWith(Observable.range(1, Constants.MAX_CONNECT),
                                                           new Func2<Throwable, Integer, InnerThrowable>() {
@@ -116,7 +120,8 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
                                                                                         Constants.MAX_CONNECT);
                                                             }
                                                           }).concatMap(new Func1<InnerThrowable, Observable<Long>>() {
-                             @Override public Observable<Long> call(InnerThrowable innerThrowable) {
+                             @Override
+                             public Observable<Long> call(InnerThrowable innerThrowable) {
 
                                Integer retryCount = innerThrowable.getRetryCount();
                                if (retryCount.equals(Constants.MAX_CONNECT)) {
@@ -140,7 +145,8 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       this.originalCall = originalCall;
     }
 
-    @Override public void call(final Subscriber<? super Response<T>> subscriber) {
+    @Override
+    public void call(final Subscriber<? super Response<T>> subscriber) {
       // Since Call is a one-shot type, clone it for each new subscriber.
       Call<T> call = originalCall.clone();
 
@@ -162,7 +168,8 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       this.subscriber = subscriber;
     }
 
-    @Override public void request(long n) {
+    @Override
+    public void request(long n) {
       if (n < 0) throw new IllegalArgumentException("n < 0: " + n);
       if (n == 0) return; // Nothing to do when requesting 0.
       if (!this.compareAndSet(false, true)) return; // Request was already triggered.
@@ -181,11 +188,13 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
       }
     }
 
-    @Override public void unsubscribe() {
+    @Override
+    public void unsubscribe() {
       if (this.unsubscribed.compareAndSet(false, true)) call.cancel();
     }
 
-    @Override public boolean isUnsubscribed() {
+    @Override
+    public boolean isUnsubscribed() {
       return unsubscribed.get() && call.isCanceled();
     }
   }

@@ -40,13 +40,15 @@ final class CompletableHelper {
       this.originalCall = originalCall;
     }
 
-    @Override public void call(CompletableSubscriber subscriber) {
+    @Override
+    public void call(CompletableSubscriber subscriber) {
       // Since Call is a one-shot type, clone it for each new subscriber.
       final Call call = originalCall.clone();
 
       // Attempt to cancel the call if it is still in-flight on unsubscription.
       Subscription subscription = Subscriptions.create(new Action0() {
-        @Override public void call() {
+        @Override
+        public void call() {
           call.cancel();
         }
       });
@@ -72,11 +74,13 @@ final class CompletableHelper {
 
   static class CompletableCallAdapter implements CallAdapter<Completable> {
 
-    @Override public Type responseType() {
+    @Override
+    public Type responseType() {
       return Void.class;
     }
 
-    @Override public Completable adapt(Call call) {
+    @Override
+    public Completable adapt(Call call) {
       return Completable.create(new CompletableCallOnSubscribe(call));
     }
   }

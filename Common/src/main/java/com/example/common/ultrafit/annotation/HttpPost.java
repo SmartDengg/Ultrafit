@@ -10,7 +10,10 @@ import java.lang.annotation.Target;
 /**
  * Created by SmartDengg on 2016/2/14.
  */
-@Documented @Retention(value = RetentionPolicy.RUNTIME) @Target(value = ElementType.TYPE)
-@RestMethod(type = RestType.POST) public @interface HttpPost {
+@Documented
+@Retention(value = RetentionPolicy.RUNTIME)
+@Target(value = ElementType.TYPE)
+@RestMethod(type = RestType.POST)
+public @interface HttpPost {
   String stringUrl();
 }

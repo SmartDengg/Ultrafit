@@ -24,7 +24,8 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
     return new SmartCallAdapterFactory();
   }
 
-  @Override public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
+  @Override
+  public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
 
     if (Types.getRawType(returnType) != SmartCall.class) {
       return null;
@@ -38,12 +39,14 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
     final Type responseType = Types.getParameterUpperBound(0, (ParameterizedType) returnType);
 
     return new CallAdapter<SmartCall<?>>() {
-      @Override public Type responseType() {
+      @Override
+      public Type responseType() {
         return responseType;
       }
 
-      @Override public <R> SmartCall<?> adapt(Call<R> call) {
-        return new SmartCallAdapter<>(call,mainThreadExecutor);
+      @Override
+      public <R> SmartCall<?> adapt(Call<R> call) {
+        return new SmartCallAdapter<>(call, mainThreadExecutor);
       }
     };
   }
