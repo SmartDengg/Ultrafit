@@ -107,7 +107,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
 
         @Override
         public void logRequestBody(String message) {
-            this.log(" ⇢⇢⇢ " + message);
+            this.log(" ⇢⇢⇢⇢ " + message);
         }
 
         @Override
@@ -168,8 +168,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
 
         Connection connection = chain.connection();
         Protocol protocol = connection != null ? connection.protocol() : Protocol.HTTP_1_1;
-        String requestStartMessage =
-                "--> " + request.method() + ' ' + request.url() + ' ' + protocol(protocol);
+        String requestStartMessage = "--> " + request.method() + ' ' + request.url() + ' ' + protocol(protocol);
         if (!logHeaders && hasRequestBody) {
             requestStartMessage += " (" + requestBody.contentLength() + "-byte body)";
         }
@@ -195,8 +194,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
             for (int i = 0, count = headers.size(); i < count; i++) {
                 String name = headers.name(i);
                 // Skip headers from the request body as they are explicitly logged above.
-                if (!"Content-Type".equalsIgnoreCase(name) && !"Content-Length".equalsIgnoreCase(
-                        name)) {
+                if (!"Content-Type".equalsIgnoreCase(name) && !"Content-Length".equalsIgnoreCase(name)) {
                     logger.log(name + ": " + headers.value(i));
                 }
             }
@@ -215,8 +213,10 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                     charset = contentType.charset(UTF8);
                 }
 
-                logger.log("");
-                logger.logRequestBody(buffer.readString(charset));
+                if (requestBody.contentLength() > 0) {
+                    logger.log("");
+                    logger.logRequestBody(buffer.readString(charset));
+                }
 
                 logger.log("--> END " + request.method() + " (" + requestBody.contentLength() +
                                    "-byte body)");
@@ -233,11 +233,8 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
         ResponseBody responseBody = response.body();
         long contentLength = responseBody.contentLength();
         String bodySize = contentLength != -1 ? contentLength + "-byte" : "unknown-length";
-        logger.log(
-                "<-- " + response.code() + ' ' + response.message() + ' ' + response.request()
-                                                                                    .url() + " (" +
-                        tookMs + "ms" + (
-                        !logHeaders ? ", " + bodySize + " body" : "") + ')');
+        logger.log("<-- " + response.code() + ' ' + response.message() + ' ' + response.request().url() + " (" +
+                           tookMs + "ms" + (!logHeaders ? ", " + bodySize + " body" : "") + ')');
 
         if (logHeaders) {
             Headers headers = response.headers();
@@ -265,8 +262,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
 
                 if (contentLength != 0) {
                     logger.log("");
-                    logger.log(buffer.clone()
-                                     .readString(charset));
+                    logger.log(buffer.clone().readString(charset));
                 }
 
                 logger.log("<-- END HTTP (" + buffer.size() + "-byte body)");

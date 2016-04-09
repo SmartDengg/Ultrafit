@@ -1,3 +1,4 @@
+/*
 package com.example.ultrafit;
 
 import android.annotation.TargetApi;
@@ -29,11 +30,9 @@ import rx.schedulers.Schedulers;
 @HttpPost(stringUrl = "")
 @SuppressWarnings("")
 public class BeforeFormat extends RxAppCompatActivity
-        implements DialogInterface.OnClickListener, View.OnClickListener,
-                   RemoteController.OnClientUpdateListener {
+        implements DialogInterface.OnClickListener, View.OnClickListener, RemoteController.OnClientUpdateListener {
 
-    @Bind(R.id.city_layout_root_view)
-    protected View view;
+    @Bind(R.id.city_layout_root_view) protected View view;
     @Bind(R.id.city_layout_root_view)
     @SuppressWarnings("")
     protected View view2;
@@ -66,8 +65,7 @@ public class BeforeFormat extends RxAppCompatActivity
     }
 
     @Override
-    public void onClientPlaybackStateUpdate(int state, long stateChangeTimeMs, long currentPosMs,
-                                            float speed) {
+    public void onClientPlaybackStateUpdate(int state, long stateChangeTimeMs, long currentPosMs, float speed) {
     }
 
     @Override
@@ -86,7 +84,8 @@ public class BeforeFormat extends RxAppCompatActivity
     @SuppressWarnings("")
     @Deprecated
     @NonNull
-    public void ChainCode(@IntegerRes @Nullable @NonNull int id, String s1, String s2, String s3, @NonNull int id0, @NonNull int id1, @NonNull int id2) {
+    public void ChainCode(@IntegerRes @Nullable @NonNull int id, String s1, String s2, String s3, @NonNull int id0,
+                          @NonNull int id1, @NonNull int id2) {
         if (true) {
             Observable.just(1);
         }
@@ -139,3 +138,4 @@ public class BeforeFormat extends RxAppCompatActivity
 
     class TestInnerClass {}
 }
+*/

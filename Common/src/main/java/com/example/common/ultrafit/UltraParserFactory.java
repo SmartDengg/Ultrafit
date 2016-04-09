@@ -94,16 +94,19 @@ public class UltraParserFactory {
         for (Annotation classAnnotation : annotations) {
 
             Class<? extends Annotation> clazz = classAnnotation.annotationType();
-            if (!clazz.isAnnotationPresent(RestMethod.class)) continue;
+            if (!clazz.isAnnotationPresent(RestMethod.class)) {
+                continue;
+            }
 
             RestMethod restMethod = clazz.getAnnotation(RestMethod.class);
 
             if (restType != null) {
                 throw Errors.methodError(this.clazz,
                                          "Only one HTTP method is allowed.Found: %s and %s.You should choose one from these.",
-                                         restType.name(), restMethod.type());
+                                         restType.name(),
+                                         restMethod.type());
             }
-      /*Only HttpGet or HttpPost*/
+            /*Only HttpGet or HttpPost*/
             restType = restMethod.type();
 
             try {
@@ -116,8 +119,7 @@ public class UltraParserFactory {
         }
 
         if (restType == null || url == null) {
-            throw Errors.methodError(this.clazz,
-                                     "Http method annotation is required (e.g.@HttpGet, @HttpPost, etc.).");
+            throw Errors.methodError(this.clazz, "Http method annotation is required (e.g.@HttpGet, @HttpPost, etc.).");
         }
 
         return new RequestEntity(restType, url, null);
@@ -126,8 +128,7 @@ public class UltraParserFactory {
     public RequestEntity internalParseParameter() {
 
         if (requestEntity.getRestType() == null || requestEntity.getUrl() == null) {
-            throw Errors.methodError(this.clazz,
-                                     "You should first invoke parseUrl() before call this method.");
+            throw Errors.methodError(this.clazz, "You should first invoke parseUrl() before call this method.");
         }
 
         Map<String, String> params = new HashMap<>();
@@ -135,12 +136,16 @@ public class UltraParserFactory {
 
         while (superClazz != null) {
 
-            if (Object.class.getName().equalsIgnoreCase(superClazz.getName())) break;
+            if (Object.class.getName().equalsIgnoreCase(superClazz.getName())) {
+                break;
+            }
 
             Field[] superFields = superClazz.getDeclaredFields();
             superClazz = superClazz.getSuperclass();
 
-            if (superFields == null || superFields.length == 0) continue;
+            if (superFields == null || superFields.length == 0) {
+                continue;
+            }
             UltraParserFactory.this.hunter(params, superFields);
         }
 
@@ -153,7 +158,9 @@ public class UltraParserFactory {
     private void hunter(Map<String, String> params, Field[] declaredFields) {
         for (Field field : declaredFields) {
 
-            if (Modifier.isPrivate(field.getModifiers())) field.setAccessible(true);
+            if (Modifier.isPrivate(field.getModifiers())) {
+                field.setAccessible(true);
+            }
 
             if (field.isAnnotationPresent(Argument.class)) {
 
@@ -169,15 +176,15 @@ public class UltraParserFactory {
                     value = field.get(rawEntity);
                 } catch (IllegalAccessException e) {
                     throw Errors.methodError(field.getDeclaringClass(),
-                                             "IllegalAccessException was happened when access "
-                                                     + "%s field", field.getName());
+                                             "IllegalAccessException was happened when access " + "%s field",
+                                             field.getName());
                 }
 
                 if (value == null) continue;
 
                 if (rawParameterType.isArray()) {
-                    Class<?> arrayComponentType = UltraParserFactory.this.boxIfPrimitive(
-                            rawParameterType.getComponentType());
+                    Class<?> arrayComponentType =
+                            UltraParserFactory.this.boxIfPrimitive(rawParameterType.getComponentType());
                     name = argument.parameter();
                     ultra = UltraParserFactory.this.arrayToString(value, arrayComponentType);
                 } else {
@@ -187,10 +194,11 @@ public class UltraParserFactory {
 
                 if (params.containsKey(name)) {
                     throw Errors.methodError(field.getDeclaringClass(),
-                                             "The parameter %s at least already exists one.You must choose one "
-                                                     + "from these which value is '%s'"
-                                                     + " or"
-                                                     + " '%s'", name, params.get(name), ultra);
+                                             "The parameter %s at least already exists one.You must choose one " +
+                                                     "from these which value is '%s'" + " or" + " '%s'",
+                                             name,
+                                             params.get(name),
+                                             ultra);
                 }
                 params.put(name, ultra);
             }
@@ -204,14 +212,30 @@ public class UltraParserFactory {
      * @return
      */
     private Class<?> boxIfPrimitive(Class<?> type) {
-        if (boolean.class == type) return Boolean.class;
-        if (byte.class == type) return Byte.class;
-        if (char.class == type) return Character.class;
-        if (double.class == type) return Double.class;
-        if (float.class == type) return Float.class;
-        if (int.class == type) return Integer.class;
-        if (long.class == type) return Long.class;
-        if (short.class == type) return Short.class;
+        if (boolean.class == type) {
+            return Boolean.class;
+        }
+        if (byte.class == type) {
+            return Byte.class;
+        }
+        if (char.class == type) {
+            return Character.class;
+        }
+        if (double.class == type) {
+            return Double.class;
+        }
+        if (float.class == type) {
+            return Float.class;
+        }
+        if (int.class == type) {
+            return Integer.class;
+        }
+        if (long.class == type) {
+            return Long.class;
+        }
+        if (short.class == type) {
+            return Short.class;
+        }
         return type;
     }
 

@@ -16,7 +16,7 @@ import static android.os.Build.VERSION_CODES.HONEYCOMB;
  */
 public class CacheUtil {
 
-  private static final String ULTRA_CACHE = "ultra-cache";
+  private static final String ULTRA_CACHE = "ultra-picasso-cache";
   private static final int MIN_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5MB
   private static final int MAX_DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
 
