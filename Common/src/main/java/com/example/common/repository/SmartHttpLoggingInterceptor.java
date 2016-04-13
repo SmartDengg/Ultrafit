@@ -98,8 +98,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                 newline = newline != -1 ? newline : length;
                 do {
                     int end = Math.min(newline, i + Constants.MAX_LOG_LENGTH);
-                    Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG,
-                          Constants.HORIZONTAL_DOUBLE_LINE + message.substring(i, end));
+                    Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.HORIZONTAL_DOUBLE_LINE + message.substring(i, end));
                     i = end;
                 } while (i < newline);
             }
@@ -218,8 +217,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                     logger.logRequestBody(buffer.readString(charset));
                 }
 
-                logger.log("--> END " + request.method() + " (" + requestBody.contentLength() +
-                                   "-byte body)");
+                logger.log("--> END " + request.method() + " (" + requestBody.contentLength() + "-byte body)");
             }
         }
 
@@ -233,8 +231,8 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
         ResponseBody responseBody = response.body();
         long contentLength = responseBody.contentLength();
         String bodySize = contentLength != -1 ? contentLength + "-byte" : "unknown-length";
-        logger.log("<-- " + response.code() + ' ' + response.message() + ' ' + response.request().url() + " (" +
-                           tookMs + "ms" + (!logHeaders ? ", " + bodySize + " body" : "") + ')');
+        logger.log("<-- " + response.code() + ' ' + response.message() + ' ' + response.request().url() + " (" + tookMs + "ms" +
+                           (!logHeaders ? ", " + bodySize + " body" : "") + ')');
 
         if (logHeaders) {
             Headers headers = response.headers();
@@ -254,7 +252,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                 source.request(Long.MAX_VALUE); // Buffer the entire body.
                 Buffer buffer = source.buffer();
 
-                Charset charset = UTF8;
+               /* Charset charset = UTF8;
                 MediaType contentType = responseBody.contentType();
                 if (contentType != null) {
                     charset = contentType.charset(UTF8);
@@ -263,7 +261,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                 if (contentLength != 0) {
                     logger.log("");
                     logger.log(buffer.clone().readString(charset));
-                }
+                }*/
 
                 logger.log("<-- END HTTP (" + buffer.size() + "-byte body)");
             }

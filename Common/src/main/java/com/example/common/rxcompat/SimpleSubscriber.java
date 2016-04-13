@@ -12,21 +12,21 @@ import rx.Subscriber;
  */
 public class SimpleSubscriber<T> extends Subscriber<T> {
 
-  @Override
-  public void onCompleted() {
-  }
-
-  @CallSuper
-  @Override
-  public void onError(Throwable e) {
-    Logger.e(e.toString());
-    if (e instanceof RetrofitHttpException) {
-      Response<?> response = ((RetrofitHttpException) e).response();
-      if (response != null) Logger.t(Constants.OKHTTP_TAG).e(((RetrofitHttpException) e).response().raw().toString());
+    @Override
+    public void onCompleted() {
     }
-  }
 
-  @Override
-  public void onNext(T t) {
-  }
+    @CallSuper
+    @Override
+    public void onError(Throwable e) {
+        Logger.t(Constants.OKHTTP_TAG, 0).e(e.toString());
+        if (e instanceof RetrofitHttpException) {
+            Response<?> response = ((RetrofitHttpException) e).response();
+            if (response != null) Logger.t(Constants.OKHTTP_TAG, 1).e(((RetrofitHttpException) e).response().raw().toString());
+        }
+    }
+
+    @Override
+    public void onNext(T t) {
+    }
 }

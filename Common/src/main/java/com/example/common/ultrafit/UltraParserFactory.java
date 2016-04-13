@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * Created by SmartDengg on 2016/2/21.
  */
-public class UltraParserFactory {
+public class UltraParserFactory<R> {
 
     private static final String HttpMethod = "stringUrl";
 
@@ -36,17 +36,19 @@ public class UltraParserFactory {
                                                     requestEntity.getParamMap());
     }
 
-    private Object rawEntity;
+    private R rawEntity;
     private RequestEntity requestEntity;
     private Class<?> clazz;
 
-    private UltraParserFactory(Object rawEntity) {
+    private UltraParserFactory(R rawEntity) {
         this.rawEntity = rawEntity;
         this.requestEntity = new RequestEntity();
     }
 
-    public static UltraParserFactory createParser(Object rawEntity) {
-        return new UltraParserFactory(rawEntity);
+    /**Safe because of generics erasure*/
+    @SuppressWarnings("unchecked")
+    public static <R> UltraParserFactory createParser(R requestEntity) {
+        return new UltraParserFactory(requestEntity);
     }
 
     public String parseUrl() {
@@ -101,21 +103,15 @@ public class UltraParserFactory {
             RestMethod restMethod = clazz.getAnnotation(RestMethod.class);
 
             if (restType != null) {
-                throw Errors.methodError(this.clazz,
-                                         "Only one HTTP method is allowed.Found: %s and %s.You should choose one from these.",
-                                         restType.name(),
-                                         restMethod.type());
+                String excessUrl = UltraParserFactory.this.invokeUrl(classAnnotation, clazz);
+                throw Errors.methodError(this.clazz, "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", restType.name(), url, restMethod
+                        .type(), excessUrl);
             }
+
             /*Only HttpGet or HttpPost*/
             restType = restMethod.type();
 
-            try {
-                url = (String) clazz.getMethod(HttpMethod).invoke(classAnnotation);
-            } catch (Exception ignored) {
-                throw Errors.methodError(this.clazz,
-                                         "Failed to extract String 'value' from @%s annotation.",
-                                         clazz.getSimpleName());
-            }
+            url = UltraParserFactory.this.invokeUrl(classAnnotation, clazz);
         }
 
         if (restType == null || url == null) {
@@ -123,6 +119,14 @@ public class UltraParserFactory {
         }
 
         return new RequestEntity(restType, url, null);
+    }
+
+    private String invokeUrl(Annotation classAnnotation, Class<? extends Annotation> clazz) {
+        try {
+            return clazz.getMethod(HttpMethod).invoke(classAnnotation).toString();
+        } catch (Exception ignore) {
+            throw Errors.methodError(this.clazz, "Failed to extract String 'value' from @%s annotation.", clazz.getSimpleName());
+        }
     }
 
     public RequestEntity internalParseParameter() {
@@ -176,15 +180,13 @@ public class UltraParserFactory {
                     value = field.get(rawEntity);
                 } catch (IllegalAccessException e) {
                     throw Errors.methodError(field.getDeclaringClass(),
-                                             "IllegalAccessException was happened when access " + "%s field",
-                                             field.getName());
+                                             "IllegalAccessException was happened when access " + "%s field", field.getName());
                 }
 
                 if (value == null) continue;
 
                 if (rawParameterType.isArray()) {
-                    Class<?> arrayComponentType =
-                            UltraParserFactory.this.boxIfPrimitive(rawParameterType.getComponentType());
+                    Class<?> arrayComponentType = UltraParserFactory.this.boxIfPrimitive(rawParameterType.getComponentType());
                     name = argument.parameter();
                     ultra = UltraParserFactory.this.arrayToString(value, arrayComponentType);
                 } else {
@@ -195,10 +197,7 @@ public class UltraParserFactory {
                 if (params.containsKey(name)) {
                     throw Errors.methodError(field.getDeclaringClass(),
                                              "The parameter %s at least already exists one.You must choose one " +
-                                                     "from these which value is '%s'" + " or" + " '%s'",
-                                             name,
-                                             params.get(name),
-                                             ultra);
+                                                     "from these which value is '%s'" + " or" + " '%s'", name, params.get(name), ultra);
                 }
                 params.put(name, ultra);
             }
@@ -212,30 +211,15 @@ public class UltraParserFactory {
      * @return
      */
     private Class<?> boxIfPrimitive(Class<?> type) {
-        if (boolean.class == type) {
-            return Boolean.class;
-        }
-        if (byte.class == type) {
-            return Byte.class;
-        }
-        if (char.class == type) {
-            return Character.class;
-        }
-        if (double.class == type) {
-            return Double.class;
-        }
-        if (float.class == type) {
-            return Float.class;
-        }
-        if (int.class == type) {
-            return Integer.class;
-        }
-        if (long.class == type) {
-            return Long.class;
-        }
-        if (short.class == type) {
-            return Short.class;
-        }
+        if (boolean.class == type) return Boolean.class;
+        if (byte.class == type) return Byte.class;
+        if (char.class == type) return Character.class;
+        if (double.class == type) return Double.class;
+        if (float.class == type) return Float.class;
+        if (int.class == type) return Integer.class;
+        if (long.class == type) return Long.class;
+        if (short.class == type) return Short.class;
+
         return type;
     }
 

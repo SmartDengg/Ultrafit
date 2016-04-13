@@ -12,19 +12,20 @@ import rx.Observable;
  */
 public class MovieListUseCase<R> extends UseCase<R, List<MovieEntity>> {
 
-  private MovieService movieService;
+    private MovieService movieService;
 
-  private MovieListUseCase() {
-    this.movieService = MovieService.createdService();
-  }
+    private MovieListUseCase() {
+        this.movieService = MovieService.createdService();
+    }
 
-  public static <R> MovieListUseCase<R> createdUseCase() {
-    return (MovieListUseCase<R>) new MovieListUseCase();
-  }
+    @SuppressWarnings("unchecked")
+    public static <R> MovieListUseCase<R> createdUseCase() {
+        return (MovieListUseCase<R>) new MovieListUseCase();
+    }
 
-  @SuppressWarnings("unchecked")
-  @Override
-  protected Observable<List<MovieEntity>> interactor(@NonNull String url, @NonNull Map params) {
-    return this.movieService.getMovieEntities(url, params);
-  }
+    @SuppressWarnings("unchecked")
+    @Override
+    protected Observable<List<MovieEntity>> interactor(@NonNull String url, @NonNull Map<String,String> params) {
+        return this.movieService.getMovieEntities(url, params);
+    }
 }

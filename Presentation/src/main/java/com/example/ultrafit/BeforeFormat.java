@@ -86,6 +86,7 @@ public class BeforeFormat extends RxAppCompatActivity
     @NonNull
     public void ChainCode(@IntegerRes @Nullable @NonNull int id, String s1, String s2, String s3, @NonNull int id0,
                           @NonNull int id1, @NonNull int id2) {
+
         if (true) {
             Observable.just(1);
         }
