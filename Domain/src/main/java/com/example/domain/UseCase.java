@@ -22,6 +22,7 @@ public abstract class UseCase<R, S> {
 
     //@formatter:off
     @SuppressWarnings("unchecked")
+
     public void subscribe(final R requestEntity, Observer<S> useCaseSubscriber) {
 
         /*Be care of ConnectableObservable*/
