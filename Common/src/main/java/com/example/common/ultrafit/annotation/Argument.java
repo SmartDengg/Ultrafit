@@ -13,5 +13,6 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.FIELD)
 public @interface Argument {
-  String parameter();
+
+    String parameter() default "";
 }

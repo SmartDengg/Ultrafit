@@ -23,7 +23,8 @@ public class MyApplication extends Application {
     private Picasso.Listener picassoListener = new Picasso.Listener() {
         @Override
         public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-            Logger.e(exception.getMessage());
+            Logger.t(0)
+                  .e(exception.getMessage());
         }
     };
 
@@ -31,17 +32,13 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (BuildConfig.DEBUG) {
-            AndroidDevMetrics.initWith(MyApplication.this);
-        }
-
-        if (Constants.isDebugChrome) {
-            Stetho.initializeWithDefaults(MyApplication.this);
-        }
+        if (BuildConfig.DEBUG) AndroidDevMetrics.initWith(MyApplication.this);
+        if (Constants.isDebugChrome) Stetho.initializeWithDefaults(MyApplication.this);
 
         File cacheFile = CacheUtil.createDiskCacheDir(MyApplication.this);
         long cacheSize = CacheUtil.calculateDiskCacheSize(cacheFile);
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(new Cache(cacheFile, cacheSize)).build();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(new Cache(cacheFile, cacheSize))
+                                                              .build();
 
         Picasso picasso = new Picasso.Builder(MyApplication.this).downloader(new OkHttp3Downloader(okHttpClient))
                                                                  .listener(picassoListener)
@@ -49,6 +46,9 @@ public class MyApplication extends Application {
                                                                  .build();
         Picasso.setSingletonInstance(picasso);
 
-        Logger.init(Constants.BASE_TAG).setMethodOffset(0).setMethodCount(3).setLogLevel(LogLevel.FULL);
+        Logger.init(Constants.BASE_TAG)
+              .setMethodOffset(0)
+              .setMethodCount(3)
+              .setLogLevel(LogLevel.FULL);
     }
 }

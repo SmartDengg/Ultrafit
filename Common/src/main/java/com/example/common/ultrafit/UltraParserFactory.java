@@ -24,16 +24,18 @@ public class UltraParserFactory<R> {
 
     public static void outputs(@NonNull RequestEntity requestEntity) {
 
-        Logger.t(Constants.OKHTTP_TAG, 0).d("Request entity !!!!" +
-                                                    "\n  ⇢ " +
-                                                    " Type   : " +
-                                                    requestEntity.getRestType().name() +
-                                                    "\n  ⇢ " +
-                                                    " Url    : " +
-                                                    Constants.BASE_URL + requestEntity.getUrl() +
-                                                    "\n  ⇢ " +
-                                                    " Params : " +
-                                                    requestEntity.getParamMap());
+        Logger.t(Constants.OKHTTP_TAG, 0)
+              .d("Request entity !!!!" +
+                      "\n  ⇢ " +
+                      " Type   : " +
+                      requestEntity.getRestType()
+                                   .name() +
+                      "\n  ⇢ " +
+                      " Url    : " +
+                      Constants.BASE_URL + requestEntity.getUrl() +
+                      "\n  ⇢ " +
+                      " Params : " +
+                      requestEntity.getParamMap());
     }
 
     private R rawEntity;
@@ -45,7 +47,7 @@ public class UltraParserFactory<R> {
         this.requestEntity = new RequestEntity();
     }
 
-    /**Safe because of generics erasure*/
+    /** Safe because of generics erasure */
     @SuppressWarnings("unchecked")
     public static <R> UltraParserFactory createParser(R requestEntity) {
         return new UltraParserFactory(requestEntity);
@@ -58,7 +60,8 @@ public class UltraParserFactory<R> {
 
     private void parseRestUrl() {
         RequestEntity tempEntity = UltraParserFactory.this.internalParseUrl();
-        requestEntity.setRestType(tempEntity.getRestType()).setUrl(tempEntity.getUrl());
+        requestEntity.setRestType(tempEntity.getRestType())
+                     .setUrl(tempEntity.getUrl());
     }
 
     public Map<String, String> parseParameter() {
@@ -104,8 +107,7 @@ public class UltraParserFactory<R> {
 
             if (restType != null) {
                 String excessUrl = UltraParserFactory.this.invokeUrl(classAnnotation, clazz);
-                throw Errors.methodError(this.clazz, "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", restType.name(), url, restMethod
-                        .type(), excessUrl);
+                throw Errors.methodError(this.clazz, "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", restType.name(), url, restMethod.type(), excessUrl);
             }
 
             /*Only HttpGet or HttpPost*/
@@ -123,7 +125,9 @@ public class UltraParserFactory<R> {
 
     private String invokeUrl(Annotation classAnnotation, Class<? extends Annotation> clazz) {
         try {
-            return clazz.getMethod(HttpMethod).invoke(classAnnotation).toString();
+            return clazz.getMethod(HttpMethod)
+                        .invoke(classAnnotation)
+                        .toString();
         } catch (Exception ignore) {
             throw Errors.methodError(this.clazz, "Failed to extract String 'value' from @%s annotation.", clazz.getSimpleName());
         }
@@ -140,7 +144,8 @@ public class UltraParserFactory<R> {
 
         while (superClazz != null) {
 
-            if (Object.class.getName().equalsIgnoreCase(superClazz.getName())) {
+            if (Object.class.getName()
+                            .equalsIgnoreCase(superClazz.getName())) {
                 break;
             }
 
@@ -162,11 +167,9 @@ public class UltraParserFactory<R> {
     private void hunter(Map<String, String> params, Field[] declaredFields) {
         for (Field field : declaredFields) {
 
-            if (Modifier.isPrivate(field.getModifiers())) {
-                field.setAccessible(true);
-            }
-
             if (field.isAnnotationPresent(Argument.class)) {
+
+                if (Modifier.isPrivate(field.getModifiers())) field.setAccessible(true);
 
                 Argument argument = field.getAnnotation(Argument.class);
                 Class<?> parameterType = field.getType();
@@ -180,7 +183,7 @@ public class UltraParserFactory<R> {
                     value = field.get(rawEntity);
                 } catch (IllegalAccessException e) {
                     throw Errors.methodError(field.getDeclaringClass(),
-                                             "IllegalAccessException was happened when access " + "%s field", field.getName());
+                            "IllegalAccessException was happened when access " + "%s field", field.getName());
                 }
 
                 if (value == null) continue;
@@ -196,9 +199,11 @@ public class UltraParserFactory<R> {
 
                 if (params.containsKey(name)) {
                     throw Errors.methodError(field.getDeclaringClass(),
-                                             "The parameter %s at least already exists one.You must choose one " +
-                                                     "from these which value is '%s'" + " or" + " '%s'", name, params.get(name), ultra);
+                            "The parameter %s at least already exists one.You must choose one " +
+                                    "from these which value is '%s'" + " or" + " '%s'", name, params.get(name), ultra);
                 }
+
+                if (name.equals("")) name = field.getName();
                 params.put(name, ultra);
             }
         }

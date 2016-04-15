@@ -20,11 +20,10 @@ public abstract class UseCase<R, S> {
 
     private Subscription subscription = Subscriptions.empty();
 
-    //@formatter:off
     @SuppressWarnings("unchecked")
-
     public void subscribe(final R requestEntity, Observer<S> useCaseSubscriber) {
 
+        //@formatter:off
         /*Be care of ConnectableObservable*/
         this.subscription = Observable.fromCallable(new Func0<R>() {
                                           @Override

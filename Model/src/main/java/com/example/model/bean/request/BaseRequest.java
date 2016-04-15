@@ -9,5 +9,5 @@ import com.example.common.ultrafit.annotation.Argument;
 public class BaseRequest {
 
     @Argument(parameter = "key") private String appKey = Constants.APP_KEY;
-    @Argument(parameter = "dtype") private String dtype = "json";
+    @Argument private String dtype = "json";
 }
