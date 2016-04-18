@@ -162,11 +162,9 @@ public class UltraParserFactory<R> {
     private void hunter(Map<String, String> params, Field[] declaredFields) {
         for (Field field : declaredFields) {
 
-            if (Modifier.isPrivate(field.getModifiers())) {
-                field.setAccessible(true);
-            }
-
             if (field.isAnnotationPresent(Argument.class)) {
+
+                if (Modifier.isPrivate(field.getModifiers())) field.setAccessible(true);
 
                 Argument argument = field.getAnnotation(Argument.class);
                 Class<?> parameterType = field.getType();
