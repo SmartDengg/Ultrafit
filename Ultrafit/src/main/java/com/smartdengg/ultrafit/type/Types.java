@@ -1,4 +1,4 @@
-package com.example.common.ultrafit.type;
+package com.smartdengg.ultrafit.type;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
@@ -6,11 +6,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
-import java.util.Arrays;
 
 /**
  * Created by Joker on 2016/2/19.
- * thanks to square
+ * thanks to Square
  */
 public class Types {
 
@@ -45,18 +44,5 @@ public class Types {
       throw new IllegalArgumentException(
           "Expected a Class, ParameterizedType, or " + "GenericArrayType, but <" + type + "> is of type " + className);
     }
-  }
-
-  public static Type getParameterUpperBound(int index, ParameterizedType type) {
-    Type[] types = type.getActualTypeArguments();
-    if (types.length <= index) {
-      throw new IllegalArgumentException(
-          "Expected at least " + index + " type argument(s) but got: " + Arrays.toString(types));
-    }
-    Type paramType = types[index];
-    if (paramType instanceof WildcardType) {
-      return ((WildcardType) paramType).getUpperBounds()[0];
-    }
-    return paramType;
   }
 }

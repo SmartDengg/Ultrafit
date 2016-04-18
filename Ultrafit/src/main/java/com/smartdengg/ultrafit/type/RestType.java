@@ -1,4 +1,4 @@
-package com.example.common.ultrafit.type;
+package com.smartdengg.ultrafit.type;
 
 /**
  * Created by SmartDengg on 2016/2/14.

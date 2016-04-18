@@ -1,7 +1,7 @@
 package com.example.model.bean.request;
 
 import com.example.common.Constants;
-import com.example.common.ultrafit.annotation.Argument;
+import com.smartdengg.ultrafit.annotation.Argument;
 
 /**
  * Created by Joker on 2016/3/28.

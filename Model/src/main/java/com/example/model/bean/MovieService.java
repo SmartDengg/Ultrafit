@@ -2,8 +2,6 @@ package com.example.model.bean;
 
 import android.support.annotation.NonNull;
 import com.example.common.repository.ServiceGenerator;
-import com.example.common.ultrafit.RequestEntity;
-import com.example.common.ultrafit.UltraParserFactory;
 import com.example.model.bean.entity.CityEntity;
 import com.example.model.bean.entity.MovieEntity;
 import com.example.model.bean.request.MovieDetailRequest;
@@ -12,6 +10,8 @@ import com.example.model.bean.response.MovieDetailResponse;
 import com.example.model.bean.response.MovieListResponse;
 import com.example.model.bean.response.base.ResponseS;
 import com.example.model.bean.response.base.ResponseX;
+import com.smartdengg.ultrafit.RequestEntity;
+import com.smartdengg.ultrafit.UltraParserFactory;
 import java.util.List;
 import java.util.Map;
 import retrofit2.http.GET;

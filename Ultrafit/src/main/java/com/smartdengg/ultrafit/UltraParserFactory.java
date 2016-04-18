@@ -1,12 +1,10 @@
-package com.example.common.ultrafit;
+package com.smartdengg.ultrafit;
 
 import android.support.annotation.NonNull;
-import com.example.common.Constants;
-import com.example.common.ultrafit.annotation.Argument;
-import com.example.common.ultrafit.annotation.RestMethod;
-import com.example.common.ultrafit.type.RestType;
-import com.example.common.ultrafit.type.Types;
-import com.orhanobut.logger.Logger;
+import com.smartdengg.ultrafit.annotation.Argument;
+import com.smartdengg.ultrafit.annotation.RestMethod;
+import com.smartdengg.ultrafit.type.RestType;
+import com.smartdengg.ultrafit.type.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -23,9 +21,28 @@ public class UltraParserFactory<R> {
     private static final String HttpMethod = "stringUrl";
     private static final String LogEntity = "LOG";
 
+    private static final char TOP_LEFT_CORNER = '╔';
+    private static final char BOTTOM_LEFT_CORNER = '╚';
+    private static final char MIDDLE_CORNER = '╟';
+    public static final char HORIZONTAL_DOUBLE_LINE = '║';
+    private static final String DOUBLE_DIVIDER = "════════════════════════════════════════════";
+    private static final String SINGLE_DIVIDER = "────────────────────────────────────────────";
+
+    public static final String TOP_BORDER = TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
+    public static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
+    public static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;
+
     private void outputs(@NonNull RequestEntity requestEntity) {
-        Logger.t(Constants.OKHTTP_TAG, 0)
-              .d(requestEntity.toString());
+       /* Logger.t("Http", 0)
+              .d(requestEntity.toString());*/
+
+
+
+
+
+
+
+
     }
 
     private R rawEntity;
@@ -33,6 +50,13 @@ public class UltraParserFactory<R> {
     private Class<?> clazz;
 
     private UltraParserFactory(R rawEntity) {
+
+        if (Modifier.isInterface(rawEntity.getClass()
+                                          .getModifiers())) {
+            throw Errors.methodError(this.clazz, "%s cannot be a interface,it must be a Object", rawEntity.getClass()
+                                                                                                          .getName());
+        }
+
         this.rawEntity = rawEntity;
         this.requestEntity = new RequestEntity();
     }

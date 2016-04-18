@@ -1,6 +1,6 @@
-package com.example.common.ultrafit.annotation;
+package com.smartdengg.ultrafit.annotation;
 
-import com.example.common.ultrafit.type.RestType;
+import com.smartdengg.ultrafit.type.RestType;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -14,9 +14,9 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)
-@RestMethod(type = RestType.POST)
+@RestMethod(type = RestType.GET)
 @Inherited
-public @interface HttpPost {
+public @interface HttpGet {
 
     String stringUrl();
 

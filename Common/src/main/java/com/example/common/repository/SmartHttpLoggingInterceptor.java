@@ -28,6 +28,18 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
     private final Logger logger;
     private volatile Level level = Level.NONE;
 
+    private static final char TOP_LEFT_CORNER = '╔';
+    private static final char BOTTOM_LEFT_CORNER = '╚';
+    private static final char MIDDLE_CORNER = '╟';
+    public static final char HORIZONTAL_DOUBLE_LINE = '║';
+    private static final String DOUBLE_DIVIDER = "════════════════════════════════════════════";
+    private static final String SINGLE_DIVIDER = "────────────────────────────────────────────";
+
+    public static final String TOP_BORDER = TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
+    public static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
+    public static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;
+
+
     public enum Level {
         /** No logs. */
         NONE,
@@ -98,7 +110,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                 newline = newline != -1 ? newline : length;
                 do {
                     int end = Math.min(newline, i + Constants.MAX_LOG_LENGTH);
-                    Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.HORIZONTAL_DOUBLE_LINE + message.substring(i, end));
+                    Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, SmartHttpLoggingInterceptor.HORIZONTAL_DOUBLE_LINE + message.substring(i, end));
                     i = end;
                 } while (i < newline);
             }
@@ -111,17 +123,17 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
 
         @Override
         public void logTopBorder() {
-            Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.TOP_BORDER);
+            Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, SmartHttpLoggingInterceptor.TOP_BORDER);
         }
 
         @Override
         public void logMiddleBorder() {
-            Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.MIDDLE_BORDER);
+            Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, SmartHttpLoggingInterceptor.MIDDLE_BORDER);
         }
 
         @Override
         public void logBottomBorder() {
-            Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, Constants.BOTTOM_BORDER);
+            Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, SmartHttpLoggingInterceptor.BOTTOM_BORDER);
         }
     };
 

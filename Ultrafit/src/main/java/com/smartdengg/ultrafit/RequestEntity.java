@@ -1,9 +1,8 @@
-package com.example.common.ultrafit;
+package com.smartdengg.ultrafit;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.example.common.Constants;
-import com.example.common.ultrafit.type.RestType;
+import com.smartdengg.ultrafit.type.RestType;
 import java.util.Map;
 
 /**
@@ -15,16 +14,16 @@ public class RequestEntity {
     private String url;
     private Map<String, String> paramMap;
 
-    private boolean shouldOutpus;
+    private boolean shouldOutputs;
 
     public RequestEntity() {
     }
 
-    public RequestEntity(RestType restType, String url, Map<String, String> paramMap, boolean shouldOutpus) {
+    public RequestEntity(RestType restType, String url, Map<String, String> paramMap, boolean shouldOutputs) {
         this.restType = restType;
         this.url = url;
         this.paramMap = paramMap;
-        this.shouldOutpus = shouldOutpus;
+        this.shouldOutputs = shouldOutputs;
     }
 
     public RestType getRestType() {
@@ -55,26 +54,20 @@ public class RequestEntity {
     }
 
     public boolean isShouldOutputs() {
-        return shouldOutpus;
+        return shouldOutputs;
     }
 
     public RequestEntity setShouldOutputs(boolean shouldOutputs) {
-        this.shouldOutpus = shouldOutputs;
+        this.shouldOutputs = shouldOutputs;
         return RequestEntity.this;
     }
 
     @Override
     public String toString() {
         return "Request entity !!!!" +
-                "\n  ⇢ " +
-                " Type   : " +
-                RequestEntity.this.getRestType()
-                                  .name() +
-                "\n  ⇢ " +
-                " Url    : " +
-                Constants.BASE_URL + RequestEntity.this.getUrl() +
-                "\n  ⇢ " +
-                " Params : " +
-                RequestEntity.this.getParamMap();
+                "\n  ⇢ " + " Type   : " + RequestEntity.this.getRestType()
+                                                            .name() +
+                "\n  ⇢ " + " Url    : " + RequestEntity.this.getUrl() +
+                "\n  ⇢ " + " Params : " + RequestEntity.this.getParamMap();
     }
 }

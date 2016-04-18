@@ -1,6 +1,5 @@
-package com.example.common.ultrafit.annotation;
+package com.smartdengg.ultrafit.annotation;
 
-import com.example.common.ultrafit.type.RestType;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +11,8 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.ANNOTATION_TYPE)
-public @interface RestMethod {
-  RestType type();
+@Target(value = ElementType.FIELD)
+public @interface Argument {
+
+    String parameter() default "";
 }
