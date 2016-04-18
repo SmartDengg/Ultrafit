@@ -1,40 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/city_layout_root_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/material_blue_50"
-    tools:context=".views.activity.MovieListActivity">
+  android:id="@+id/city_layout_root_view"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/material_blue_50"
+  tools:context=".views.activity.MovieListActivity">
 
   <android.support.v7.widget.Toolbar
-      android:id="@+id/city_layout_toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/material_128dp"
-      android:theme="@style/ToolbarTheme"
-      app:contentInsetLeft="0dp"
-      app:contentInsetStart="0dp"
-      app:titleTextAppearance="@style/Toolbar.TitleText"
-  >
-  </android.support.v7.widget.Toolbar>
+    android:id="@+id/city_layout_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/material_128dp"
+    android:theme="@style/ToolbarTheme"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    app:titleTextAppearance="@style/Toolbar.TitleText" />
 
   <android.support.v4.widget.SwipeRefreshLayout
-      android:id="@+id/city_layout_srl"
-      android:layout_below="@id/city_layout_toolbar"
+    android:id="@+id/city_layout_srl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/city_layout_toolbar">
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/city_layout_rv"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-  >
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/city_layout_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:padding="@dimen/material_8dp"
-        android:clipToPadding="false"
-        tools:listitem="@layout/movie_item"
-    />
+      android:clipToPadding="false"
+      android:overScrollMode="never"
+      android:padding="@dimen/material_8dp"
+      tools:listitem="@layout/movie_item" />
   </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>
