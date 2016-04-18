@@ -21,19 +21,11 @@ import java.util.Map;
 public class UltraParserFactory<R> {
 
     private static final String HttpMethod = "stringUrl";
+    private static final String LogEntity = "LOG";
 
-    public static void outputs(@NonNull RequestEntity requestEntity) {
-
-        Logger.t(Constants.OKHTTP_TAG, 0).d("Request entity !!!!" +
-                                                    "\n  ⇢ " +
-                                                    " Type   : " +
-                                                    requestEntity.getRestType().name() +
-                                                    "\n  ⇢ " +
-                                                    " Url    : " +
-                                                    Constants.BASE_URL + requestEntity.getUrl() +
-                                                    "\n  ⇢ " +
-                                                    " Params : " +
-                                                    requestEntity.getParamMap());
+    private void outputs(@NonNull RequestEntity requestEntity) {
+        Logger.t(Constants.OKHTTP_TAG, 0)
+              .d(requestEntity.toString());
     }
 
     private R rawEntity;
@@ -45,7 +37,7 @@ public class UltraParserFactory<R> {
         this.requestEntity = new RequestEntity();
     }
 
-    /**Safe because of generics erasure*/
+    /** Safe because of generics erasure */
     @SuppressWarnings("unchecked")
     public static <R> UltraParserFactory createParser(R requestEntity) {
         return new UltraParserFactory(requestEntity);
@@ -58,7 +50,9 @@ public class UltraParserFactory<R> {
 
     private void parseRestUrl() {
         RequestEntity tempEntity = UltraParserFactory.this.internalParseUrl();
-        requestEntity.setRestType(tempEntity.getRestType()).setUrl(tempEntity.getUrl());
+        requestEntity.setRestType(tempEntity.getRestType())
+                     .setUrl(tempEntity.getUrl())
+                     .setShouldOutputs(tempEntity.isShouldOutputs());
     }
 
     public Map<String, String> parseParameter() {
@@ -81,6 +75,8 @@ public class UltraParserFactory<R> {
             UltraParserFactory.this.parseParams();
         }
 
+        if (requestEntity.isShouldOutputs()) UltraParserFactory.this.outputs(requestEntity);
+
         return requestEntity;
     }
 
@@ -89,6 +85,7 @@ public class UltraParserFactory<R> {
 
         RestType restType = null;
         String url = null;
+        boolean logEntity = true;
 
         this.clazz = rawEntity.getClass();
         Annotation[] annotations = this.clazz.getAnnotations();
@@ -103,27 +100,29 @@ public class UltraParserFactory<R> {
             RestMethod restMethod = clazz.getAnnotation(RestMethod.class);
 
             if (restType != null) {
-                String excessUrl = UltraParserFactory.this.invokeUrl(classAnnotation, clazz);
-                throw Errors.methodError(this.clazz, "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", restType.name(), url, restMethod
-                        .type(), excessUrl);
+                String excessUrl = (String) UltraParserFactory.this.invokeUrl(classAnnotation, clazz, HttpMethod);
+                throw Errors.methodError(this.clazz, "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", restType.name(), url, restMethod.type(), excessUrl);
             }
 
             /*Only HttpGet or HttpPost*/
             restType = restMethod.type();
 
-            url = UltraParserFactory.this.invokeUrl(classAnnotation, clazz);
+            url = (String) UltraParserFactory.this.invokeUrl(classAnnotation, clazz, HttpMethod);
+
+            logEntity = (boolean) UltraParserFactory.this.invokeUrl(classAnnotation, clazz, LogEntity);
         }
 
         if (restType == null || url == null) {
             throw Errors.methodError(this.clazz, "Http method annotation is required (e.g.@HttpGet, @HttpPost, etc.).");
         }
 
-        return new RequestEntity(restType, url, null);
+        return new RequestEntity(restType, url, null, logEntity);
     }
 
-    private String invokeUrl(Annotation classAnnotation, Class<? extends Annotation> clazz) {
+    private Object invokeUrl(Annotation classAnnotation, Class<? extends Annotation> clazz, String mehtodName) {
         try {
-            return clazz.getMethod(HttpMethod).invoke(classAnnotation).toString();
+            return clazz.getMethod(mehtodName)
+                        .invoke(classAnnotation);
         } catch (Exception ignore) {
             throw Errors.methodError(this.clazz, "Failed to extract String 'value' from @%s annotation.", clazz.getSimpleName());
         }
@@ -140,7 +139,8 @@ public class UltraParserFactory<R> {
 
         while (superClazz != null) {
 
-            if (Object.class.getName().equalsIgnoreCase(superClazz.getName())) {
+            if (Object.class.getName()
+                            .equalsIgnoreCase(superClazz.getName())) {
                 break;
             }
 
@@ -156,7 +156,7 @@ public class UltraParserFactory<R> {
         Field[] subFields = this.clazz.getDeclaredFields();
         UltraParserFactory.this.hunter(params, subFields);
 
-        return new RequestEntity(null, null, Collections.unmodifiableMap(params));
+        return new RequestEntity(null, null, Collections.unmodifiableMap(params), false);
     }
 
     private void hunter(Map<String, String> params, Field[] declaredFields) {
@@ -180,7 +180,7 @@ public class UltraParserFactory<R> {
                     value = field.get(rawEntity);
                 } catch (IllegalAccessException e) {
                     throw Errors.methodError(field.getDeclaringClass(),
-                                             "IllegalAccessException was happened when access " + "%s field", field.getName());
+                            "IllegalAccessException was happened when access " + "%s field", field.getName());
                 }
 
                 if (value == null) continue;
@@ -196,8 +196,8 @@ public class UltraParserFactory<R> {
 
                 if (params.containsKey(name)) {
                     throw Errors.methodError(field.getDeclaringClass(),
-                                             "The parameter %s at least already exists one.You must choose one " +
-                                                     "from these which value is '%s'" + " or" + " '%s'", name, params.get(name), ultra);
+                            "The parameter %s at least already exists one.You must choose one " +
+                                    "from these which value is '%s'" + " or" + " '%s'", name, params.get(name), ultra);
                 }
                 params.put(name, ultra);
             }

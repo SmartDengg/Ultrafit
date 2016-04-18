@@ -19,4 +19,6 @@ import java.lang.annotation.Target;
 public @interface HttpPost {
 
     String stringUrl();
+
+    boolean LOG() default true;
 }

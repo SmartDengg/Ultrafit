@@ -19,4 +19,6 @@ import java.lang.annotation.Target;
 public @interface HttpGet {
 
     String stringUrl();
+
+    boolean LOG() default true;
 }

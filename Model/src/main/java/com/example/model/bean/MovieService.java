@@ -106,7 +106,6 @@ public class MovieService {
                                                 RequestEntity requestEntity =
                                                         UltraParserFactory.createParser(new MovieDetailRequest(response.movieId))
                                                                           .parseRequestEntity();
-                                                UltraParserFactory.outputs(requestEntity);
 
                                                 return service.getMovieDetail(requestEntity.getUrl(), requestEntity.getParamMap())
                                                               .concatMap(new Func1<ResponseX<MovieDetailResponse>, Observable<MovieDetailResponse>>() {

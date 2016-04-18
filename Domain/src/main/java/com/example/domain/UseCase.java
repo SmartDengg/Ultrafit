@@ -37,7 +37,6 @@ public abstract class UseCase<R, S> {
 
                                               RequestEntity requestEntity = UltraParserFactory.createParser(r)
                                                                                               .parseRequestEntity();
-                                              UltraParserFactory.outputs(requestEntity);
 
                                               return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParamMap());
                                           }
