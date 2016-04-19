@@ -54,7 +54,7 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
         };
     }
 
-    private class MainThreadExecutor implements Executor {
+    public class MainThreadExecutor implements Executor {
 
         private Handler mainHandler = new Handler(Looper.getMainLooper());
 

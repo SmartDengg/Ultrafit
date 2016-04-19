@@ -153,9 +153,8 @@ public class UltraParserFactory<R> {
             Field[] superFields = superClazz.getDeclaredFields();
             superClazz = superClazz.getSuperclass();
 
-            if (superFields == null || superFields.length == 0) {
-                continue;
-            }
+            if (superFields == null || superFields.length == 0) continue;
+
             UltraParserFactory.this.hunter(params, superFields);
         }
 
@@ -180,6 +179,7 @@ public class UltraParserFactory<R> {
                 Object value;
                 String ultra;
 
+
                 try {
                     value = field.get(rawEntity);
                 } catch (IllegalAccessException e) {
@@ -203,6 +203,9 @@ public class UltraParserFactory<R> {
                             "The parameter %s at least already exists one.You must choose one " +
                                     "from these which value is '%s'" + " or" + " '%s'", name, params.get(name), ultra);
                 }
+
+                if (name == null || name.isEmpty()) name = field.getName();
+
                 params.put(name, ultra);
             }
         }
