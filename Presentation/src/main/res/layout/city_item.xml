@@ -11,7 +11,7 @@
     app:cardCornerRadius="@dimen/material_4dp"
     app:cardElevation="@dimen/material_4dp">
 
-  <com.example.ultrafit.ui.SmartTextView
+  <com.smartdengg.presentation.ui.SmartTextView
       android:id="@+id/city_item_name_tv"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

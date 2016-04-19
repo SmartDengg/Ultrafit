@@ -50,7 +50,7 @@
           android:layout_height="@dimen/material_128dp"
       >
 
-        <com.example.ultrafit.ui.SmartTextView
+        <com.smartdengg.presentation.ui.SmartTextView
             android:id="@+id/detail_layout_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

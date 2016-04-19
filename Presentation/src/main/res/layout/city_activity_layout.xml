@@ -7,7 +7,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/material_blue_50"
-  tools:context=".views.activity.MovieListActivity">
+  tools:context="com.smartdengg.presentation.views.activity.MovieListActivity">
 
   <android.support.v7.widget.Toolbar
     android:id="@+id/city_layout_toolbar"

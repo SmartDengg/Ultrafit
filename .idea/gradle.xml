@@ -5,17 +5,8 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="1.7" />
         <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/Common" />
-            <option value="$PROJECT_DIR$/Domain" />
-            <option value="$PROJECT_DIR$/Model" />
-            <option value="$PROJECT_DIR$/Presentation" />
-            <option value="$PROJECT_DIR$/Ultrafit" />
-          </set>
-        </option>
-        <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/Common" />

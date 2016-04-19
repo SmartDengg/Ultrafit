@@ -20,6 +20,18 @@ android {
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
+
+  /*Google Library*/
+  compile 'com.google.code.gson:gson:2.6.1'
+
+  /*Square Library*/
+  compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
+  compile 'com.squareup.retrofit2:retrofit:2.0.1'
+
+  /*Facebook Library*/
+  compile 'com.facebook.stetho:stetho-okhttp3:1.3.0'
+  compile 'com.facebook.stetho:stetho:1.3.0'
+
   compile project(':Common')
-  compile project(':Ultrafit')
+  compile project(':Domain')
 }

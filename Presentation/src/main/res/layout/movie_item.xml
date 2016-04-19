@@ -29,7 +29,7 @@
           android:layout_height="@dimen/material_120dp"
       />
 
-      <com.example.ultrafit.ui.SmartTextView
+      <com.smartdengg.presentation.ui.SmartTextView
           android:id="@+id/movie_item_score_tv"
           android:layout_toRightOf="@id/movie_item_thumb_iv"
           android:layout_width="match_parent"
