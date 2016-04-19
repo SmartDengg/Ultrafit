@@ -1,6 +1,7 @@
 package com.example.model.bean;
 
 import android.support.annotation.NonNull;
+import com.example.common.Constants;
 import com.example.common.repository.ServiceGenerator;
 import com.example.model.bean.entity.CityEntity;
 import com.example.model.bean.entity.MovieEntity;
@@ -10,6 +11,7 @@ import com.example.model.bean.response.MovieDetailResponse;
 import com.example.model.bean.response.MovieListResponse;
 import com.example.model.bean.response.base.ResponseS;
 import com.example.model.bean.response.base.ResponseX;
+import com.orhanobut.logger.Logger;
 import com.smartdengg.ultrafit.RequestEntity;
 import com.smartdengg.ultrafit.UltraParserFactory;
 import java.util.List;
@@ -18,6 +20,7 @@ import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -84,6 +87,7 @@ public class MovieService {
 
         final MovieEntity movieEntityInstance = new MovieEntity();
 
+        //@formatter:on
         return MovieService.this.service.getMovieList(url, params)
                                         .concatMap(new Func1<ResponseS<MovieListResponse>, Observable<List<MovieListResponse>>>() {
                                             @Override
@@ -95,22 +99,34 @@ public class MovieService {
                                             @Override
                                             public Observable<MovieListResponse> call(List<MovieListResponse> movieListResponses) {
                                                 //return Observable.from(movieListResponses);
-
                                                 return Observable.just(movieListResponses.get(0));
                                             }
                                         })
-                                        .concatMap(new Func1<MovieListResponse, Observable<MovieDetailResponse>>() {
+                                        .concatMap(new Func1<MovieListResponse, Observable<RequestEntity>>() {
                                             @Override
-                                            public Observable<MovieDetailResponse> call(MovieListResponse response) {
+                                            public Observable<RequestEntity> call(MovieListResponse movieListResponse) {
 
-                                                RequestEntity requestEntity =
-                                                        UltraParserFactory.createParser(new MovieDetailRequest(response.movieId))
-                                                                          .parseRequestEntity();
+                                                return UltraParserFactory.createParser(new MovieDetailRequest(movieListResponse.movieId))
+                                                                         .parseRequestEntity()
+                                                                         .asObservable();
+                                            }
+                                        })
+                                        .doOnNext(new Action1<RequestEntity>() {
+                                            @Override
+                                            public void call(RequestEntity requestEntity) {
+                                                Logger.t(Constants.OKHTTP_TAG, 0)
+                                                      .d(requestEntity.toString());
+                                            }
+                                        })
+                                        .concatMap(new Func1<RequestEntity, Observable<MovieDetailResponse>>() {
+                                            @Override
+                                            public Observable<MovieDetailResponse> call(RequestEntity requestEntity) {
 
                                                 return service.getMovieDetail(requestEntity.getUrl(), requestEntity.getParamMap())
                                                               .concatMap(new Func1<ResponseX<MovieDetailResponse>, Observable<MovieDetailResponse>>() {
                                                                   @Override
-                                                                  public Observable<MovieDetailResponse> call(ResponseX<MovieDetailResponse> responseX) {
+                                                                  public Observable<MovieDetailResponse> call(
+                                                                          ResponseX<MovieDetailResponse> responseX) {
                                                                       return responseX.filterWebServiceErrors();
                                                                   }
                                                               });

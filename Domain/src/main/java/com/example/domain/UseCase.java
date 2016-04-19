@@ -2,14 +2,16 @@ package com.example.domain;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import com.example.common.Constants;
 import com.example.common.rxcompat.SchedulersCompat;
+import com.orhanobut.logger.Logger;
 import com.smartdengg.ultrafit.RequestEntity;
 import com.smartdengg.ultrafit.UltraParserFactory;
 import java.util.Map;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.functions.Func0;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.Subscriptions;
 
@@ -23,33 +25,63 @@ public abstract class UseCase<R, S> {
     @SuppressWarnings("unchecked")
     public void subscribe(final R requestEntity, Observer<S> useCaseSubscriber) {
 
-        //@formatter:off
-        /*Be care of ConnectableObservable*/
-        this.subscription = Observable.fromCallable(new Func0<R>() {
-                                          @Override
-                                          public R call() {
-                                              return requestEntity;
-                                          }
-                                      })
-                                      .concatMap(new Func1<R, Observable<S>>() {
-                                          @Override
-                                          public Observable<S> call(R r) {
+        //*Be care of ConnectableObservable*//
+        this.subscription = UltraParserFactory.createParser(requestEntity)
+                                              .parseRequestEntity()
+                                              .asObservable()
+                                              .doOnNext(new Action1<RequestEntity>() {
+                                                  @Override
+                                                  public void call(RequestEntity requestEntity) {
+                                                      Logger.t(Constants.OKHTTP_TAG, 0)
+                                                            .d(requestEntity.toString());
+                                                  }
+                                              })
+                                              .concatMap(new Func1<RequestEntity, Observable<S>>() {
+                                                  @Override
+                                                  public Observable<S> call(RequestEntity requestEntity) {
+                                                      return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParamMap());
+                                                  }
+                                              })
+                                              .onBackpressureBuffer()
+                                              .takeFirst(new Func1<S, Boolean>() {
+                                                  @Override
+                                                  public Boolean call(S s) {
+                                                      return !subscription.isUnsubscribed();
+                                                  }
+                                              })
+                                              .compose(SchedulersCompat.<S>applyExecutorSchedulers())
+                                              .subscribe(useCaseSubscriber);
+    }
 
-                                              RequestEntity requestEntity = UltraParserFactory.createParser(r)
-                                                                                              .parseRequestEntity();
+    @SuppressWarnings("unchecked")
+    public void subscribe(final R requestEntity, final Action1<? super S> onSuccess, final Action1<Throwable> onError) {
 
-                                              return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParamMap());
-                                          }
-                                      })
-                                      .onBackpressureBuffer()
-                                      .takeFirst(new Func1<S, Boolean>() {
-                                          @Override
-                                          public Boolean call(S s) {
-                                              return !subscription.isUnsubscribed();
-                                          }
-                                      })
-                                      .compose(SchedulersCompat.<S>applyExecutorSchedulers())
-                                      .subscribe(useCaseSubscriber);
+        this.subscription = UltraParserFactory.createParser(requestEntity)
+                                              .parseRequestEntity()
+                                              .asObservable()
+                                              .doOnNext(new Action1<RequestEntity>() {
+                                                  @Override
+                                                  public void call(RequestEntity requestEntity) {
+                                                      Logger.t(Constants.OKHTTP_TAG, 0)
+                                                            .d(requestEntity.toString());
+                                                  }
+                                              })
+                                              .concatMap(new Func1<RequestEntity, Observable<S>>() {
+                                                  @Override
+                                                  public Observable<S> call(RequestEntity requestEntity) {
+                                                      return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParamMap());
+                                                  }
+                                              })
+                                              .onBackpressureBuffer()
+                                              .takeFirst(new Func1<S, Boolean>() {
+                                                  @Override
+                                                  public Boolean call(S s) {
+                                                      return !subscription.isUnsubscribed();
+                                                  }
+                                              })
+                                              .compose(SchedulersCompat.<S>applyExecutorSchedulers())
+                                              .toSingle()
+                                              .subscribe(onSuccess, onError);
     }
 
     public void unsubscribe() {

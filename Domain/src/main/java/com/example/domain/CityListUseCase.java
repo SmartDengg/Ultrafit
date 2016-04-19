@@ -10,6 +10,7 @@ import rx.Observable;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
+@SuppressWarnings("unchecked")
 public class CityListUseCase<R> extends UseCase<R, List<CityEntity>> {
 
     private MovieService movieService;
@@ -18,12 +19,10 @@ public class CityListUseCase<R> extends UseCase<R, List<CityEntity>> {
         this.movieService = MovieService.createdService();
     }
 
-    @SuppressWarnings("unchecked")
     public static <R> CityListUseCase<R> createdUseCase() {
         return (CityListUseCase<R>) new CityListUseCase();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected Observable<List<CityEntity>> interactor(@NonNull String url, @NonNull Map<String, String> params) {
         return movieService.getCityEntities(url, params);

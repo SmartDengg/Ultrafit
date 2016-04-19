@@ -8,13 +8,11 @@ import com.smartdengg.ultrafit.annotation.HttpGet;
  * Created by SmartDengg on 2016/2/22.
  */
 @HttpGet(stringUrl = Constants.MOVIE_DETAIL_URL)
-public class MovieDetailRequest {
+public class MovieDetailRequest extends BaseRequest {
 
-  @Argument(parameter = "movieid") private String movieId;
-  @Argument(parameter = "key") private String appKey = Constants.APP_KEY;
-  @Argument(parameter = "dtype") private String dtype = "json";
+    @Argument(parameter = "movieid") private String movieId;
 
-  public MovieDetailRequest(String movieId) {
-    this.movieId = movieId;
-  }
+    public MovieDetailRequest(String movieId) {
+        this.movieId = movieId;
+    }
 }
