@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import com.example.ultrafit.R;
+import com.smartdengg.presentation.R;
 
 public class MarginDecoration extends RecyclerView.ItemDecoration {
   private int margin;

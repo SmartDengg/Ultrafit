@@ -15,7 +15,7 @@
  */
 package com.smartdengg.model.repository.adapter.rxadapter;
 
-import com.example.common.errors.RetrofitHttpException;
+import com.smartdengg.model.errors.RetrofitHttpException;
 import java.lang.reflect.Type;
 import retrofit2.Call;
 import retrofit2.CallAdapter;

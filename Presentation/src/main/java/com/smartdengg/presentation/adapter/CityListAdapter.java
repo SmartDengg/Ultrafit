@@ -13,7 +13,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.smartdengg.model.entity.CityEntity;
-import com.example.ultrafit.R;
+import com.smartdengg.presentation.R;
 import java.util.List;
 import rx.Observer;
 

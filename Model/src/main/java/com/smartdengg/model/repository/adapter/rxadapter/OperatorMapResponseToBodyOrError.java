@@ -15,7 +15,7 @@
  */
 package com.smartdengg.model.repository.adapter.rxadapter;
 
-import com.example.common.errors.RetrofitHttpException;
+import com.smartdengg.model.errors.RetrofitHttpException;
 import com.smartdengg.model.repository.adapter.callAdapter.SmartCallAdapter;
 import retrofit2.Response;
 import rx.Observable;

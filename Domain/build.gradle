@@ -24,9 +24,6 @@ dependencies {
   /*ReactiveX Library*/
   compile 'io.reactivex:rxandroid:1.1.0'
 
-  /*Third Library*/
-  compile 'com.orhanobut:logger:1.11'
-
   compile project(':Common')
   compile project(':Ultrafit')
 }

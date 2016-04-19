@@ -1,4 +1,4 @@
-package com.smartdengg.common.rxcompat;
+package com.smartdengg.domain.rxcompat;
 
 import android.os.Build;
 import android.os.Process;

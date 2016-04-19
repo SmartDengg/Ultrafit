@@ -1,12 +1,13 @@
-package com.smartdengg.common;
+package com.smartdengg.domain;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.smartdengg.common.rxcompat.SchedulersCompat;
+import com.orhanobut.logger.Logger;
+import com.smartdengg.common.Constants;
+import com.smartdengg.domain.rxcompat.SchedulersCompat;
 import com.smartdengg.ultrafit.RequestEntity;
 import com.smartdengg.ultrafit.UltraParserFactory;
 import java.util.Map;
-import java.util.logging.Logger;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;

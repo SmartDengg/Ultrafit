@@ -14,7 +14,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.smartdengg.model.entity.MovieEntity;
-import com.example.ultrafit.R;
+import com.smartdengg.presentation.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import rx.Observer;

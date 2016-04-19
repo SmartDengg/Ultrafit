@@ -1,6 +1,6 @@
 package com.smartdengg.presentation.presenter;
 
-import com.smartdengg.common.UseCase;
+import com.smartdengg.domain.UseCase;
 import com.smartdengg.model.SimpleSubscriber;
 import com.smartdengg.model.entity.CityEntity;
 import com.smartdengg.model.errors.WebServiceException;

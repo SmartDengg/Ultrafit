@@ -28,7 +28,7 @@ import butterknife.Bind;
 import butterknife.BindString;
 import com.smartdengg.common.Constants;
 import com.smartdengg.model.entity.MovieEntity;
-import com.example.ultrafit.R;
+import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.adapter.MovieAdapter;
 import com.smartdengg.presentation.bitmaps.BitmapUtil;
 import com.smartdengg.presentation.presenter.MovieListPresenter;

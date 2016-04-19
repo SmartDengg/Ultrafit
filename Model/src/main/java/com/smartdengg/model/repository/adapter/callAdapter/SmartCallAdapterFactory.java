@@ -1,7 +1,7 @@
 package com.smartdengg.model.repository.adapter.callAdapter;
 
 import com.smartdengg.common.Executors;
-import com.example.common.util.Types;
+import com.smartdengg.common.utils.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

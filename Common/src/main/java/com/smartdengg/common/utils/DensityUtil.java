@@ -1,4 +1,4 @@
-package com.example.common.util;
+package com.smartdengg.common.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;

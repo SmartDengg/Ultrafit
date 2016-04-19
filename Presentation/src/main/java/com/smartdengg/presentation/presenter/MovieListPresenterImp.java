@@ -1,10 +1,10 @@
 package com.smartdengg.presentation.presenter;
 
-import rxcompat.SimpleSubscriber;
-import com.smartdengg.presentation.errors.WebServiceException;
-import com.example.domain.MovieListUseCase;
-import com.smartdengg.common.UseCase;
+import com.smartdengg.domain.UseCase;
+import com.smartdengg.model.SimpleSubscriber;
 import com.smartdengg.model.entity.MovieEntity;
+import com.smartdengg.model.errors.WebServiceException;
+import com.smartdengg.model.repository.interactor.MovieListUseCase;
 import com.smartdengg.model.request.MovieIdRequest;
 import com.smartdengg.presentation.views.ListView;
 import java.util.List;

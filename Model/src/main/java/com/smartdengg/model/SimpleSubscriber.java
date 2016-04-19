@@ -1,6 +1,7 @@
 package com.smartdengg.model;
 
 import android.support.annotation.CallSuper;
+import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.model.errors.RetrofitHttpException;
 import retrofit2.Response;

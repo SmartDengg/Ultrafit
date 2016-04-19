@@ -1,7 +1,7 @@
 package com.smartdengg.model.response.base;
 
 import com.smartdengg.common.Constants;
-import com.example.common.errors.WebServiceException;
+import com.smartdengg.model.errors.WebServiceException;
 import java.util.List;
 import rx.Observable;
 
