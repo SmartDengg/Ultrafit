@@ -1,4 +1,4 @@
-package com.smartdengg.model.repository.interactor;
+package com.smartdengg.model.interactor;
 
 import android.support.annotation.NonNull;
 import com.smartdengg.domain.UseCase;

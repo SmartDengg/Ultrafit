@@ -1,10 +1,13 @@
 package com.smartdengg.model.repository.adapter.callAdapter;
 
-import com.smartdengg.common.Executors;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
 import com.smartdengg.common.utils.Types;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.concurrent.Executor;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Retrofit;
@@ -14,11 +17,10 @@ import retrofit2.Retrofit;
  */
 public class SmartCallAdapterFactory extends CallAdapter.Factory {
 
-    private Executors.MainThreadExecutor mainThreadExecutor;
+    private MainThreadExecutor mainThreadExecutor;
 
     private SmartCallAdapterFactory() {
-        this.mainThreadExecutor = Executors.getInstance()
-                                           .mainThreadExecutor();
+        this.mainThreadExecutor = new MainThreadExecutor();
     }
 
     public static SmartCallAdapterFactory create() {
@@ -33,7 +35,7 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
         }
 
         if (!(returnType instanceof ParameterizedType)) {
-      /*返回结果应该指定一个泛型，最起码也需要一个ResponseBody作为泛型*/
+            /*返回结果应该指定一个泛型，最起码也需要一个ResponseBody作为泛型*/
             throw new IllegalStateException("SmartCall must have generic type (e.g., SmartCall<ResponseBody>)");
         }
 
@@ -50,5 +52,15 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
                 return new SmartCallAdapter<>(call, mainThreadExecutor);
             }
         };
+    }
+
+    private class MainThreadExecutor implements Executor {
+
+        private Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        @Override
+        public void execute(@NonNull Runnable command) {
+            mainHandler.post(command);
+        }
     }
 }

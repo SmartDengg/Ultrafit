@@ -4,7 +4,7 @@ import com.smartdengg.domain.UseCase;
 import com.smartdengg.model.SimpleSubscriber;
 import com.smartdengg.model.entity.CityEntity;
 import com.smartdengg.model.errors.WebServiceException;
-import com.smartdengg.model.repository.interactor.CityListUseCase;
+import com.smartdengg.model.interactor.CityListUseCase;
 import com.smartdengg.model.request.CityListRequest;
 import com.smartdengg.presentation.views.ListView;
 import java.util.List;

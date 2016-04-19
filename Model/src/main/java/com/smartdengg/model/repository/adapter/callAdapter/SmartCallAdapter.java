@@ -1,6 +1,5 @@
 package com.smartdengg.model.repository.adapter.callAdapter;
 
-import com.smartdengg.common.Executors;
 import com.smartdengg.model.repository.callback.SmartCallback;
 import java.io.IOException;
 import okhttp3.Request;
@@ -24,9 +23,9 @@ public class SmartCallAdapter<T> implements SmartCall<T> {
   private static int CODE_600 = 600;
 
   private Call<T> delegate;
-  private Executors.MainThreadExecutor callbackExecutor;
+  private SmartCallAdapterFactory.MainThreadExecutor callbackExecutor;
 
-  public SmartCallAdapter(Call<T> delegate, Executors.MainThreadExecutor mainThreadExecutor) {
+  public SmartCallAdapter(Call<T> delegate, SmartCallAdapterFactory.MainThreadExecutor mainThreadExecutor) {
     this.delegate = delegate;
     this.callbackExecutor = mainThreadExecutor;
   }

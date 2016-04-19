@@ -4,7 +4,7 @@ import com.smartdengg.domain.UseCase;
 import com.smartdengg.model.SimpleSubscriber;
 import com.smartdengg.model.entity.MovieEntity;
 import com.smartdengg.model.errors.WebServiceException;
-import com.smartdengg.model.repository.interactor.MovieListUseCase;
+import com.smartdengg.model.interactor.MovieListUseCase;
 import com.smartdengg.model.request.MovieIdRequest;
 import com.smartdengg.presentation.views.ListView;
 import java.util.List;
