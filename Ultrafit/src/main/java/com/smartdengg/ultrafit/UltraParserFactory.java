@@ -99,23 +99,21 @@ public class UltraParserFactory<R> {
         for (Annotation classAnnotation : annotations) {
 
             Class<? extends Annotation> clazz = classAnnotation.annotationType();
-            if (!clazz.isAnnotationPresent(RestMethod.class)) {
-                continue;
-            }
+            if (!clazz.isAnnotationPresent(RestMethod.class)) continue;
 
             RestMethod restMethod = clazz.getAnnotation(RestMethod.class);
 
             if (restType != null) {
-                String excessUrl = (String) UltraParserFactory.this.invokeUrl(classAnnotation, clazz, HttpMethod);
-                throw Errors.methodError(this.clazz, "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", restType.name(), url, restMethod.type(), excessUrl);
+                String previousUrl = UltraParserFactory.invokeMethod(classAnnotation, clazz, HttpMethod);
+                throw Errors.methodError(this.clazz, "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", restType, url, restMethod.type(), previousUrl);
             }
 
             /*Only HttpGet or HttpPost*/
             restType = restMethod.type();
 
-            url = (String) UltraParserFactory.this.invokeUrl(classAnnotation, clazz, HttpMethod);
+            url = UltraParserFactory.invokeMethod(classAnnotation, clazz, HttpMethod);
 
-            logEntity = (boolean) UltraParserFactory.this.invokeUrl(classAnnotation, clazz, LogEntity);
+            logEntity = UltraParserFactory.invokeMethod(classAnnotation, clazz, LogEntity);
         }
 
         if (restType == null || url == null) {
@@ -125,12 +123,14 @@ public class UltraParserFactory<R> {
         return new RequestEntity(restType, url, null, logEntity);
     }
 
-    private Object invokeUrl(Annotation classAnnotation, Class<? extends Annotation> clazz, String mehtodName) {
+    /** Safe because of generics erasure */
+    @SuppressWarnings("unchecked")
+    private static <T> T invokeMethod(Annotation classAnnotation, Class<? extends Annotation> clazz, String methodName) {
         try {
-            return clazz.getMethod(mehtodName)
-                        .invoke(classAnnotation);
+            return (T) clazz.getDeclaredMethod(methodName)
+                            .invoke(classAnnotation);
         } catch (Exception ignore) {
-            throw Errors.methodError(this.clazz, "Failed to extract String 'value' from @%s annotation.", clazz.getSimpleName());
+            throw Errors.methodError(clazz, "Failed to extract String 'value' from @%s annotation.", clazz.getSimpleName());
         }
     }
 
@@ -178,7 +178,6 @@ public class UltraParserFactory<R> {
                 String name;
                 Object value;
                 String ultra;
-
 
                 try {
                     value = field.get(rawEntity);

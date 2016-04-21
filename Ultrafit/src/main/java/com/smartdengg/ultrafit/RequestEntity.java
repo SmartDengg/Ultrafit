@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.smartdengg.ultrafit.type.RestType;
 import java.util.Map;
+import rx.Observable;
+import rx.Single;
 import rx.functions.Func0;
 
 /**
@@ -64,9 +66,9 @@ public class RequestEntity {
     }
 
     /** Be care of ConnectableObservable */
-    public rx.Observable<RequestEntity> asObservable() {
+    public Observable<RequestEntity> asObservable() {
 
-        return rx.Observable.fromCallable(new Func0<RequestEntity>() {
+        return Observable.fromCallable(new Func0<RequestEntity>() {
             @Override
             public RequestEntity call() {
                 return RequestEntity.this;
@@ -74,24 +76,16 @@ public class RequestEntity {
         });
     }
 
-    public rx.Single<RequestEntity> asSingle() {
-
-        //@formatter:off
-        return rx.Observable.fromCallable(new Func0<RequestEntity>() {
-                                @Override
-                                public RequestEntity call() {
-                                    return RequestEntity.this;
-                                }
-                            })
-                            .toSingle();
+    public Single<RequestEntity> asSingle() {
+        return asObservable().toSingle();
     }
 
     //@formatter:off
     @Override
     public String toString() {
         return "Request entity !!!!" +
-                "\n  ⇢ " + " Type   : " + RequestEntity.this.getRestType().name() +
-                "\n  ⇢ " + " Url    : " + RequestEntity.this.getUrl() +
-                "\n  ⇢ " + " Params : " + RequestEntity.this.getParamMap();
+                "\n  ⇢ " + " Type    : " + RequestEntity.this.getRestType() +
+                "\n  ⇢ " + " Url     : " + RequestEntity.this.getUrl() +
+                "\n  ⇢ " + " Params  : " + RequestEntity.this.getParamMap();
     }
 }
