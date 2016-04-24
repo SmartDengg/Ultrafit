@@ -75,12 +75,19 @@ public abstract class UseCase<R, S> {
         this.subscribe(requestEntity, onSuccess, onError, null);
     }
 
+    //@formatter:off
     @SuppressWarnings("unchecked")
     public void subscribe(final R requestEntity, final Action1<? super S> onSuccess, final Action1<Throwable> onError, final Action1<RequestEntity> action1) {
 
-        this.subscription = UltraParserFactory.createParser(requestEntity)
-                                              .parseRequestEntity()
-                                              .as(Observable.class)
+        this.subscription = Observable.defer(new Func0<Observable<RequestEntity>>() {
+                                                @Override
+                                                  public Observable<RequestEntity> call() {
+
+                                                      return UltraParserFactory.createParser(requestEntity)
+                                                                               .parseRequestEntity()
+                                                                               .as(Observable.class);
+                                                  }
+                                              })
                                               .doOnNext(new Action1<RequestEntity>() {
                                                   @Override
                                                   public void call(RequestEntity requestEntity) {
