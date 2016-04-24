@@ -1,12 +1,7 @@
 package com.smartdengg.ultrafit;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import com.smartdengg.ultrafit.type.RestType;
 import java.util.Map;
-import rx.Observable;
-import rx.Single;
-import rx.functions.Func0;
 
 /**
  * Created by SmartDengg on 2016/2/21.
@@ -33,7 +28,7 @@ public class RequestEntity {
         return restType;
     }
 
-    public RequestEntity setRestType(@NonNull RestType restType) {
+    public RequestEntity setRestType( RestType restType) {
         this.restType = restType;
         return RequestEntity.this;
     }
@@ -42,7 +37,7 @@ public class RequestEntity {
         return url;
     }
 
-    public RequestEntity setUrl(@NonNull String url) {
+    public RequestEntity setUrl( String url) {
         this.url = url;
         return RequestEntity.this;
     }
@@ -51,7 +46,7 @@ public class RequestEntity {
         return paramMap;
     }
 
-    public RequestEntity setParamMap(@Nullable Map<String, String> paramMap) {
+    public RequestEntity setParamMap(Map<String, String> paramMap) {
         this.paramMap = paramMap;
         return RequestEntity.this;
     }
@@ -66,19 +61,29 @@ public class RequestEntity {
     }
 
     /** Be care of ConnectableObservable */
-    public Observable<RequestEntity> asObservable() {
+    public T  asObservable(Class<T> obserable) {
 
-        return Observable.fromCallable(new Func0<RequestEntity>() {
+
+        obserable.getGenericSuperclass()
+
+       /* return Observable.fromCallable(new Func0<RequestEntity>() {
             @Override
             public RequestEntity call() {
                 return RequestEntity.this;
             }
-        });
+        });*/
+
+
+
+
+
+
+        return null;
     }
 
-    public Single<RequestEntity> asSingle() {
+   /* public Single<RequestEntity> asSingle() {
         return asObservable().toSingle();
-    }
+    }*/
 
     //@formatter:off
     @Override

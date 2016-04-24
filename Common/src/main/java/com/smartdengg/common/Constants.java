@@ -13,7 +13,8 @@ public class Constants {
   public static final String MOVIE_TODAY_URL = "movie/movies.today";
   public static final String MOVIE_DETAIL_URL = "movie/query";
 
-  public static final String APP_KEY = "e0b8426d4f107de733aed080e7ee65f8";
+  public static final String APP_KEY = "a0f04cc3b9377e57754ffeff0392a12e";
+  //public static final String APP_KEY = "e0b8426d4f107de733aed080e7ee65f8";
 
   public static final String BASE_TAG = "LOG";
   public static final String OKHTTP_TAG = "OkHttp";

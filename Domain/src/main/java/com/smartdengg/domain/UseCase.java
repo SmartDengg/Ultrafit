@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.domain.rxcompat.SchedulersCompat;
-import com.smartdengg.ultrafit.RequestEntity;
-import com.smartdengg.ultrafit.UltraParserFactory;
+import com.smartdengg.ultra.RequestEntity;
+import com.smartdengg.ultra.UltraParserFactory;
 import java.util.Map;
 import rx.Observable;
 import rx.Observer;
@@ -33,7 +33,7 @@ public abstract class UseCase<R, S> {
         //*Be care of ConnectableObservable*//
         this.subscription = UltraParserFactory.createParser(requestEntity)
                                               .parseRequestEntity()
-                                              .asObservable()
+                                              .as(Observable.class)
                                               .doOnNext(new Action1<RequestEntity>() {
                                                   @Override
                                                   public void call(RequestEntity requestEntity) {
@@ -68,12 +68,11 @@ public abstract class UseCase<R, S> {
     }
 
     @SuppressWarnings("unchecked")
-    public void subscribe(final R requestEntity, final Action1<? super S> onSuccess, final Action1<Throwable> onError,
-                          final Action1<RequestEntity> action1) {
+    public void subscribe(final R requestEntity, final Action1<? super S> onSuccess, final Action1<Throwable> onError, final Action1<RequestEntity> action1) {
 
         this.subscription = UltraParserFactory.createParser(requestEntity)
                                               .parseRequestEntity()
-                                              .asObservable()
+                                              .as(Observable.class)
                                               .doOnNext(new Action1<RequestEntity>() {
                                                   @Override
                                                   public void call(RequestEntity requestEntity) {

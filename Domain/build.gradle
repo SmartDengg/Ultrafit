@@ -23,7 +23,8 @@ dependencies {
 
   /*ReactiveX Library*/
   compile 'io.reactivex:rxandroid:1.1.0'
+  compile 'io.reactivex:rxjava:1.1.1'
 
   compile project(':Common')
-  compile project(':Ultrafit')
+  compile project(':ultraprocessor')
 }

@@ -1,12 +1,12 @@
 package com.smartdengg.model;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.smartdengg.common.Constants;
 import com.smartdengg.model.repository.adapter.callAdapter.SmartCallAdapterFactory;
 import com.smartdengg.model.repository.adapter.rxadapter.RxJavaCallAdapterFactory;
 import com.smartdengg.model.repository.coverter.GsonConverterFactory;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.smartdengg.model.repository.interceptor.HeaderInterceptor;
 import com.smartdengg.model.repository.interceptor.SmartHttpLoggingInterceptor;
 import okhttp3.OkHttpClient;

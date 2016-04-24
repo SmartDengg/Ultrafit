@@ -52,10 +52,11 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
     public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
 
         Class<?> rawType = getRawType(returnType);
+        boolean isObservable = "rx.Observable".equals(rawType.getCanonicalName());
         boolean isSingle = "rx.Single".equals(rawType.getCanonicalName());
         boolean isCompletable = "rx.Completable".equals(rawType.getCanonicalName());
 
-        if (rawType != Observable.class && !isSingle && !isCompletable) {
+        if (!isObservable && !isSingle && !isCompletable) {
             return null;
         }
 
@@ -120,19 +121,20 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
                                              }
                                              return new InnerThrowable(throwable, Constants.MAX_CONNECT);
                                          }
-                                     }).concatMap(new Func1<InnerThrowable, Observable<Long>>() {
-                                         @Override
-                                         public Observable<Long> call(InnerThrowable innerThrowable) {
+                                     })
+                                                           .concatMap(new Func1<InnerThrowable, Observable<Long>>() {
+                                                               @Override
+                                                               public Observable<Long> call(InnerThrowable innerThrowable) {
 
-                                             Integer retryCount = innerThrowable.getRetryCount();
-                                             if (retryCount.equals(Constants.MAX_CONNECT)) {
-                                                 return Observable.error(innerThrowable.getThrowable());
-                                             }
+                                                                   Integer retryCount = innerThrowable.getRetryCount();
+                                                                   if (retryCount.equals(Constants.MAX_CONNECT)) {
+                                                                       return Observable.error(innerThrowable.getThrowable());
+                                                                   }
 
-                                             /*use Schedulers#immediate() to keep on same thread */
-                                             return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS, Schedulers.immediate());
-                                         }
-                                     });
+                                                                   /*use Schedulers#immediate() to keep on same thread */
+                                                                   return Observable.timer((long) Math.pow(2, retryCount), TimeUnit.SECONDS, Schedulers.immediate());
+                                                               }
+                                                           });
                                  }
                              });
         }

@@ -1,6 +1,7 @@
 package com.smartdengg.model;
 
 import android.support.annotation.NonNull;
+import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.model.entity.CityEntity;
 import com.smartdengg.model.entity.MovieEntity;
@@ -10,9 +11,8 @@ import com.smartdengg.model.response.MovieDetailResponse;
 import com.smartdengg.model.response.MovieListResponse;
 import com.smartdengg.model.response.base.ResponseS;
 import com.smartdengg.model.response.base.ResponseX;
-import com.orhanobut.logger.Logger;
-import com.smartdengg.ultrafit.RequestEntity;
-import com.smartdengg.ultrafit.UltraParserFactory;
+import com.smartdengg.ultra.RequestEntity;
+import com.smartdengg.ultra.UltraParserFactory;
 import java.util.List;
 import java.util.Map;
 import retrofit2.http.GET;
@@ -107,7 +107,7 @@ public class MovieService {
 
                                                 return UltraParserFactory.createParser(new MovieDetailRequest(movieListResponse.movieId))
                                                                          .parseRequestEntity()
-                                                                         .asObservable();
+                                                                         .as(Observable.class);
                                             }
                                         })
                                         .doOnNext(new Action1<RequestEntity>() {
@@ -124,8 +124,7 @@ public class MovieService {
                                                 return service.getMovieDetail(requestEntity.getUrl(), requestEntity.getParamMap())
                                                               .concatMap(new Func1<ResponseX<MovieDetailResponse>, Observable<MovieDetailResponse>>() {
                                                                   @Override
-                                                                  public Observable<MovieDetailResponse> call(
-                                                                          ResponseX<MovieDetailResponse> responseX) {
+                                                                  public Observable<MovieDetailResponse> call(ResponseX<MovieDetailResponse> responseX) {
                                                                       return responseX.filterWebServiceErrors();
                                                                   }
                                                               });

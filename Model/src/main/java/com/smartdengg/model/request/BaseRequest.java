@@ -1,7 +1,7 @@
 package com.smartdengg.model.request;
 
 import com.smartdengg.common.Constants;
-import com.smartdengg.ultrafit.annotation.Argument;
+import com.smartdengg.ultra.annotation.Argument;
 
 /**
  * Created by Joker on 2016/3/28.

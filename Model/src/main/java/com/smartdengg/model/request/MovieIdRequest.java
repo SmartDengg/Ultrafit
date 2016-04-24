@@ -1,8 +1,8 @@
 package com.smartdengg.model.request;
 
 import com.smartdengg.common.Constants;
-import com.smartdengg.ultrafit.annotation.Argument;
-import com.smartdengg.ultrafit.annotation.HttpGet;
+import com.smartdengg.ultra.annotation.Argument;
+import com.smartdengg.ultra.annotation.HttpGet;
 
 /**
  * Created by SmartDengg on 2016/2/22.
