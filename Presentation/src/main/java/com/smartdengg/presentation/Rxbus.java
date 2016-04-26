@@ -1,8 +1,10 @@
 package com.smartdengg.presentation;
 
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
+import java.util.List;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
+import rx.subjects.ReplaySubject;
 import rx.subjects.SerializedSubject;
 
 /**
@@ -16,7 +18,7 @@ public class Rxbus {
     @SuppressWarnings("unchecked")
     private Rxbus() {
         this.rxBus = new SerializedSubject(PublishSubject.create());
-        this.rxStickBus = new SerializedSubject(BehaviorSubject.create());
+        this.rxStickBus = new SerializedSubject(ReplaySubject.create());
     }
 
     private static class SingletonHolder {
@@ -36,16 +38,24 @@ public class Rxbus {
         rxStickBus.onNext(event);
     }
 
-    public <T> Observable<T> toObservable(Class<T> type) {
-        return rxBus.asObservable()
-                    .ofType(type)
-                    .onBackpressureBuffer();
+    public <T> void subscribeEvent(Class<T> type, Action1<T> action) {
+        rxBus.asObservable()
+             .ofType(type)
+             .onBackpressureBuffer()
+             .subscribe(action);
     }
 
-    public <T> Observable<T> toStickObservable(Class<T> type) {
-        return rxStickBus.asObservable()
-                         .ofType(type)
-                         .onBackpressureBuffer();
+    public <T> void subscribeStickEvent(Class<T> type, Action1<T> action) {
+        rxStickBus.asObservable()
+                  .ofType(type)
+                  .buffer(Integer.MAX_VALUE)
+                  .map(new Func1<List<T>, T>() {
+                      @Override
+                      public T call(List<T> ts) {
+                          return ts.get(ts.size());
+                      }
+                  })
+                  .subscribe(action);
     }
 
     private boolean hasObservers() {
