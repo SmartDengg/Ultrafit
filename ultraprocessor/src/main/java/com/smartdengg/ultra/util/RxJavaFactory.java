@@ -3,7 +3,6 @@ package com.smartdengg.ultra.util;
 import com.smartdengg.ultra.Platform;
 import com.smartdengg.ultra.RequestEntity;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 
 /**
  * Created by SmartDengg on 2016/4/24.
@@ -19,12 +18,11 @@ public class RxJavaFactory {
 
         Constructor scalarSynchronousObservableConstructor =
                 Reflections.getConstructor("rx.internal.util.ScalarSynchronousObservable", Object.class);
-        Object scalarSynchronousObservable = Reflections.newInstance(scalarSynchronousObservableConstructor, requestEntity);
 
         //Method createMethod = Reflections.getDeclaredMethod(scalarSynchronousObservable.getClass(), "create", Object.class);
         //return (T) Reflections.invokeMethod(createMethod, scalarSynchronousObservable, requestEntity);
 
-        return (T) scalarSynchronousObservable;
+        return (T) Reflections.newInstance(scalarSynchronousObservableConstructor, requestEntity);
     }
 
     @SuppressWarnings("unchecked")
@@ -34,11 +32,9 @@ public class RxJavaFactory {
 
         /** Single.just("requestEntity");*/
 
-        Constructor scalarSynchronousObservableConstructor =
+        Constructor scalarSynchronousSingleConstructor =
                 Reflections.getConstructor("rx.internal.util.ScalarSynchronousSingle", Object.class);
-        Object scalarSynchronousSingle = Reflections.newInstance(scalarSynchronousObservableConstructor, requestEntity);
-        Method createMethod = Reflections.getDeclaredMethod(scalarSynchronousSingle.getClass(), "create", Object.class);
 
-        return (T) Reflections.invokeMethod(createMethod, scalarSynchronousSingle, requestEntity);
+        return (T) Reflections.newInstance(scalarSynchronousSingleConstructor, requestEntity);
     }
 }
