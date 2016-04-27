@@ -2,7 +2,7 @@ package com.smartdengg.presentation;
 
 import java.util.HashMap;
 import java.util.List;
-import rx.functions.Action1;
+import rx.Observable;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 import rx.subjects.ReplaySubject;
@@ -57,26 +57,24 @@ public class Rxbus {
         rxStickBus.onNext(event);
     }
 
-    public <T> void subscribeEvent(Class<T> type, Action1<T> action) {
+    public <T> Observable<T> subscribeEvent(Class<T> type) {
 
-        rxBus.asObservable()
-             .ofType(type)
-             .onBackpressureBuffer()
-             .subscribe(action);
+        return rxBus.asObservable()
+                    .ofType(type)
+                    .onBackpressureBuffer();
     }
 
-    public <T> void subscribeStickEvent(Class<T> type, Action1<T> action) {
+    public <T> Observable<T> subscribeStickEvent(Class<T> type) {
 
-        rxStickBus.asObservable()
-                  .ofType(type)
-                  .buffer(stickEvents.get(type.getCanonicalName()))
-                  .map(new Func1<List<T>, T>() {
-                      @Override
-                      public T call(List<T> ts) {
-                          return ts.get(ts.size());
-                      }
-                  })
-                  .subscribe(action);
+        return rxStickBus.asObservable()
+                         .ofType(type)
+                         .buffer(stickEvents.get(type.getCanonicalName()))
+                         .map(new Func1<List<T>, T>() {
+                             @Override
+                             public T call(List<T> ts) {
+                                 return ts.get(ts.size());
+                             }
+                         });
     }
 
     private boolean hasObservers() {
