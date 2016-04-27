@@ -6,7 +6,7 @@ package com.smartdengg.ultra;
 public class Platform {
 
     public static final boolean HAS_RX_OBSERVABLE = hasRxObservableOnClasspath();
-    public static final boolean HAS_RX_SINGLE = hasRxObservableOnClasspath();
+    public static final boolean HAS_RX_SINGLE = hasRxSingleOnClasspath();
     public static final boolean HAS_RX_COMPLETABLE = hasRxCompletableOnClasspath();
 
     private static boolean hasRxObservableOnClasspath() {

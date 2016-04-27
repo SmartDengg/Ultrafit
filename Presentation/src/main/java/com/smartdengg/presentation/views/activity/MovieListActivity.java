@@ -64,7 +64,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
   @Bind(R.id.movie_layout_rv)
   protected RecyclerView recyclerView;
   @NonNull
-  @Bind(R.id.movie_layout_viewstub)
+  @Bind(R.id.movie_layout_vs)
   protected ViewStub viewStub;
 
   private MovieAdapter movieAdapter = new MovieAdapter(MovieListActivity.this);

@@ -6,12 +6,14 @@ import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -48,6 +50,8 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     @NonNull
     @Bind(R.id.city_layout_rv)
     protected RecyclerView recyclerView;
+
+    private ActionBar bar;
 
     private CityListAdapter cityListAdapter = new CityListAdapter(CityListActivity.this);
     private CityListPresenter<CityEntity> cityListPresenter;
@@ -95,7 +99,9 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     private void initView(Bundle savedInstanceState) {
 
         CityListActivity.this.setSupportActionBar(toolbar);
-        CityListActivity.this.getSupportActionBar().setTitle(null);
+        bar = CityListActivity.this.getSupportActionBar();
+        if (bar == null) return;
+        bar.setTitle(null);
 
         this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
         this.swipeRefreshLayout.setOnRefreshListener(listener);
@@ -123,7 +129,8 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
                 viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        rootView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        rootView.getViewTreeObserver()
+                                .removeOnPreDrawListener(this);
                         CityListActivity.this.collapseToolbar();
                         return true;
                     }
@@ -138,12 +145,14 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void collapseToolbar() {
 
         int contentViewHeight = toolbar.getHeight();
         int toolBarHeight = DensityUtil.getActionBarSize(CityListActivity.this);
         ValueAnimator valueHeightAnimator = ValueAnimator.ofInt(contentViewHeight, toolBarHeight);
-        valueHeightAnimator.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime));
+        valueHeightAnimator.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime) * 2);
+        valueHeightAnimator.setInterpolator(new OvershootInterpolator(2.0f));
         valueHeightAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -156,7 +165,9 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
         valueHeightAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                CityListActivity.this.getSupportActionBar().setTitle(title);
+
+                if (bar == null) return;
+                bar.setTitle(title);
                 CityListActivity.this.initData();
             }
         });
@@ -177,7 +188,8 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     public void showError(String errorMessage) {
         CityListActivity.this.closeRefresh();
         if (errorMessage != null) {
-            Toast.makeText(CityListActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            Toast.makeText(CityListActivity.this, errorMessage, Toast.LENGTH_SHORT)
+                 .show();
         }
     }
 
@@ -187,7 +199,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     }
 
     private void closeRefresh() {
-        if (swipeRefreshLayout != null && swipeRefreshLayout.isRefreshing()) {
+        if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
     }

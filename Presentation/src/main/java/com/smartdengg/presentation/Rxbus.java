@@ -1,5 +1,6 @@
 package com.smartdengg.presentation;
 
+import java.util.HashMap;
 import java.util.List;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -12,8 +13,12 @@ import rx.subjects.SerializedSubject;
  */
 public class Rxbus {
 
+    private static final int initialCount = 1;
+
     private SerializedSubject<Object, Object> rxBus;
     private SerializedSubject<Object, Object> rxStickBus;
+
+    private HashMap<String, Integer> stickEvents = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     private Rxbus() {
@@ -35,10 +40,25 @@ public class Rxbus {
     }
 
     public void postStickEvent(Object event) {
+
+        synchronized (Rxbus.this) {
+
+            String name = event.getClass()
+                               .getCanonicalName();
+
+            if (stickEvents.containsKey(name)) {
+                Integer oldCount = stickEvents.get(name);
+                stickEvents.put(name, ++oldCount);
+            } else {
+                stickEvents.put(name, initialCount);
+            }
+        }
+
         rxStickBus.onNext(event);
     }
 
     public <T> void subscribeEvent(Class<T> type, Action1<T> action) {
+
         rxBus.asObservable()
              .ofType(type)
              .onBackpressureBuffer()
@@ -46,9 +66,10 @@ public class Rxbus {
     }
 
     public <T> void subscribeStickEvent(Class<T> type, Action1<T> action) {
+
         rxStickBus.asObservable()
                   .ofType(type)
-                  .buffer(Integer.MAX_VALUE)
+                  .buffer(stickEvents.get(type.getCanonicalName()))
                   .map(new Func1<List<T>, T>() {
                       @Override
                       public T call(List<T> ts) {
