@@ -7,17 +7,15 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:background="@color/material_blue_grey_50"
-  tools:context="com.smartdengg.presentation.views.activity.MovieListActivity"
-  >
+  tools:context="com.smartdengg.presentation.views.activity.MovieListActivity">
 
   <android.support.v7.widget.Toolbar
     android:id="@+id/city_layout_toolbar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/material_128dp"
     android:theme="@style/ToolbarTheme"
-    app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp"
-    />
+    app:contentInsetLeft="@dimen/material_16dp"
+    app:titleTextAppearance="@style/Toolbar.TitleTextStyle" />
 
   <android.support.v4.widget.SwipeRefreshLayout
     android:id="@+id/city_layout_srl"
