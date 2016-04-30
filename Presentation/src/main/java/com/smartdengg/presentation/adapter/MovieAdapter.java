@@ -18,6 +18,8 @@ import com.smartdengg.presentation.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 import rx.Observer;
+import rx.RxDebounceClick;
+import rx.functions.Action1;
 
 /**
  * Created by SmartDengg on 2016/2/21.
@@ -52,15 +54,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ItemHolder> 
     private void bindValue(final ItemHolder holder, final int position) {
         final MovieEntity movieEntity = items.get(position);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (callback != null) callback.onItemClick(position, holder.thumbIv, movieEntity);
-            }
-        });
-
         holder.nameTv.setText(movieEntity.getMovieName());
         holder.scoreTv.setText(movieEntity.getMovieScore() + " 分");
+
+        RxDebounceClick.onClick(holder.itemView)
+                       .forEach(new Action1<Void>() {
+                           @Override
+                           public void call(Void aVoid) {
+                               if (callback != null) callback.onItemClick(position, holder.thumbIv, movieEntity);
+                           }
+                       });
+
         Picasso.with(context)
                .load(items.get(position)
                           .getMovieThumbUrl())

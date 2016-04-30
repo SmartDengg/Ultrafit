@@ -45,6 +45,7 @@ dependencies {
   /*ReactiveX Library*/
   compile 'com.trello:rxlifecycle-components:0.4.0'
   compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
+  compile 'com.github.SmartDengg:RxDebounceClick:1.0.0'
 
   compile project(':Model')
 }
