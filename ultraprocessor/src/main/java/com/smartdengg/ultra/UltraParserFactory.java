@@ -135,7 +135,7 @@ public class UltraParserFactory<R> {
         }
     }
 
-    public RequestEntity internalParseParameter() {
+    private RequestEntity internalParseParameter() {
 
         if (requestEntity.getRestType() == null || requestEntity.getUrl() == null) {
             throw Utils.methodError(this.clazz, "You should first invoke parseUrl() before call this method.");
