@@ -1,4 +1,4 @@
-package com.smartdengg.model;
+package com.smartdengg.model.service;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;

@@ -2,7 +2,7 @@ package com.smartdengg.model.interactor;
 
 import android.support.annotation.NonNull;
 import com.smartdengg.domain.UseCase;
-import com.smartdengg.model.MovieService;
+import com.smartdengg.model.service.MovieService;
 import com.smartdengg.model.entity.CityEntity;
 import java.util.List;
 import java.util.Map;

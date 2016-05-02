@@ -1,4 +1,4 @@
-package com.smartdengg.model;
+package com.smartdengg.model.service;
 
 import android.support.annotation.NonNull;
 import com.orhanobut.logger.Logger;
