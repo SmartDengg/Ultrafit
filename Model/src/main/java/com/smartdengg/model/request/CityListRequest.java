@@ -10,7 +10,7 @@ import com.smartdengg.ultra.annotation.HttpGet;
 @HttpGet(stringUrl = Constants.CITY_URL)
 public class CityListRequest extends BaseRequest {
 
-    @Argument(parameter = "test1") private String test1 = "test1";
+    @Argument(parameter = "     ") private String test1 = "test1";
     @Argument(parameter = "test2") private String test2 = "test2";
     @Argument(parameter = "test3") private String test3 = "test3";
 }

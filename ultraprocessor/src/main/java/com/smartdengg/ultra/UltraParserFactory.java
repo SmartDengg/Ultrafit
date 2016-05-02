@@ -203,7 +203,10 @@ public class UltraParserFactory<R> {
                             "from these which value is '%s'" + " or" + " '%s'", name, params.get(name), ultra);
                 }
 
-                if (name == null || name.isEmpty()) name = field.getName();
+                if (name == null || name.trim()
+                                        .isEmpty()) {
+                    name = field.getName();
+                }
 
                 params.put(name, ultra);
             }
