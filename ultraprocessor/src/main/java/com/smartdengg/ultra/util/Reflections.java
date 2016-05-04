@@ -17,7 +17,9 @@ public class Reflections {
         try {
             Class<?> clazz = Class.forName(className);
             constructor = clazz.getDeclaredConstructor(parameterTypes);
-        } catch (NoSuchMethodException | ClassNotFoundException e) {
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -30,10 +32,15 @@ public class Reflections {
         Object instance = null;
 
         try {
-
-            if (!Modifier.isPublic(constructor.getModifiers())) constructor.setAccessible(true);
+            if (!Modifier.isPublic(constructor.getModifiers())) {
+                constructor.setAccessible(true);
+            }
             instance = constructor.newInstance(parameters);
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
 
@@ -57,10 +64,13 @@ public class Reflections {
         Object returnObject = null;
 
         try {
-
-            if (Modifier.isPrivate(method.getModifiers())) method.setAccessible(true);
+            if (Modifier.isPrivate(method.getModifiers())) {
+                method.setAccessible(true);
+            }
             returnObject = method.invoke(instance, parameters);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
 
