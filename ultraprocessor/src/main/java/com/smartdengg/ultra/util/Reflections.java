@@ -1,7 +1,6 @@
 package com.smartdengg.ultra.util;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -17,9 +16,7 @@ public class Reflections {
         try {
             Class<?> clazz = Class.forName(className);
             constructor = clazz.getDeclaredConstructor(parameterTypes);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -36,11 +33,7 @@ public class Reflections {
                 constructor.setAccessible(true);
             }
             instance = constructor.newInstance(parameters);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -53,7 +46,7 @@ public class Reflections {
         Method declaredMethod = null;
         try {
             declaredMethod = clazz.getDeclaredMethod(name, parameterTypes);
-        } catch (NoSuchMethodException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return declaredMethod;
@@ -68,9 +61,7 @@ public class Reflections {
                 method.setAccessible(true);
             }
             returnObject = method.invoke(instance, parameters);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
