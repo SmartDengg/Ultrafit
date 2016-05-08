@@ -11,6 +11,6 @@ import com.smartdengg.ultra.annotation.HttpGet;
 public class CityListRequest extends BaseRequest {
 
     @Argument(parameter = "     ") private String test1 = "test1";
-    @Argument(parameter = "test2") private String test2 = "test2";
+    @Argument private String test2 = "test2";
     @Argument(parameter = "test3") private String test3 = "test3";
 }
