@@ -13,7 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.OvershootInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -51,7 +51,7 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     @Bind(R.id.city_layout_rv)
     protected RecyclerView recyclerView;
 
-    private ActionBar bar;
+    private ActionBar actionBar;
 
     private CityListAdapter cityListAdapter = new CityListAdapter(CityListActivity.this);
     private CityListPresenter<CityEntity> cityListPresenter;
@@ -99,9 +99,9 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     private void initView(Bundle savedInstanceState) {
 
         CityListActivity.this.setSupportActionBar(toolbar);
-        bar = CityListActivity.this.getSupportActionBar();
-        if (bar == null) return;
-        bar.setTitle(null);
+        actionBar = CityListActivity.this.getSupportActionBar();
+        if (actionBar == null) return;
+        actionBar.setTitle(null);
 
         this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
         this.swipeRefreshLayout.setOnRefreshListener(listener);
@@ -148,11 +148,14 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
     @SuppressWarnings("unchecked")
     private void collapseToolbar() {
 
+        Integer shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        Integer longAnimTime = getResources().getInteger(android.R.integer.config_longAnimTime);
+
         int contentViewHeight = toolbar.getHeight();
         int toolBarHeight = DensityUtil.getActionBarSize(CityListActivity.this);
         ValueAnimator valueHeightAnimator = ValueAnimator.ofInt(contentViewHeight, toolBarHeight);
-        valueHeightAnimator.setDuration(getResources().getInteger(android.R.integer.config_longAnimTime) * 2);
-        valueHeightAnimator.setInterpolator(new OvershootInterpolator(2.0f));
+        valueHeightAnimator.setDuration(longAnimTime * 2);
+        valueHeightAnimator.setInterpolator(new DecelerateInterpolator(2.0f));
         valueHeightAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -166,11 +169,12 @@ public class CityListActivity extends BaseActivity implements ListView<CityEntit
             @Override
             public void onAnimationEnd(Animator animation) {
 
-                if (bar == null) return;
-                bar.setTitle(title);
+                if (actionBar == null) return;
+                actionBar.setTitle(title);
                 CityListActivity.this.initData();
             }
         });
+        valueHeightAnimator.setStartDelay(shortAnimTime);
         valueHeightAnimator.start();
     }
 
