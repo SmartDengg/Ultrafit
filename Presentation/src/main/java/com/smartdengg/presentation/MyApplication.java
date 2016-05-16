@@ -3,13 +3,13 @@ package com.smartdengg.presentation;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import com.facebook.stetho.Stetho;
 import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.common.utils.CacheUtil;
+import com.smartdengg.model.service.StethoPlatform;
 import com.squareup.picasso.Picasso;
 import java.io.File;
 import okhttp3.Cache;
@@ -33,7 +33,7 @@ public class MyApplication extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) AndroidDevMetrics.initWith(MyApplication.this);
-        if (Constants.isDebugChrome) Stetho.initializeWithDefaults(MyApplication.this);
+        if (BuildConfig.DEBUG && StethoPlatform.HAS_STETHO) StethoPlatform.initializeWithDefaults(MyApplication.this);
 
         File cacheFile = CacheUtil.createDiskCacheDir(MyApplication.this);
         long cacheSize = CacheUtil.calculateDiskCacheSize(cacheFile);

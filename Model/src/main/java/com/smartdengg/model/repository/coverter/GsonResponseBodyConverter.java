@@ -15,9 +15,10 @@
  */
 package com.smartdengg.model.repository.coverter;
 
-import com.smartdengg.common.Constants;
 import com.google.gson.TypeAdapter;
 import com.orhanobut.logger.Logger;
+import com.smartdengg.common.Constants;
+import com.smartdengg.model.BuildConfig;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -56,7 +57,11 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
       }
 
       if (value.contentLength() != 0) {
-        if (Constants.isDebugJsonLog) Logger.t(Constants.OKHTTP_TAG, 0).json(buffer.clone().readString(charset));
+        if (BuildConfig.DEBUG) {
+          Logger.t(Constants.OKHTTP_TAG, 0)
+                .json(buffer.clone()
+                            .readString(charset));
+        }
       }
 
       /**①*/

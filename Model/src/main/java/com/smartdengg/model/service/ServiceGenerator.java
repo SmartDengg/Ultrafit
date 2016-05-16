@@ -1,9 +1,9 @@
 package com.smartdengg.model.service;
 
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.smartdengg.common.Constants;
+import com.smartdengg.model.BuildConfig;
 import com.smartdengg.model.repository.adapter.callAdapter.SmartCallAdapterFactory;
 import com.smartdengg.model.repository.adapter.rxadapter.RxJavaCallAdapterFactory;
 import com.smartdengg.model.repository.coverter.GsonConverterFactory;
@@ -27,18 +27,20 @@ public class ServiceGenerator {
                                      .setPrettyPrinting()
                                      .create();
 
-        ServiceGenerator.httpClientBuilder.addNetworkInterceptor(new StethoInterceptor())
-                                          .addInterceptor(HeaderInterceptor.createdInterceptor())
+        if (BuildConfig.DEBUG && StethoPlatform.HAS_STETHO_INTERCEPTOR) {
+            ServiceGenerator.httpClientBuilder.addNetworkInterceptor(StethoPlatform.createdStethoInterceptor());
+        }
+
+        ServiceGenerator.httpClientBuilder.addInterceptor(HeaderInterceptor.createdInterceptor())
                                           .addInterceptor(SmartHttpLoggingInterceptor.createLoggingInterceptor()
                                                                                      .setLevel(SmartHttpLoggingInterceptor.Level.HEADERS));
-
-        retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
-                                         .addCallAdapterFactory(SmartCallAdapterFactory.create())
-                                         .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                                         .addConverterFactory(GsonConverterFactory.create(gson))
-                                         .client(httpClientBuilder.build())
-                                         .validateEagerly(true)
-                                         .build();
+        ServiceGenerator.retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
+                                                          .addCallAdapterFactory(SmartCallAdapterFactory.create())
+                                                          .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                                                          .addConverterFactory(GsonConverterFactory.create(gson))
+                                                          .client(httpClientBuilder.build())
+                                                          .validateEagerly(true)
+                                                          .build();
     }
 
     public static <S> S createService(Class<S> serviceClass) {

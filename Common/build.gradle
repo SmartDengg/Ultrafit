@@ -15,14 +15,16 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
+    debug {
+      debuggable true
+    }
   }
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile fileTree(include: ['*.jar'], dir: 'libs')
   /*Google Library*/
   compile 'com.android.support:support-annotations:23.2.1'
-
   /*Third Library*/
   compile 'com.orhanobut:logger:1.11'
 }

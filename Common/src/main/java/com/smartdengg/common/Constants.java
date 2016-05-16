@@ -22,7 +22,6 @@ public class Constants {
     public static final Integer RESULT_OK = 0;
     public static final Integer MAX_CONNECT = 4;
 
-    public static boolean isDebugChrome = true;
     public static boolean isDebugJsonLog = true;
 
     public static int[] colors = new int[] {

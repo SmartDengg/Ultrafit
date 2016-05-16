@@ -5,6 +5,10 @@ package com.smartdengg.ultra;
  */
 public class Platform {
 
+    private Platform() {
+        throw new IllegalStateException("No instance");
+    }
+
     public static final boolean HAS_RX_OBSERVABLE = hasRxObservableOnClasspath();
     public static final boolean HAS_RX_SINGLE = hasRxSingleOnClasspath();
     public static final boolean HAS_RX_COMPLETABLE = hasRxCompletableOnClasspath();
