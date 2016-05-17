@@ -30,56 +30,59 @@ import okio.BufferedSource;
 import okio.Okio;
 import retrofit2.Converter;
 
+@SuppressWarnings("all")
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
-  private final TypeAdapter<T> adapter;
 
-  private static final Charset UTF8 = Charset.forName("UTF-8");
+    private final TypeAdapter<T> adapter;
 
-  GsonResponseBodyConverter(TypeAdapter<T> adapter) {
-    this.adapter = adapter;
-  }
+    private static final Charset UTF8 = Charset.forName("UTF-8");
 
-  @Override
-  public T convert(ResponseBody value) throws IOException {
-
-    BufferedSource source = null;
-    InputStreamReader reader = null;
-
-    try {
-      source = value.source();
-      source.request(Long.MAX_VALUE);
-      Buffer buffer = source.buffer();
-
-      Charset charset = UTF8;
-      MediaType contentType = value.contentType();
-      if (contentType != null) {
-        charset = contentType.charset(UTF8);
-      }
-
-      if (value.contentLength() != 0) {
-        if (BuildConfig.DEBUG) {
-          Logger.t(Constants.OKHTTP_TAG, 0)
-                .json(buffer.clone()
-                            .readString(charset));
-        }
-      }
-
-      /**①*/
-      /*String content = value.string();
-      if (Constants.isDebugJsonLog) Logger.t(Constants.OKHTTP_TAG, 0).json(content);
-      ResponseBody responseBody = ResponseBody.create(value.contentType(), content);
-      return adapter.fromJson(responseBody.charStream());*/
-      /**②*/
-      /*return adapter.fromJson(ResponseBody.create(contentType,value.contentLength(),source).charStream());*/
-
-      /**③ Only require Reader,ResponseBody is unnecessary,so i choose this approach :)
-       * 因为我并不特别了解OKio，所以我相信以上三种写法或许都不够表现完美，你唯一需要注意的是，不要忘记关闭Closeable对象*/
-      reader = new InputStreamReader(Okio.buffer(source).inputStream(), charset);
-      return adapter.fromJson(reader);
-    } finally {
-      Util.closeQuietly(value);
-      Util.closeQuietly(source);
-      Util.closeQuietly(reader);
+    GsonResponseBodyConverter(TypeAdapter<T> adapter) {
+        this.adapter = adapter;
     }
-  }
+
+    @Override
+    public T convert(ResponseBody value) throws IOException {
+
+        BufferedSource source = null;
+        InputStreamReader reader = null;
+
+        try {
+            source = value.source();
+            source.request(Long.MAX_VALUE);
+            Buffer buffer = source.buffer();
+
+            Charset charset = UTF8;
+            MediaType contentType = value.contentType();
+            if (contentType != null) {
+                charset = contentType.charset(UTF8);
+            }
+
+            if (value.contentLength() != 0) {
+                if (!BuildConfig.RELEASE) {
+                    Logger.t(Constants.OKHTTP_TAG, 0)
+                          .json(buffer.clone()
+                                      .readString(charset));
+                }
+            }
+
+            /**①*/
+            /*String content = value.string();
+            if (Constants.isDebugJsonLog) Logger.t(Constants.OKHTTP_TAG, 0).json(content);
+            ResponseBody responseBody = ResponseBody.create(value.contentType(), content);
+            return adapter.fromJson(responseBody.charStream());*/
+            /**②*/
+            /*return adapter.fromJson(ResponseBody.create(contentType,value.contentLength(),source).charStream());*/
+
+            /**③ Only require Reader,ResponseBody is unnecessary,so i choose this approach :)
+             * 因为我并不特别了解OKio，所以我相信以上三种写法或许都不够表现完美，你唯一需要注意的是，不要忘记关闭Closeable对象*/
+            reader = new InputStreamReader(Okio.buffer(source)
+                                               .inputStream(), charset);
+            return adapter.fromJson(reader);
+        } finally {
+            Util.closeQuietly(value);
+            Util.closeQuietly(source);
+            Util.closeQuietly(reader);
+        }
+    }
 }

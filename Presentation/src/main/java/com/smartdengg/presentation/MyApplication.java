@@ -9,7 +9,7 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.common.utils.CacheUtil;
-import com.smartdengg.model.service.StethoPlatform;
+import com.smartdengg.model.service.StethoGenerator;
 import com.squareup.picasso.Picasso;
 import java.io.File;
 import okhttp3.Cache;
@@ -33,7 +33,7 @@ public class MyApplication extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) AndroidDevMetrics.initWith(MyApplication.this);
-        if (BuildConfig.DEBUG && StethoPlatform.HAS_STETHO) StethoPlatform.initializeWithDefaults(MyApplication.this);
+        if (BuildConfig.DEBUG && StethoGenerator.HAS_STETHO) StethoGenerator.initializeWithDefaults(MyApplication.this);
 
         File cacheFile = CacheUtil.createDiskCacheDir(MyApplication.this);
         long cacheSize = CacheUtil.calculateDiskCacheSize(cacheFile);

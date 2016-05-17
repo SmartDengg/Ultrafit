@@ -15,6 +15,7 @@ import retrofit2.Retrofit;
 /**
  * Created by Joker on 2016/2/19.
  */
+@SuppressWarnings("all")
 public class ServiceGenerator {
 
     private static OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
@@ -27,8 +28,8 @@ public class ServiceGenerator {
                                      .setPrettyPrinting()
                                      .create();
 
-        if (BuildConfig.DEBUG && StethoPlatform.HAS_STETHO_INTERCEPTOR) {
-            ServiceGenerator.httpClientBuilder.addNetworkInterceptor(StethoPlatform.createdStethoInterceptor());
+        if (!BuildConfig.RELEASE && StethoGenerator.HAS_STETHO_INTERCEPTOR) {
+            ServiceGenerator.httpClientBuilder.addNetworkInterceptor(StethoGenerator.createdStethoInterceptor());
         }
 
         ServiceGenerator.httpClientBuilder.addInterceptor(HeaderInterceptor.createdInterceptor())

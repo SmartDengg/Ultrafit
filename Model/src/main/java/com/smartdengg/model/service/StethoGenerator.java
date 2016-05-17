@@ -9,12 +9,16 @@ import okhttp3.Interceptor;
 /**
  * Created by SmartDengg on 2016/5/16.
  */
-public class StethoPlatform {
+public class StethoGenerator {
 
     public static final boolean HAS_STETHO = hasStethoOnClasspath();
     public static final boolean HAS_STETHO_INTERCEPTOR = hasStethoInterceptorOnClasspath();
 
-    private StethoPlatform() {
+    private static final String stethoClassName = "com.facebook.stetho.Stetho";
+    private static final String stethoInterceptorClassName = "com.facebook.stetho.okhttp3.StethoInterceptor";
+    private static final String initializeWithDefaults = "initializeWithDefaults";
+
+    private StethoGenerator() {
         throw new IllegalStateException("No instance");
     }
 
@@ -23,7 +27,7 @@ public class StethoPlatform {
         boolean hasStetho = false;
 
         try {
-            Class.forName("com.facebook.stetho.Stetho.Stetho");
+            Class.forName(stethoClassName);
             hasStetho = true;
         } catch (ClassNotFoundException ignored) {
         }
@@ -35,7 +39,7 @@ public class StethoPlatform {
         boolean hasStethoInterceptor = false;
 
         try {
-            Class.forName("com.facebook.stetho.okhttp3.StethoInterceptor");
+            Class.forName(stethoInterceptorClassName);
             hasStethoInterceptor = true;
         } catch (ClassNotFoundException ignored) {
         }
@@ -44,19 +48,18 @@ public class StethoPlatform {
 
     public static void initializeWithDefaults(Context context) {
 
-        Constructor stethoConstructor = Reflections.getConstructor("com.facebook.stetho.Stetho.Stetho");
-        Object stethoInstance = Reflections.newInstance(stethoConstructor);
-        Method initializeWithDefaultsMethod =
-                Reflections.getDeclaredMethod(stethoInstance.getClass(), "initializeWithDefaults", Context.class);
         try {
-            initializeWithDefaultsMethod.invoke(stethoInstance, context);
+            Method initializeWithDefaultsMethod =
+                    Reflections.getDeclaredMethod(Class.forName(stethoClassName), initializeWithDefaults, Context.class);
+            /**null for static methods*/
+            initializeWithDefaultsMethod.invoke(null, context);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static Interceptor createdStethoInterceptor() {
-        Constructor StethoInterceptorConstructor = Reflections.getConstructor("com.facebook.stetho.okhttp3.StethoInterceptor");
+        Constructor StethoInterceptorConstructor = Reflections.getConstructor(stethoInterceptorClassName);
         return (Interceptor) Reflections.newInstance(StethoInterceptorConstructor);
     }
 }
