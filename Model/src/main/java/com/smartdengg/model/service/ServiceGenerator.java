@@ -40,7 +40,7 @@ public class ServiceGenerator {
                                                           .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                                                           .addConverterFactory(GsonConverterFactory.create(gson))
                                                           .client(httpClientBuilder.build())
-                                                          .validateEagerly(true)
+                                                          .validateEagerly(!BuildConfig.RELEASE)
                                                           .build();
     }
 
