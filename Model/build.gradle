@@ -50,4 +50,5 @@ dependencies {
   compile 'com.squareup.retrofit2:retrofit:2.0.1'
   compile project(':Common')
   compile project(':Domain')
+  compile project(':ultraprocessor')
 }

@@ -60,7 +60,7 @@ task onReleaseTypeTriggered << {
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile fileTree(include: ['*.jar'], dir: 'libs')
   /*Google Library*/
   compile 'com.android.support:design:23.2.0'
   compile 'com.android.support:cardview-v7:23.2.0'

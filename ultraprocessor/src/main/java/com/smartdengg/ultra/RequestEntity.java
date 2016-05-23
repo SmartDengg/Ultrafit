@@ -88,12 +88,11 @@ public class RequestEntity {
         }
     }
 
-    //@formatter:off
     @Override
     public String toString() {
         return "Request entity !!!!" +
-                "\n  -> " + " Type    : " + RequestEntity.this.getRestType() +
-                "\n  -> " + " Url     : " + RequestEntity.this.getUrl() +
-                "\n  -> " + " Params  : " + RequestEntity.this.getParamMap();
+                "\n  --> " + " Type    : " + RequestEntity.this.getRestType() +
+                "\n  --> " + " Url     : " + RequestEntity.this.getUrl() +
+                "\n  --> " + " Params  : " + RequestEntity.this.getParamMap();
     }
 }
