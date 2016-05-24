@@ -57,7 +57,7 @@ public class Reflections {
         Object returnObject = null;
 
         try {
-            if (Modifier.isPrivate(method.getModifiers())) {
+            if (!Modifier.isPublic(method.getModifiers())) {
                 method.setAccessible(true);
             }
             returnObject = method.invoke(instance, parameters);
