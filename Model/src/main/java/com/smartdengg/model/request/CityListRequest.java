@@ -16,5 +16,10 @@ public class CityListRequest extends BaseRequest {
     @Argument private String test2 = "test2";
     @Argument(parameter = "test3") private String test3 = "test3";*/
 
-    @Argument(parameter = "test1") private List<String> test1 = new ArrayList<>();
+    @Argument(parameter = "test1") private List<String> test1;
+
+    public CityListRequest() {
+        test1 = new ArrayList<>();
+        test1.add("233333");
+    }
 }
