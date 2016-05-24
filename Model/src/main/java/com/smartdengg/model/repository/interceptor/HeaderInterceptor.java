@@ -10,18 +10,20 @@ import okhttp3.Response;
  */
 public class HeaderInterceptor implements Interceptor {
 
-  private HeaderInterceptor() {
-  }
+    private HeaderInterceptor() {
+    }
 
-  public static HeaderInterceptor createdInterceptor() {
-    return new HeaderInterceptor();
-  }
+    public static HeaderInterceptor createdInterceptor() {
+        return new HeaderInterceptor();
+    }
 
-  @Override
-  public Response intercept(Chain chain) throws IOException {
+    @Override
+    public Response intercept(Chain chain) throws IOException {
 
-    Request.Builder builder = chain.request().newBuilder().addHeader("Accept-Encoding", "application/json");
+        Request.Builder builder = chain.request()
+                                       .newBuilder()
+                                       .addHeader("Accept-Encoding", "application/json");
 
-    return chain.proceed(builder.build());
-  }
+        return chain.proceed(builder.build());
+    }
 }

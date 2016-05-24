@@ -7,6 +7,7 @@ import com.smartdengg.model.BuildConfig;
 import com.smartdengg.model.repository.adapter.callAdapter.SmartCallAdapterFactory;
 import com.smartdengg.model.repository.adapter.rxadapter.RxJavaCallAdapterFactory;
 import com.smartdengg.model.repository.coverter.GsonConverterFactory;
+import com.smartdengg.model.repository.interceptor.AnchorInterceptor;
 import com.smartdengg.model.repository.interceptor.HeaderInterceptor;
 import com.smartdengg.model.repository.interceptor.SmartHttpLoggingInterceptor;
 import okhttp3.OkHttpClient;
@@ -32,9 +33,11 @@ public class ServiceGenerator {
             ServiceGenerator.httpClientBuilder.addNetworkInterceptor(StethoGenerator.createdStethoInterceptor());
         }
 
-        ServiceGenerator.httpClientBuilder.addInterceptor(HeaderInterceptor.createdInterceptor())
+        ServiceGenerator.httpClientBuilder.addInterceptor(AnchorInterceptor.createdInterceptor())
+                                          .addInterceptor(HeaderInterceptor.createdInterceptor())
                                           .addInterceptor(SmartHttpLoggingInterceptor.createLoggingInterceptor()
                                                                                      .setLevel(SmartHttpLoggingInterceptor.Level.HEADERS));
+
         ServiceGenerator.retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
                                                           .addCallAdapterFactory(SmartCallAdapterFactory.create())
                                                           .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

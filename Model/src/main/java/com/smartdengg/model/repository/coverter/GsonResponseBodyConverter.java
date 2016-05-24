@@ -74,8 +74,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
             /**②*/
             /*return adapter.fromJson(ResponseBody.create(contentType,value.contentLength(),source).charStream());*/
 
-            /**③ Only require Reader,ResponseBody is unnecessary,so i choose this approach :)
-             * 因为我并不特别了解OKio，所以我相信以上三种写法或许都不够表现完美，你唯一需要注意的是，不要忘记关闭Closeable对象*/
+            /**③ Only require Reader,ResponseBody is unnecessary,so i choose this approach :)*/
             reader = new InputStreamReader(Okio.buffer(source)
                                                .inputStream(), charset);
             return adapter.fromJson(reader);
