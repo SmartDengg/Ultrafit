@@ -9,6 +9,16 @@ import java.lang.reflect.Modifier;
  */
 public class Reflections {
 
+    public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
+        Class<?>[] empty = {};
+        try {
+            clazz.getConstructor(empty);
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static Constructor getConstructor(String className, Class<?>... parameterTypes) {
 
         Constructor constructor = null;
@@ -29,9 +39,7 @@ public class Reflections {
         Object instance = null;
 
         try {
-            if (!Modifier.isPublic(constructor.getModifiers())) {
-                constructor.setAccessible(true);
-            }
+            if (!Modifier.isPublic(constructor.getModifiers())) constructor.setAccessible(true);
             instance = constructor.newInstance(parameters);
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,9 +65,7 @@ public class Reflections {
         Object returnObject = null;
 
         try {
-            if (!Modifier.isPublic(method.getModifiers())) {
-                method.setAccessible(true);
-            }
+            if (!Modifier.isPublic(method.getModifiers())) method.setAccessible(true);
             returnObject = method.invoke(instance, parameters);
         } catch (Exception e) {
             e.printStackTrace();
