@@ -41,8 +41,6 @@ import rx.schedulers.Schedulers;
  */
 public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
 
-    private boolean gotMaxConnect;
-
     public static RxJavaCallAdapterFactory create() {
         return new RxJavaCallAdapterFactory();
     }
@@ -53,20 +51,12 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
     @Override
     public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
 
-        int[] maxConnect = new int[2];
+        int maxConnect = 1;
 
         for (Annotation annotation : annotations) {
             if (!MaxConnect.class.isAssignableFrom(annotation.getClass())) continue;
-
-            if (this.gotMaxConnect) {
-                maxConnect[1] = ((MaxConnect) annotation).count();
-                throw new IllegalArgumentException(String.format("At most only one @MaxConnect can be declared, There already exist two " +
-                        "value '%s' and '%s'", maxConnect[0], maxConnect[1]));
-            }
-            maxConnect[0] = ((MaxConnect) annotation).count();
-            if (maxConnect[0] < 1) throw new IllegalArgumentException("@MaxConnect's value must not be less than 1");
-
-            this.gotMaxConnect = true;
+            maxConnect = ((MaxConnect) annotation).count();
+            if (maxConnect < 1) throw new IllegalArgumentException("@MaxConnect must not be less than 1");
         }
 
         Class<?> rawType = getRawType(returnType);
@@ -89,7 +79,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
             return CompletableHelper.createCallAdapter();
         }
 
-        CallAdapter<Observable<?>> callAdapter = RxJavaCallAdapterFactory.this.getCallAdapter(returnType, maxConnect[0]);
+        CallAdapter<Observable<?>> callAdapter = RxJavaCallAdapterFactory.this.getCallAdapter(returnType, maxConnect);
         if (isSingle) {
             return SingleHelper.makeSingle(callAdapter);
         } else {

@@ -20,8 +20,6 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
 
     private MainThreadExecutor mainThreadExecutor;
 
-    private boolean gotMaxConnect;
-
     private SmartCallAdapterFactory() {
         this.mainThreadExecutor = new MainThreadExecutor();
     }
@@ -33,7 +31,7 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
     @Override
     public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
 
-        final int[] maxConnect = new int[2];
+        int maxConnect = 1;
 
         if (Types.getRawType(returnType) != SmartCall.class) {
             return null;
@@ -46,20 +44,13 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
 
         for (Annotation annotation : annotations) {
             if (!MaxConnect.class.isAssignableFrom(annotation.getClass())) continue;
-
-            if (this.gotMaxConnect) {
-                maxConnect[1] = ((MaxConnect) annotation).count();
-                throw new IllegalArgumentException(String.format("At most only one @MaxConnect can be declared, There already exist two " +
-                        "value '%s' and '%s'", maxConnect[0], maxConnect[1]));
-            }
-            maxConnect[0] = ((MaxConnect) annotation).count();
-            if (maxConnect[0] < 1) throw new IllegalArgumentException("@MaxConnect's value must not be less than 1");
-
-            this.gotMaxConnect = true;
+            maxConnect = ((MaxConnect) annotation).count();
+            if (maxConnect < 1) throw new IllegalArgumentException("@MaxConnect must not be less than 1");
         }
 
         final Type responseType = Types.getParameterUpperBound(0, (ParameterizedType) returnType);
 
+        final int finalMaxConnect = maxConnect;
         return new CallAdapter<SmartCall<?>>() {
             @Override
             public Type responseType() {
@@ -68,7 +59,7 @@ public class SmartCallAdapterFactory extends CallAdapter.Factory {
 
             @Override
             public <R> SmartCall<?> adapt(Call<R> call) {
-                return new SmartCallAdapter<>(call, mainThreadExecutor, maxConnect[0]);
+                return new SmartCallAdapter<>(call, mainThreadExecutor, finalMaxConnect);
             }
         };
     }
