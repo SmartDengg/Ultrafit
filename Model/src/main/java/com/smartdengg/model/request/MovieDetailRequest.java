@@ -7,7 +7,7 @@ import com.smartdengg.ultra.annotation.HttpGet;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-@HttpGet(stringUrl = Constants.MOVIE_DETAIL_URL)
+@HttpGet(stringUrl = Constants.MOVIE_DETAIL_URL, LOG = true)
 public class MovieDetailRequest extends BaseRequest {
 
     @Argument(parameter = "movieid") private String movieId;

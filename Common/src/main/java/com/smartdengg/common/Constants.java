@@ -20,7 +20,6 @@ public class Constants {
     public static final String ULTRA_TAG = "Ultra";
     public static final int MAX_LOG_LENGTH = 4 * 1000;
     public static final Integer RESULT_OK = 0;
-    public static final Integer MAX_CONNECT = 4;
 
     public static boolean isDebugJsonLog = true;
 

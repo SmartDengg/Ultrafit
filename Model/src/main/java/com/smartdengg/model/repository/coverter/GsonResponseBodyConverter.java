@@ -34,11 +34,13 @@ import retrofit2.Converter;
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 
     private final TypeAdapter<T> adapter;
+    private final boolean enable;
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
-    GsonResponseBodyConverter(TypeAdapter<T> adapter) {
+    GsonResponseBodyConverter(TypeAdapter adapter, boolean enable) {
         this.adapter = adapter;
+        this.enable = enable;
     }
 
     @Override
@@ -58,7 +60,7 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
                 charset = contentType.charset(UTF8);
             }
 
-            if (value.contentLength() != 0) {
+            if (value.contentLength() != 0 && enable) {
                 if (!BuildConfig.RELEASE) {
                     Logger.t(Constants.OKHTTP_TAG, 0)
                           .json(buffer.clone()

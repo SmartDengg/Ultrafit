@@ -16,7 +16,7 @@
 package com.smartdengg.model.repository.adapter.rxadapter;
 
 import android.support.annotation.NonNull;
-import com.smartdengg.common.Constants;
+import com.smartdengg.model.repository.annotation.MaxConnect;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -51,6 +51,15 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
     @Override
     public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
 
+        int maxConnect = 1;
+
+        for (Annotation annotation : annotations) {
+            if (!MaxConnect.class.isAssignableFrom(annotation.getClass())) continue;
+            maxConnect = ((MaxConnect) annotation).count();
+
+            if (maxConnect < 1) throw new IllegalArgumentException("@MaxConnect must not be less than 1");
+        }
+
         Class<?> rawType = getRawType(returnType);
         boolean isObservable = "rx.Observable".equals(rawType.getCanonicalName());
         boolean isSingle = "rx.Single".equals(rawType.getCanonicalName());
@@ -68,14 +77,10 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
         }
 
         if (isCompletable) {
-            /* Add Completable-converter wrapper from a separate class. This defers classloading such that
-            regular Observable operation can be leveraged without relying on this unstable RxJava API.
-            Note that this has to be done separately since Completable doesn't have a parametrized
-            type.*/
             return CompletableHelper.createCallAdapter();
         }
 
-        CallAdapter<Observable<?>> callAdapter = RxJavaCallAdapterFactory.this.getCallAdapter(returnType);
+        CallAdapter<Observable<?>> callAdapter = RxJavaCallAdapterFactory.this.getCallAdapter(returnType, maxConnect);
         if (isSingle) {
             return SingleHelper.makeSingle(callAdapter);
         } else {
@@ -83,19 +88,21 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
         }
     }
 
-    private CallAdapter<Observable<?>> getCallAdapter(Type returnType) {
+    private CallAdapter<Observable<?>> getCallAdapter(Type returnType, int maxConnect) {
 
         Type observableType = getParameterUpperBound(0, (ParameterizedType) returnType);
 
-        return new SimpleCallAdapter(observableType);
+        return new SimpleCallAdapter(observableType, maxConnect);
     }
 
     static final class SimpleCallAdapter implements CallAdapter<Observable<?>> {
 
         private final Type responseType;
+        private final int maxConnect;
 
-        SimpleCallAdapter(Type responseType) {
+        SimpleCallAdapter(Type responseType, int maxConnect) {
             this.responseType = responseType;
+            this.maxConnect = maxConnect;
         }
 
         @Override
@@ -112,14 +119,15 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
                                  @Override
                                  public Observable<Long> call(Observable<? extends Throwable> errorObservable) {
 
-                                     return errorObservable.zipWith(Observable.range(1, Constants.MAX_CONNECT), new Func2<Throwable, Integer, InnerThrowable>() {
+                                     return errorObservable.zipWith(Observable.range(1, maxConnect), new Func2<Throwable, Integer, InnerThrowable>() {
+
                                          @Override
                                          public InnerThrowable call(Throwable throwable, Integer i) {
 
                                              if (throwable instanceof IOException) {
                                                  return new InnerThrowable(throwable, i);
                                              }
-                                             return new InnerThrowable(throwable, Constants.MAX_CONNECT);
+                                             return new InnerThrowable(throwable, maxConnect);
                                          }
                                      })
                                                            .concatMap(new Func1<InnerThrowable, Observable<Long>>() {
@@ -127,7 +135,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
                                                                public Observable<Long> call(InnerThrowable innerThrowable) {
 
                                                                    Integer retryCount = innerThrowable.getRetryCount();
-                                                                   if (retryCount.equals(Constants.MAX_CONNECT)) {
+                                                                   if (retryCount.equals(maxConnect)) {
                                                                        return Observable.error(innerThrowable.getThrowable());
                                                                    }
 

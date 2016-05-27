@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by SmartDengg on 2016/2/24.
  */
-@HttpGet(stringUrl = Constants.CITY_URL)
+@HttpGet(stringUrl = Constants.CITY_URL,LOG = true)
 public class CityListRequest extends BaseRequest {
 
    /* @Argument(parameter = "     ") private String test1 = "test1";

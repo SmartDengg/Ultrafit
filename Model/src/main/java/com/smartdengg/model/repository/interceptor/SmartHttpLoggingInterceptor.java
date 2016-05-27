@@ -39,7 +39,6 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
     public static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
     public static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;
 
-
     public enum Level {
         /** No logs. */
         NONE,
@@ -110,7 +109,8 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                 newline = newline != -1 ? newline : length;
                 do {
                     int end = Math.min(newline, i + Constants.MAX_LOG_LENGTH);
-                    Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG, SmartHttpLoggingInterceptor.HORIZONTAL_DOUBLE_LINE + message.substring(i, end));
+                    Log.d(Constants.BASE_TAG + "-" + Constants.OKHTTP_TAG,
+                            SmartHttpLoggingInterceptor.HORIZONTAL_DOUBLE_LINE + message.substring(i, end));
                     i = end;
                 } while (i < newline);
             }
@@ -118,7 +118,7 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
 
         @Override
         public void logRequestBody(String message) {
-            this.log(" ⇢⇢⇢⇢ " + message);
+            this.log("\n    " + message);
         }
 
         @Override
@@ -224,7 +224,10 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                     charset = contentType.charset(UTF8);
                 }
 
-                if (requestBody.contentLength() > 0) {
+                /*ignore "image", "audio" and "video" */
+                String type = requestBody.contentType()
+                                         .type();
+                if (requestBody.contentLength() > 0 && (type.equals("text") || type.equals("application"))) {
                     logger.log("");
                     logger.logRequestBody(buffer.readString(charset));
                 }
@@ -243,8 +246,9 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
         ResponseBody responseBody = response.body();
         long contentLength = responseBody.contentLength();
         String bodySize = contentLength != -1 ? contentLength + "-byte" : "unknown-length";
-        logger.log("<-- " + response.code() + ' ' + response.message() + ' ' + response.request().url() + " (" + tookMs + "ms" +
-                           (!logHeaders ? ", " + bodySize + " body" : "") + ')');
+        logger.log("<-- " + response.code() + ' ' + response.message() + ' ' + response.request()
+                                                                                       .url() + " (" + tookMs + "ms" +
+                (!logHeaders ? ", " + bodySize + " body" : "") + ')');
 
         if (logHeaders) {
             Headers headers = response.headers();
@@ -263,17 +267,6 @@ public class SmartHttpLoggingInterceptor implements Interceptor {
                 BufferedSource source = responseBody.source();
                 source.request(Long.MAX_VALUE); // Buffer the entire body.
                 Buffer buffer = source.buffer();
-
-               /* Charset charset = UTF8;
-                MediaType contentType = responseBody.contentType();
-                if (contentType != null) {
-                    charset = contentType.charset(UTF8);
-                }
-
-                if (contentLength != 0) {
-                    logger.log("");
-                    logger.log(buffer.clone().readString(charset));
-                }*/
 
                 logger.log("<-- END HTTP (" + buffer.size() + "-byte body)");
             }

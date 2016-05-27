@@ -7,12 +7,12 @@ import com.smartdengg.ultra.annotation.HttpGet;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-@HttpGet(stringUrl = Constants.MOVIE_TODAY_URL)
+@HttpGet(stringUrl = Constants.MOVIE_TODAY_URL, LOG = true)
 public class MovieIdRequest extends BaseRequest {
 
-  @Argument(parameter = "cityid") private int cityId;
+    @Argument(parameter = "cityid") private int cityId;
 
-  public MovieIdRequest(int cityId) {
-    this.cityId = cityId;
-  }
+    public MovieIdRequest(int cityId) {
+        this.cityId = cityId;
+    }
 }

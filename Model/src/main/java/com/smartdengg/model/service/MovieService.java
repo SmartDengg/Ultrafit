@@ -5,6 +5,8 @@ import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.model.entity.CityEntity;
 import com.smartdengg.model.entity.MovieEntity;
+import com.smartdengg.model.repository.annotation.LogResult;
+import com.smartdengg.model.repository.annotation.MaxConnect;
 import com.smartdengg.model.request.MovieDetailRequest;
 import com.smartdengg.model.response.CityListResponse;
 import com.smartdengg.model.response.MovieDetailResponse;
@@ -27,16 +29,22 @@ import rx.functions.Func1;
  */
 public class MovieService {
 
+    private static final int MAX_CONNECT = 3;
+
     private final InternalService service;
 
     private interface InternalService {
 
+        @LogResult(enable = false)
+        @MaxConnect(count = MAX_CONNECT)
         @GET
         Observable<ResponseS<CityListResponse>> getCityList(@Url String url, @QueryMap Map<String, String> params);
 
+        @MaxConnect(count = MAX_CONNECT)
         @GET
         Observable<ResponseS<MovieListResponse>> getMovieList(@Url String url, @QueryMap Map<String, String> params);
 
+        @MaxConnect(count = MAX_CONNECT)
         @GET
         Observable<ResponseX<MovieDetailResponse>> getMovieDetail(@Url String url, @QueryMap Map<String, String> params);
     }

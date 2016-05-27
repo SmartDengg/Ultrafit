@@ -36,7 +36,7 @@ public class ServiceGenerator {
         ServiceGenerator.httpClientBuilder.addInterceptor(AnchorInterceptor.createdInterceptor())
                                           .addInterceptor(HeaderInterceptor.createdInterceptor())
                                           .addInterceptor(SmartHttpLoggingInterceptor.createLoggingInterceptor()
-                                                                                     .setLevel(SmartHttpLoggingInterceptor.Level.HEADERS));
+                                                                                     .setLevel(SmartHttpLoggingInterceptor.Level.BODY));
 
         ServiceGenerator.retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
                                                           .addCallAdapterFactory(SmartCallAdapterFactory.create())
