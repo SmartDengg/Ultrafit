@@ -5,16 +5,11 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import rx.annotations.Beta;
 
 /**
- * Created by SmartDengg on 2016/5/27.
+ * Created by SmartDengg on 2016/5/28.
  */
 @Documented
-@Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.METHOD)
-@Beta
-public @interface LogResult {
-
-    boolean enable() default true;
-}
+@Retention(value = RetentionPolicy.SOURCE)
+@Target(value = ElementType.ANNOTATION_TYPE)
+public @interface Beat {}
