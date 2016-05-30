@@ -67,16 +67,14 @@ public final class GsonConverterFactory extends Converter.Factory {
         for (Annotation annotation : annotations) {
             if (!LogResult.class.isAssignableFrom(annotation.getClass())) continue;
             enable = ((LogResult) annotation).enable();
-
-            System.out.println("ENABLE:    " + enable);
         }
 
-        TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
-        return new GsonResponseBodyConverter<>(adapter, enable);
+        return new GsonResponseBodyConverter<>(gson, gson.getAdapter(TypeToken.get(type)), enable);
     }
 
     @Override
-    public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
+    public Converter<?, RequestBody> requestBodyConverter(Type type, Annotation[] parameterAnnotations, Annotation[] methodAnnotations,
+                                                          Retrofit retrofit) {
 
         TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(type));
         return new GsonRequestBodyConverter<>(gson, adapter);

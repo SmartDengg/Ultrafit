@@ -15,7 +15,9 @@
  */
 package com.smartdengg.model.repository.coverter;
 
+import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.model.BuildConfig;
@@ -33,12 +35,14 @@ import retrofit2.Converter;
 @SuppressWarnings("all")
 final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
 
+    private Gson gson;
     private final TypeAdapter<T> adapter;
     private final boolean enable;
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
-    GsonResponseBodyConverter(TypeAdapter adapter, boolean enable) {
+    GsonResponseBodyConverter(Gson gson, TypeAdapter adapter, boolean enable) {
+        this.gson = gson;
         this.adapter = adapter;
         this.enable = enable;
     }
@@ -46,44 +50,49 @@ final class GsonResponseBodyConverter<T> implements Converter<ResponseBody, T> {
     @Override
     public T convert(ResponseBody value) throws IOException {
 
-        BufferedSource source = null;
         InputStreamReader reader = null;
+        BufferedSource source = null;
+        JsonReader jsonReader = null;
 
         try {
-            source = value.source();
-            source.request(Long.MAX_VALUE);
-            Buffer buffer = source.buffer();
+            if (enable) {
+                source = value.source();
+                source.request(Long.MAX_VALUE);
+                Buffer buffer = source.buffer();
 
-            Charset charset = UTF8;
-            MediaType contentType = value.contentType();
-            if (contentType != null) {
-                charset = contentType.charset(UTF8);
-            }
-
-            if (value.contentLength() != 0 && enable) {
-                if (!BuildConfig.RELEASE) {
-                    Logger.t(Constants.OKHTTP_TAG, 0)
-                          .json(buffer.clone()
-                                      .readString(charset));
+                Charset charset = UTF8;
+                MediaType contentType = value.contentType();
+                if (contentType != null) {
+                    charset = contentType.charset(UTF8);
                 }
+
+                if (value.contentLength() != 0 && enable) {
+                    if (!BuildConfig.RELEASE) {
+                        Logger.t(Constants.OKHTTP_TAG, 0)
+                              .json(buffer.clone()
+                                          .readString(charset));
+                    }
+                }
+                /**①*/
+                /*String content = value.string();
+                if (Constants.isDebugJsonLog) Logger.t(Constants.OKHTTP_TAG, 0).json(content);
+                ResponseBody responseBody = ResponseBody.create(value.contentType(), content);
+                return adapter.fromJson(responseBody.charStream());*/
+                /**②*/
+                /*return adapter.fromJson(ResponseBody.create(contentType,value.contentLength(),source).charStream());*/
+                /**③ Only require Reader,ResponseBody is unnecessary,so i choose this approach :)*/
+                reader = new InputStreamReader(Okio.buffer(source)
+                                                   .inputStream(), charset);
+                return adapter.fromJson(reader);
+            } else {
+                jsonReader = gson.newJsonReader(value.charStream());
+                return adapter.read(jsonReader);
             }
-
-            /**①*/
-            /*String content = value.string();
-            if (Constants.isDebugJsonLog) Logger.t(Constants.OKHTTP_TAG, 0).json(content);
-            ResponseBody responseBody = ResponseBody.create(value.contentType(), content);
-            return adapter.fromJson(responseBody.charStream());*/
-            /**②*/
-            /*return adapter.fromJson(ResponseBody.create(contentType,value.contentLength(),source).charStream());*/
-
-            /**③ Only require Reader,ResponseBody is unnecessary,so i choose this approach :)*/
-            reader = new InputStreamReader(Okio.buffer(source)
-                                               .inputStream(), charset);
-            return adapter.fromJson(reader);
         } finally {
-            Util.closeQuietly(value);
             Util.closeQuietly(source);
             Util.closeQuietly(reader);
+            Util.closeQuietly(jsonReader);
+            Util.closeQuietly(value);
         }
     }
 }
