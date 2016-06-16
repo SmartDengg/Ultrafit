@@ -29,7 +29,7 @@ import rx.functions.Func1;
  */
 public class MovieService {
 
-    private static final int MAX_CONNECT = 3;
+    private static final int MAX_CONNECT = 5;
 
     private final InternalService service;
 

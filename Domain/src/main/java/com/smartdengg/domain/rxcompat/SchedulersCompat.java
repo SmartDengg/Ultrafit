@@ -7,6 +7,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Joker on 2015/8/10.
  */
+@SuppressWarnings("All")
 public class SchedulersCompat {
 
     private static final Observable.Transformer computationTransformer = new Observable.Transformer() {

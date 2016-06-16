@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
   compileSdkVersion 23
-  buildToolsVersion "23.0.2"
+  buildToolsVersion '23.0.3'
 
   defaultConfig {
     minSdkVersion 14
@@ -48,7 +48,6 @@ dependencies {
   /*Square Library*/
   compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
   compile 'com.squareup.retrofit2:retrofit:2.0.1'
-  compile project(':Common')
   compile project(':Domain')
   compile project(':ultraprocessor')
 }

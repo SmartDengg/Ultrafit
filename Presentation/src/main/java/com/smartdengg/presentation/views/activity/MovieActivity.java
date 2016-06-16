@@ -34,11 +34,11 @@ import com.smartdengg.presentation.bitmaps.BitmapUtil;
 import com.smartdengg.presentation.presenter.MovieListPresenter;
 import com.smartdengg.presentation.presenter.MovieListPresenterImp;
 import com.smartdengg.presentation.ui.MarginDecoration;
-import com.smartdengg.presentation.views.ListView;
+import com.smartdengg.presentation.views.ViewInterface;
 import java.util.List;
 import rx.Observable;
 
-public class MovieListActivity extends BaseActivity implements ListView<MovieEntity> {
+public class MovieActivity extends BaseActivity implements ViewInterface<List<MovieEntity>> {
 
     private static final String START_LOCATION_Y = "START_LOCATION_Y";
     private static final String CITY_ID = "CITY_ID";
@@ -67,9 +67,9 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     @Bind(R.id.movie_layout_vs)
     protected ViewStub viewStub;
 
-    private MovieAdapter movieAdapter = new MovieAdapter(MovieListActivity.this);
+    private MovieAdapter movieAdapter = new MovieAdapter(MovieActivity.this);
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
-    private MovieListPresenter<MovieEntity> movieListPresenter;
+    private MovieListPresenter<List<MovieEntity>> movieListPresenter;
 
     private View itemView;
     private ImageView blurIv;
@@ -78,29 +78,29 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
         @Override
         public void onItemClick(int position, ImageView thumbIv, MovieEntity movieEntity) {
             if (viewStub.getParent() != null) {
-                MovieListActivity.this.blurIv = (ImageView) viewStub.inflate();
+                MovieActivity.this.blurIv = (ImageView) viewStub.inflate();
             } else {
-                MovieListActivity.this.blurIv.setImageDrawable(null);
+                MovieActivity.this.blurIv.setImageDrawable(null);
                 viewStub.setVisibility(View.VISIBLE);
             }
-            MovieListActivity.this.navigateToDetail(position, thumbIv, movieEntity);
+            MovieActivity.this.navigateToDetail(position, thumbIv, movieEntity);
         }
 
         @Override
         public void onError(Throwable error) {
-            MovieListActivity.this.closeRefresh();
+            MovieActivity.this.closeRefresh();
         }
     };
 
     private SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            MovieListActivity.this.initData();
+            MovieActivity.this.initData();
         }
     };
 
     public static void startFromLocation(AppCompatActivity startingActivity, int startingLocationY, String cityId) {
-        Intent intent = new Intent(startingActivity, MovieListActivity.class);
+        Intent intent = new Intent(startingActivity, MovieActivity.class);
         intent.putExtra(START_LOCATION_Y, startingLocationY);
         intent.putExtra(CITY_ID, cityId);
         startingActivity.startActivity(intent);
@@ -110,8 +110,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MovieListActivity.this.initPresenter();
-        MovieListActivity.this.initView(savedInstanceState);
+        MovieActivity.this.initPresenter();
+        MovieActivity.this.initView(savedInstanceState);
     }
 
     @Override
@@ -121,14 +121,14 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
     private void initPresenter() {
         this.movieListPresenter = MovieListPresenterImp.createdPresenter();
-        this.movieListPresenter.attachView(MovieListActivity.this);
+        this.movieListPresenter.attachView(MovieActivity.this);
     }
 
     private void initView(Bundle savedInstanceState) {
 
-        MovieListActivity.this.setSupportActionBar(toolbar);
-        MovieListActivity.this.getSupportActionBar()
-                              .setTitle(title);
+        MovieActivity.this.setSupportActionBar(toolbar);
+        MovieActivity.this.getSupportActionBar()
+                          .setTitle(title);
         this.toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
 
         this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
@@ -141,7 +141,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
         });
         this.staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
-        this.recyclerView.addItemDecoration(new MarginDecoration(MovieListActivity.this));
+        this.recyclerView.addItemDecoration(new MarginDecoration(MovieActivity.this));
         this.recyclerView.setHasFixedSize(true);
         this.recyclerView.setLayoutManager(staggeredGridLayoutManager);
         this.movieAdapter.setCallback(callback);
@@ -155,13 +155,13 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
                     public boolean onPreDraw() {
                         rootView.getViewTreeObserver()
                                 .removeOnPreDrawListener(this);
-                        MovieListActivity.this.startEnterAnim(getIntent().getIntExtra(START_LOCATION_Y, 0));
+                        MovieActivity.this.startEnterAnim(getIntent().getIntExtra(START_LOCATION_Y, 0));
                         return true;
                     }
                 });
             }
         } else {
-            MovieListActivity.this.initData();
+            MovieActivity.this.initData();
         }
     }
 
@@ -170,8 +170,8 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
     }
 
     @Override
-    public void showDataList(Observable<List<MovieEntity>> data) {
-        MovieListActivity.this.closeRefresh();
+    public void showData(Observable<List<MovieEntity>> data) {
+        MovieActivity.this.closeRefresh();
         data.subscribe(this.movieAdapter);
     }
 
@@ -183,9 +183,9 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
     @Override
     public void showError(String errorMessage) {
-        MovieListActivity.this.closeRefresh();
+        MovieActivity.this.closeRefresh();
         if (errorMessage != null) {
-            Toast.makeText(MovieListActivity.this, errorMessage, Toast.LENGTH_SHORT)
+            Toast.makeText(MovieActivity.this, errorMessage, Toast.LENGTH_SHORT)
                  .show();
         }
     }
@@ -196,7 +196,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
         this.itemView = viewHolder.itemView;
         this.itemView.setVisibility(View.INVISIBLE);
 
-        BitmapUtil.blurImage(MovieListActivity.this, this.blurIv, BitmapUtil.retrieveScreenSnapshot(MovieListActivity.this));
+        BitmapUtil.blurImage(MovieActivity.this, this.blurIv, BitmapUtil.retrieveScreenSnapshot(MovieActivity.this));
 
         Rect startBounds = new Rect();
         thumbIv.getGlobalVisibleRect(startBounds);
@@ -205,7 +205,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
         rootView.getGlobalVisibleRect(rootRect, globalOffset);
         startBounds.offset(-globalOffset.x, -globalOffset.y);
 
-        DetailActivity.navigateToActivity(MovieListActivity.this, startBounds, globalOffset, movieEntity);
+        DetailActivity.navigateToActivity(MovieActivity.this, startBounds, globalOffset, movieEntity);
         overridePendingTransition(0, 0);
     }
 
@@ -229,7 +229,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
                 toolbar.setLayerType(View.LAYER_TYPE_NONE, null);
                 contentLayout.setLayerType(View.LAYER_TYPE_NONE, null);
-                MovieListActivity.this.initData();
+                MovieActivity.this.initData();
             }
         });
 
@@ -265,7 +265,7 @@ public class MovieListActivity extends BaseActivity implements ListView<MovieEnt
 
                 toolbar.setLayerType(View.LAYER_TYPE_NONE, null);
                 contentLayout.setLayerType(View.LAYER_TYPE_NONE, null);
-                MovieListActivity.this.finish();
+                MovieActivity.this.finish();
             }
         });
 
