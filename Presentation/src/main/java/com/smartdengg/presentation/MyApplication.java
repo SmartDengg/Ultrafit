@@ -9,10 +9,9 @@ import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.common.utils.CacheUtil;
-import com.smartdengg.model.service.StethoGenerator;
+import com.smartdengg.model.service.generator.StethoGenerator;
+import com.smartdengg.model.service.provider.Injector;
 import com.squareup.picasso.Picasso;
-import java.io.File;
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 
 /**
@@ -35,10 +34,9 @@ public class MyApplication extends Application {
         if (BuildConfig.DEBUG) AndroidDevMetrics.initWith(MyApplication.this);
         if (BuildConfig.DEBUG && StethoGenerator.HAS_STETHO) StethoGenerator.initializeWithDefaults(MyApplication.this);
 
-        File cacheFile = CacheUtil.createDiskCacheDir(MyApplication.this);
-        long cacheSize = CacheUtil.calculateDiskCacheSize(cacheFile);
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(new Cache(cacheFile, cacheSize))
-                                                              .build();
+        OkHttpClient okHttpClient =
+                new OkHttpClient.Builder().cache(Injector.providePicCache(CacheUtil.createDiskCacheDir(MyApplication.this)))
+                                          .build();
 
         Picasso picasso = new Picasso.Builder(MyApplication.this).downloader(new OkHttp3Downloader(okHttpClient))
                                                                  .listener(picassoListener)
@@ -50,5 +48,7 @@ public class MyApplication extends Application {
               .setMethodOffset(0)
               .setMethodCount(3)
               .setLogLevel(LogLevel.FULL);
+
+        Injector.setOkHttpBuilderInstance(MyApplication.this);
     }
 }

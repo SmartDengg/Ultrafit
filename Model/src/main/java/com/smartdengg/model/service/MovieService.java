@@ -13,6 +13,7 @@ import com.smartdengg.model.response.MovieDetailResponse;
 import com.smartdengg.model.response.MovieListResponse;
 import com.smartdengg.model.response.base.ResponseS;
 import com.smartdengg.model.response.base.ResponseX;
+import com.smartdengg.model.service.generator.ServiceGenerator;
 import com.smartdengg.ultra.RequestEntity;
 import com.smartdengg.ultra.UltraParserFactory;
 import java.util.List;
