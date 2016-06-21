@@ -2,12 +2,12 @@ package com.smartdengg.model.service.generator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.lianjia.httpservice.adapter.callAdapter.HttpCallAdapterFactory;
+import com.lianjia.httpservice.adapter.rxadapter.RxJavaCallAdapterFactory;
+import com.lianjia.httpservice.converter.GsonConverterFactory;
+import com.lianjia.httpservice.interceptor.HttpLoggingInterceptor;
 import com.smartdengg.common.Constants;
 import com.smartdengg.model.BuildConfig;
-import com.smartdengg.model.repository.adapter.callAdapter.SmartCallAdapterFactory;
-import com.smartdengg.model.repository.adapter.rxadapter.RxJavaCallAdapterFactory;
-import com.smartdengg.model.repository.coverter.GsonConverterFactory;
-import com.smartdengg.model.repository.interceptor.SmartHttpLoggingInterceptor;
 import com.smartdengg.model.service.provider.Injector;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -38,10 +38,10 @@ public class ServiceGenerator {
             ServiceGenerator.httpClientBuilder.addInterceptor(Injector.provideHeaderInterceptor());
         }
 
-        ServiceGenerator.httpClientBuilder.addInterceptor(Injector.provideHttpLoggingInterceptor(SmartHttpLoggingInterceptor.Level.BODY));
+        ServiceGenerator.httpClientBuilder.addInterceptor(Injector.provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level.BODY));
 
         ServiceGenerator.retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
-                                                          .addCallAdapterFactory(SmartCallAdapterFactory.create())
+                                                          .addCallAdapterFactory(HttpCallAdapterFactory.create())
                                                           .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                                                           .addConverterFactory(GsonConverterFactory.create(gson))
                                                           .client(ServiceGenerator.httpClientBuilder.build())

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import com.frogermcs.androiddevmetrics.AndroidDevMetrics;
 import com.jakewharton.picasso.OkHttp3Downloader;
+import com.lianjia.httpservice.HttpService;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
@@ -50,5 +51,8 @@ public class MyApplication extends Application {
               .setLogLevel(LogLevel.FULL);
 
         Injector.setOkHttpBuilderInstance(MyApplication.this);
+
+        HttpService.setHttpTAG("LOG-HTTP")
+                   .enableResponseLog(true);
     }
 }

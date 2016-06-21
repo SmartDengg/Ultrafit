@@ -1,4 +1,4 @@
-package com.smartdengg.model.repository.interceptor;
+package com.smartdengg.model.interceptor;
 
 import java.io.IOException;
 import okhttp3.Interceptor;

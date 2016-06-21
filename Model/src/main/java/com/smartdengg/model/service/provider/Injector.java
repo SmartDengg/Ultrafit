@@ -5,10 +5,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import com.lianjia.httpservice.interceptor.HttpLoggingInterceptor;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.utils.CacheUtil;
-import com.smartdengg.model.repository.interceptor.HeaderInterceptor;
-import com.smartdengg.model.repository.interceptor.SmartHttpLoggingInterceptor;
+import com.smartdengg.model.interceptor.HeaderInterceptor;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -101,8 +101,8 @@ public class Injector {
         return HeaderInterceptor.createdInterceptor();
     }
 
-    public static Interceptor provideHttpLoggingInterceptor(SmartHttpLoggingInterceptor.Level level) {
-        return SmartHttpLoggingInterceptor.createLoggingInterceptor()
+    public static Interceptor provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level level) {
+        return HttpLoggingInterceptor.createLoggingInterceptor()
                                           .setLevel(level);
     }
 

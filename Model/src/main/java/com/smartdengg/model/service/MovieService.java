@@ -1,12 +1,10 @@
 package com.smartdengg.model.service;
 
 import android.support.annotation.NonNull;
-import com.orhanobut.logger.Logger;
-import com.smartdengg.common.Constants;
+import com.lianjia.httpservice.annotation.LogResult;
+import com.lianjia.httpservice.annotation.RetryCount;
 import com.smartdengg.model.entity.CityEntity;
 import com.smartdengg.model.entity.MovieEntity;
-import com.smartdengg.model.repository.annotation.LogResult;
-import com.smartdengg.model.repository.annotation.MaxConnect;
 import com.smartdengg.model.request.MovieDetailRequest;
 import com.smartdengg.model.response.CityListResponse;
 import com.smartdengg.model.response.MovieDetailResponse;
@@ -22,7 +20,6 @@ import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
 import rx.Observable;
-import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -37,15 +34,15 @@ public class MovieService {
     private interface InternalService {
 
         @LogResult(enable = false)
-        @MaxConnect(count = MAX_CONNECT)
+        @RetryCount(count = MAX_CONNECT)
         @GET
         Observable<ResponseS<CityListResponse>> getCityList(@Url String url, @QueryMap Map<String, String> params);
 
-        @MaxConnect(count = MAX_CONNECT)
+        @RetryCount(count = MAX_CONNECT)
         @GET
         Observable<ResponseS<MovieListResponse>> getMovieList(@Url String url, @QueryMap Map<String, String> params);
 
-        @MaxConnect(count = MAX_CONNECT)
+        @RetryCount(count = MAX_CONNECT)
         @GET
         Observable<ResponseX<MovieDetailResponse>> getMovieDetail(@Url String url, @QueryMap Map<String, String> params);
     }
@@ -119,13 +116,6 @@ public class MovieService {
                                                                          .as(Observable.class);
                                             }
                                         })
-                                        .doOnNext(new Action1<RequestEntity>() {
-                                            @Override
-                                            public void call(RequestEntity requestEntity) {
-                                                Logger.t(Constants.OKHTTP_TAG, 0)
-                                                      .d(requestEntity.toString());
-                                            }
-                                        })
                                         .concatMap(new Func1<RequestEntity, Observable<MovieDetailResponse>>() {
                                             @Override
                                             public Observable<MovieDetailResponse> call(RequestEntity requestEntity) {
@@ -133,7 +123,8 @@ public class MovieService {
                                                 return service.getMovieDetail(requestEntity.getUrl(), requestEntity.getParamMap())
                                                               .concatMap(new Func1<ResponseX<MovieDetailResponse>, Observable<MovieDetailResponse>>() {
                                                                   @Override
-                                                                  public Observable<MovieDetailResponse> call(ResponseX<MovieDetailResponse> responseX) {
+                                                                  public Observable<MovieDetailResponse> call(
+                                                                          ResponseX<MovieDetailResponse> responseX) {
                                                                       return responseX.filterWebServiceErrors();
                                                                   }
                                                               });
