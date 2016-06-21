@@ -1,4 +1,4 @@
-package com.smartdengg.model.service;
+package com.smartdengg.model.service.generator;
 
 import android.content.Context;
 import com.smartdengg.ultra.util.Reflections;

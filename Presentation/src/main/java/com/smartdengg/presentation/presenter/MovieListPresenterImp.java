@@ -6,7 +6,7 @@ import com.smartdengg.model.entity.MovieEntity;
 import com.smartdengg.model.errors.WebServiceException;
 import com.smartdengg.model.interactor.MovieListUseCase;
 import com.smartdengg.model.request.MovieIdRequest;
-import com.smartdengg.presentation.views.ListView;
+import com.smartdengg.presentation.views.ViewInterface;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func0;
@@ -14,9 +14,9 @@ import rx.functions.Func0;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
+public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntity>> {
 
-  private ListView listView;
+  private ViewInterface viewInterface;
   private UseCase<MovieIdRequest, List<MovieEntity>> listUseCase;
 
   private MovieListPresenterImp() {
@@ -28,8 +28,8 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
   }
 
   @Override
-  public void attachView(ListView<MovieEntity> view) {
-    this.listView = view;
+  public void attachView(ViewInterface<List<MovieEntity>> view) {
+    this.viewInterface = view;
   }
 
   @Override
@@ -45,7 +45,7 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
   @SuppressWarnings("unchecked")
   private void showContent(final List<MovieEntity> movieEntities) {
 
-    this.listView.showDataList(Observable.fromCallable(new Func0<List<MovieEntity>>() {
+    this.viewInterface.showData(Observable.fromCallable(new Func0<List<MovieEntity>>() {
       @Override
       public List call() {
         return movieEntities;
@@ -54,7 +54,7 @@ public class MovieListPresenterImp implements MovieListPresenter<MovieEntity> {
   }
 
   private void showError(String errorMessage) {
-    this.listView.showError(errorMessage);
+    this.viewInterface.showError(errorMessage);
   }
 
   private final class ListSubscriber extends SimpleSubscriber<List<MovieEntity>> {

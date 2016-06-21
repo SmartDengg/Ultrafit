@@ -13,6 +13,7 @@ import com.smartdengg.model.response.MovieDetailResponse;
 import com.smartdengg.model.response.MovieListResponse;
 import com.smartdengg.model.response.base.ResponseS;
 import com.smartdengg.model.response.base.ResponseX;
+import com.smartdengg.model.service.generator.ServiceGenerator;
 import com.smartdengg.ultra.RequestEntity;
 import com.smartdengg.ultra.UltraParserFactory;
 import java.util.List;
@@ -29,7 +30,7 @@ import rx.functions.Func1;
  */
 public class MovieService {
 
-    private static final int MAX_CONNECT = 3;
+    private static final int MAX_CONNECT = 5;
 
     private final InternalService service;
 

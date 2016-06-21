@@ -1,11 +1,11 @@
 package com.smartdengg.presentation.presenter;
 
-import com.smartdengg.presentation.views.ListView;
+import com.smartdengg.presentation.views.ViewInterface;
 
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public interface MovieListPresenter<T> extends Presenter<ListView<T>> {
+public interface MovieListPresenter<T> extends Presenter<ViewInterface<T>> {
 
-  void loadData(String cityId);
+    void loadData(String cityId);
 }

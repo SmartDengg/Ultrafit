@@ -1,4 +1,4 @@
-package com.smartdengg.model.service;
+package com.smartdengg.model.service.generator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,9 +7,8 @@ import com.smartdengg.model.BuildConfig;
 import com.smartdengg.model.repository.adapter.callAdapter.SmartCallAdapterFactory;
 import com.smartdengg.model.repository.adapter.rxadapter.RxJavaCallAdapterFactory;
 import com.smartdengg.model.repository.coverter.GsonConverterFactory;
-import com.smartdengg.model.repository.interceptor.AnchorInterceptor;
-import com.smartdengg.model.repository.interceptor.HeaderInterceptor;
 import com.smartdengg.model.repository.interceptor.SmartHttpLoggingInterceptor;
+import com.smartdengg.model.service.provider.Injector;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -33,16 +32,19 @@ public class ServiceGenerator {
             ServiceGenerator.httpClientBuilder.addNetworkInterceptor(StethoGenerator.createdStethoInterceptor());
         }
 
-        ServiceGenerator.httpClientBuilder.addInterceptor(AnchorInterceptor.createdInterceptor())
-                                          .addInterceptor(HeaderInterceptor.createdInterceptor())
-                                          .addInterceptor(SmartHttpLoggingInterceptor.createLoggingInterceptor()
-                                                                                     .setLevel(SmartHttpLoggingInterceptor.Level.BODY));
+        if (Injector.builder != null) {
+            ServiceGenerator.httpClientBuilder = Injector.builder;
+        } else {
+            ServiceGenerator.httpClientBuilder.addInterceptor(Injector.provideHeaderInterceptor());
+        }
+
+        ServiceGenerator.httpClientBuilder.addInterceptor(Injector.provideHttpLoggingInterceptor(SmartHttpLoggingInterceptor.Level.BODY));
 
         ServiceGenerator.retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
                                                           .addCallAdapterFactory(SmartCallAdapterFactory.create())
                                                           .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                                                           .addConverterFactory(GsonConverterFactory.create(gson))
-                                                          .client(httpClientBuilder.build())
+                                                          .client(ServiceGenerator.httpClientBuilder.build())
                                                           .validateEagerly(!BuildConfig.RELEASE)
                                                           .build();
     }
