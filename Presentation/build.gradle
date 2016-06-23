@@ -11,13 +11,6 @@ buildscript {
   }
 }
 
-def STRING = "String"
-def BUILD_TIME = "buildTime"
-
-def buildTime() {
-  return new Date().format("yyyy-MM-dd HH:mm:ss Z", TimeZone.getTimeZone("GMT+08"))
-}
-
 android {
 
   compileSdkVersion 23
@@ -32,8 +25,6 @@ android {
 
     renderscriptTargetApi 19
     renderscriptSupportModeEnabled true
-
-    buildConfigField STRING, BUILD_TIME, "\"${buildTime()}\""
   }
   buildTypes {
     release {
