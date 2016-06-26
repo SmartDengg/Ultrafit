@@ -1,9 +1,6 @@
-package com.smartdengg.ultra;
+package com.smartdengg.ultra.core;
 
 import com.smartdengg.ultra.annotation.RestType;
-import com.smartdengg.ultra.util.RxJavaFactory;
-import com.smartdengg.ultra.util.Types;
-import com.smartdengg.ultra.util.Utils;
 import java.util.Map;
 
 /**
@@ -82,9 +79,9 @@ public class RequestEntity {
         if (!isObservable && !isSingle) return null;
 
         if (isObservable) {
-            return RxJavaFactory.createdObservable(RequestEntity.this);
+            return RxJavaGenerator.createdObservable(RequestEntity.this);
         } else {
-            return RxJavaFactory.createdSingle(RequestEntity.this);
+            return RxJavaGenerator.createdSingle(RequestEntity.this);
         }
     }
 

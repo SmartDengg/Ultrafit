@@ -1,5 +1,6 @@
-package com.smartdengg.ultra.util;
+package com.smartdengg.ultra.core;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -9,7 +10,7 @@ import java.lang.reflect.Modifier;
  */
 public class Reflections {
 
-    public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
+    static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
         Class<?>[] empty = {};
         try {
             clazz.getConstructor(empty);
@@ -19,7 +20,7 @@ public class Reflections {
         return true;
     }
 
-    public static Constructor getConstructor(String className, Class<?>... parameterTypes) {
+    static Constructor getConstructor(String className, Class<?>... parameterTypes) {
 
         Constructor constructor = null;
 
@@ -34,7 +35,7 @@ public class Reflections {
     }
 
     @SuppressWarnings("unchecked")
-    public static Object newInstance(Constructor constructor, Object... parameters) {
+    static Object newInstance(Constructor constructor, Object... parameters) {
 
         Object instance = null;
 
@@ -49,7 +50,7 @@ public class Reflections {
     }
 
     @SuppressWarnings("unchecked")
-    public static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
+    static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
 
         Method declaredMethod = null;
         try {
@@ -60,7 +61,7 @@ public class Reflections {
         return declaredMethod;
     }
 
-    public static Object invokeMethod(Method method, Object instance, Object... parameters) {
+    static Object invokeMethod(Method method, Object instance, Object... parameters) {
 
         Object returnObject = null;
 
@@ -72,5 +73,17 @@ public class Reflections {
         }
 
         return returnObject;
+    }
+
+    /** Safe because of generics erasure */
+    @SuppressWarnings("unchecked")
+    static <T> T invokeMethod(Annotation classAnnotation, Class<? extends Annotation> clazz, String methodName) {
+        try {
+            Method declaredMethod = clazz.getDeclaredMethod(methodName);
+            if (!Modifier.isPublic(declaredMethod.getModifiers())) declaredMethod.setAccessible(true);
+            return (T) declaredMethod.invoke(classAnnotation);
+        } catch (Exception ignore) {
+            throw Utils.methodError(clazz, "Failed to extract String 'value' from @%s annotation.", clazz.getSimpleName());
+        }
     }
 }

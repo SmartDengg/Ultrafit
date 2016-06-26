@@ -1,16 +1,15 @@
-package com.smartdengg.ultra.util;
+package com.smartdengg.ultra.core;
 
 import com.smartdengg.ultra.Platform;
-import com.smartdengg.ultra.RequestEntity;
 import java.lang.reflect.Constructor;
 
 /**
  * Created by SmartDengg on 2016/4/24.
  */
-public class RxJavaFactory {
+public class RxJavaGenerator {
 
     @SuppressWarnings("unchecked")
-    public static <T> T createdObservable(RequestEntity requestEntity) {
+    static <T> T createdObservable(RequestEntity requestEntity) {
 
         if (!Platform.HAS_RX_OBSERVABLE) return null;
 
@@ -19,14 +18,11 @@ public class RxJavaFactory {
         Constructor scalarSynchronousObservableConstructor =
                 Reflections.getConstructor("rx.internal.util.ScalarSynchronousObservable", Object.class);
 
-        //Method createMethod = Reflections.getDeclaredMethod(scalarSynchronousObservable.getClass(), "create", Object.class);
-        //return (T) Reflections.invokeMethod(createMethod, scalarSynchronousObservable, requestEntity);
-
         return (T) Reflections.newInstance(scalarSynchronousObservableConstructor, requestEntity);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T createdSingle(RequestEntity requestEntity) {
+    static <T> T createdSingle(RequestEntity requestEntity) {
 
         if (!Platform.HAS_RX_SINGLE) return null;
 

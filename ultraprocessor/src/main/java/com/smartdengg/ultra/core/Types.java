@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.util;
+package com.smartdengg.ultra.core;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
@@ -13,7 +13,7 @@ import java.lang.reflect.WildcardType;
  */
 public class Types {
 
-    public static Class<?> getRawType(Type type) {
+     static Class<?> getRawType(Type type) {
 
         if (type instanceof Class<?>) {
             // Type is a normal class.
