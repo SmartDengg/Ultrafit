@@ -1,5 +1,12 @@
 apply plugin: 'com.android.library'
 
+def STRING = "String"
+def BUILD_TIME = "BUILD_TIME"
+
+def buildTime() {
+  return new Date().format("yyyy-MM-dd HH:mm:ss Z", TimeZone.getTimeZone("GMT+08"))
+}
+
 android {
   compileSdkVersion 23
   buildToolsVersion '23.0.3'
@@ -9,6 +16,8 @@ android {
     targetSdkVersion 23
     versionCode 1
     versionName "1.0"
+
+    buildConfigField STRING, BUILD_TIME, "\"${buildTime()}\""
   }
   buildTypes {
     release {

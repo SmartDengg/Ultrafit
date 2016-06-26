@@ -58,11 +58,9 @@ public class Injector {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Response response = chain.proceed(chain.request());
-
                 // re-write response header to force use of cache
                 CacheControl cacheControl = new CacheControl.Builder().maxAge(2, TimeUnit.MINUTES)
                                                                       .build();
-
                 return response.newBuilder()
                                .header(CACHE_CONTROL, cacheControl.toString())
                                .build();
@@ -103,7 +101,7 @@ public class Injector {
 
     public static Interceptor provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level level) {
         return HttpLoggingInterceptor.createLoggingInterceptor()
-                                          .setLevel(level);
+                                     .setLevel(level);
     }
 
     public static Cache providePicCache(File diskPicCacheDir) {

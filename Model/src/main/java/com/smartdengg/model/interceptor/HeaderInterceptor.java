@@ -1,5 +1,6 @@
 package com.smartdengg.model.interceptor;
 
+import com.smartdengg.model.BuildConfig;
 import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -22,7 +23,8 @@ public class HeaderInterceptor implements Interceptor {
 
         Request.Builder builder = chain.request()
                                        .newBuilder()
-                                       .addHeader("Accept-Encoding", "application/json");
+                                       .addHeader("Accept-Encoding", "application/json")
+                                       .addHeader("Build-Time", BuildConfig.BUILD_TIME);
 
         return chain.proceed(builder.build());
     }
