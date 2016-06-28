@@ -54,8 +54,8 @@ dependencies {
   /*Square Library*/
   compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
 
-  /*Lianjia Library*/
-  compile('com.lianjia:httpservice:1.3.1@aar') { transitive = true }
+  /*Third Library*/
+  compile 'com.github.SmartDengg:HttpService:0.1.0'
 
   compile project(':Domain')
   compile project(':ultraprocessor')

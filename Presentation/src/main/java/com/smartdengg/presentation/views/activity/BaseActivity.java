@@ -12,50 +12,50 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
  */
 public abstract class BaseActivity extends RxAppCompatActivity {
 
-  @Override
-  public void setContentView(int layoutResID) {
-    super.setContentView(layoutResID);
-    ButterKnife.bind(BaseActivity.this);
-  }
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(BaseActivity.this.getLayoutId());
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case android.R.id.home:
-        BaseActivity.this.exit();
-        return true;
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        ButterKnife.bind(BaseActivity.this);
     }
-    return super.onOptionsItemSelected(item);
-  }
 
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-      BaseActivity.this.exit();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(BaseActivity.this.getLayoutId());
     }
-    return false;
-  }
 
-  @Override
-  public void finish() {
-    super.finish();
-    overridePendingTransition(0, 0);
-  }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                BaseActivity.this.exit();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    ButterKnife.unbind(BaseActivity.this);
-  }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            BaseActivity.this.exit();
+        }
+        return false;
+    }
 
-  protected abstract void exit();
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
 
-  @LayoutRes
-  protected abstract int getLayoutId();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(BaseActivity.this);
+    }
+
+    protected abstract void exit();
+
+    @LayoutRes
+    protected abstract int getLayoutId();
 }

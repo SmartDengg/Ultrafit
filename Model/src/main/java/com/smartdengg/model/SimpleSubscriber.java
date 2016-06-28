@@ -1,9 +1,9 @@
 package com.smartdengg.model;
 
 import android.support.annotation.CallSuper;
-import com.lianjia.httpservice.errors.HttpException;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
+import com.smartdengg.httpservice.lib.errors.HttpException;
 import retrofit2.Response;
 import rx.Subscriber;
 

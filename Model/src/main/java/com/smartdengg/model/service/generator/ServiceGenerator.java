@@ -2,11 +2,11 @@ package com.smartdengg.model.service.generator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.lianjia.httpservice.adapter.callAdapter.HttpCallAdapterFactory;
-import com.lianjia.httpservice.adapter.rxadapter.RxJavaCallAdapterFactory;
-import com.lianjia.httpservice.converter.GsonConverterFactory;
-import com.lianjia.httpservice.interceptor.HttpLoggingInterceptor;
 import com.smartdengg.common.Constants;
+import com.smartdengg.httpservice.lib.adapter.callAdapter.HttpCallAdapterFactory;
+import com.smartdengg.httpservice.lib.adapter.rxadapter.RxJavaCallAdapterFactory;
+import com.smartdengg.httpservice.lib.converter.GsonConverterFactory;
+import com.smartdengg.httpservice.lib.interceptor.HttpLoggingInterceptor;
 import com.smartdengg.model.BuildConfig;
 import com.smartdengg.model.service.provider.Injector;
 import okhttp3.OkHttpClient;

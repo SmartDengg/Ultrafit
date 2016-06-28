@@ -1,8 +1,8 @@
 package com.smartdengg.model.service;
 
 import android.support.annotation.NonNull;
-import com.lianjia.httpservice.annotation.LogResult;
-import com.lianjia.httpservice.annotation.RetryCount;
+import com.smartdengg.httpservice.lib.annotation.LogResult;
+import com.smartdengg.httpservice.lib.annotation.RetryCount;
 import com.smartdengg.model.entity.CityEntity;
 import com.smartdengg.model.entity.MovieEntity;
 import com.smartdengg.model.request.MovieDetailRequest;

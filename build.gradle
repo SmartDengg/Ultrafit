@@ -19,13 +19,6 @@ allprojects {
   repositories {
     jcenter()
     maven { url "https://jitpack.io" }
-    maven {
-      url "http://maven.lianjia.com/content/repositories/Lianjia-Mobile-Releases"
-      credentials {
-        username ACCESS_KEY
-        password SECRET_KEY
-      }
-    }
   }
 }
 

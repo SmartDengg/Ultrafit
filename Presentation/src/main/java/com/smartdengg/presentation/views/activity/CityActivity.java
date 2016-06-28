@@ -32,7 +32,7 @@ import rx.Observable;
 /**
  * Created by SmartDengg on 2016/2/24.
  */
-public class CityActivityInterface extends BaseActivity implements ViewInterface<List<CityEntity>> {
+public class CityActivity extends BaseActivity implements ViewInterface<List<CityEntity>> {
 
     @NonNull
     @BindString(R.string.city_title)
@@ -53,27 +53,26 @@ public class CityActivityInterface extends BaseActivity implements ViewInterface
 
     private ActionBar actionBar;
 
-    private CityListAdapter cityListAdapter = new CityListAdapter(CityActivityInterface.this);
+    private CityListAdapter cityListAdapter = new CityListAdapter(CityActivity.this);
     private CityListPresenter<List<CityEntity>> cityListPresenter;
 
     private CityListAdapter.Callback callback = new CityListAdapter.Callback() {
         @Override
         public void onItemClick(View itemView, CityEntity cityEntity) {
             int location = DensityUtil.getLocationY(itemView);
-            MovieActivity.startFromLocation(CityActivityInterface.this, location, cityEntity.getCityId());
-            overridePendingTransition(0, 0);
+            MovieActivity.startFromLocation(CityActivity.this, location, cityEntity.getCityId());
         }
 
         @Override
         public void onError(Throwable error) {
-            CityActivityInterface.this.closeRefresh();
+            CityActivity.this.closeRefresh();
         }
     };
 
     private SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-            CityActivityInterface.this.initData();
+            CityActivity.this.initData();
         }
     };
 
@@ -82,8 +81,8 @@ public class CityActivityInterface extends BaseActivity implements ViewInterface
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(null);
 
-        CityActivityInterface.this.initPresenter();
-        CityActivityInterface.this.initView(savedInstanceState);
+        CityActivity.this.initPresenter();
+        CityActivity.this.initView(savedInstanceState);
     }
 
     @Override
@@ -93,13 +92,13 @@ public class CityActivityInterface extends BaseActivity implements ViewInterface
 
     private void initPresenter() {
         this.cityListPresenter = CityListPresenterImp.createdPresenter();
-        this.cityListPresenter.attachView(CityActivityInterface.this);
+        this.cityListPresenter.attachView(CityActivity.this);
     }
 
     private void initView(Bundle savedInstanceState) {
 
-        CityActivityInterface.this.setSupportActionBar(toolbar);
-        actionBar = CityActivityInterface.this.getSupportActionBar();
+        CityActivity.this.setSupportActionBar(toolbar);
+        actionBar = CityActivity.this.getSupportActionBar();
         if (actionBar == null) return;
         actionBar.setTitle(null);
 
@@ -112,36 +111,33 @@ public class CityActivityInterface extends BaseActivity implements ViewInterface
             }
         });
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CityActivityInterface.this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CityActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         linearLayoutManager.setSmoothScrollbarEnabled(true);
 
         this.cityListAdapter.setCallback(callback);
         this.recyclerView.setLayoutManager(linearLayoutManager);
         this.recyclerView.setHasFixedSize(true);
-        this.recyclerView.addItemDecoration(new MarginDecoration(CityActivityInterface.this));
+        this.recyclerView.addItemDecoration(new MarginDecoration(CityActivity.this));
         this.recyclerView.setAdapter(cityListAdapter);
 
         if (savedInstanceState == null) {
-
             ViewTreeObserver viewTreeObserver = this.rootView.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {
                 viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        rootView.getViewTreeObserver()
-                                .removeOnPreDrawListener(this);
-                        CityActivityInterface.this.collapseToolbar();
+                        rootView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        CityActivity.this.collapseToolbar();
                         return true;
                     }
                 });
             }
         } else {
-
             ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
-            layoutParams.height = DensityUtil.getActionBarSize(CityActivityInterface.this);
+            layoutParams.height = DensityUtil.getActionBarSize(CityActivity.this);
             toolbar.setLayoutParams(layoutParams);
-            CityActivityInterface.this.initData();
+            CityActivity.this.initData();
         }
     }
 
@@ -152,7 +148,7 @@ public class CityActivityInterface extends BaseActivity implements ViewInterface
         Integer longAnimTime = getResources().getInteger(android.R.integer.config_longAnimTime);
 
         int contentViewHeight = toolbar.getHeight();
-        int toolBarHeight = DensityUtil.getActionBarSize(CityActivityInterface.this);
+        int toolBarHeight = DensityUtil.getActionBarSize(CityActivity.this);
         ValueAnimator valueHeightAnimator = ValueAnimator.ofInt(contentViewHeight, toolBarHeight);
         valueHeightAnimator.setDuration(longAnimTime * 2);
         valueHeightAnimator.setInterpolator(new DecelerateInterpolator(2.0f));
@@ -171,7 +167,7 @@ public class CityActivityInterface extends BaseActivity implements ViewInterface
 
                 if (actionBar == null) return;
                 actionBar.setTitle(title);
-                CityActivityInterface.this.initData();
+                CityActivity.this.initData();
             }
         });
         valueHeightAnimator.setStartDelay(shortAnimTime);
@@ -184,22 +180,22 @@ public class CityActivityInterface extends BaseActivity implements ViewInterface
 
     @Override
     public void showData(Observable<List<CityEntity>> data) {
-        CityActivityInterface.this.closeRefresh();
+        CityActivity.this.closeRefresh();
         data.subscribe(this.cityListAdapter);
     }
 
     @Override
     public void showError(String errorMessage) {
-        CityActivityInterface.this.closeRefresh();
+        CityActivity.this.closeRefresh();
         if (errorMessage != null) {
-            Toast.makeText(CityActivityInterface.this, errorMessage, Toast.LENGTH_SHORT)
-                 .show();
+            Toast.makeText(CityActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     protected void exit() {
-        CityActivityInterface.this.finish();
+        CityActivity.this.finish();
+        overridePendingTransition(0, android.R.anim.fade_out);
     }
 
     private void closeRefresh() {

@@ -68,7 +68,6 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
     protected ViewStub viewStub;
 
     private MovieAdapter movieAdapter = new MovieAdapter(MovieActivity.this);
-    private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private MovieListPresenter<List<MovieEntity>> movieListPresenter;
 
     private View itemView;
@@ -104,6 +103,7 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
         intent.putExtra(START_LOCATION_Y, startingLocationY);
         intent.putExtra(CITY_ID, cityId);
         startingActivity.startActivity(intent);
+        startingActivity.overridePendingTransition(0, 0);
     }
 
     @Override
@@ -124,11 +124,12 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
         this.movieListPresenter.attachView(MovieActivity.this);
     }
 
+    @SuppressWarnings("all")
     private void initView(Bundle savedInstanceState) {
 
         MovieActivity.this.setSupportActionBar(toolbar);
-        MovieActivity.this.getSupportActionBar()
-                          .setTitle(title);
+
+        MovieActivity.this.getSupportActionBar().setTitle(title);
         this.toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_back));
 
         this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
@@ -139,7 +140,7 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
-        this.staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         this.recyclerView.addItemDecoration(new MarginDecoration(MovieActivity.this));
         this.recyclerView.setHasFixedSize(true);
@@ -153,8 +154,7 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
                 viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
-                        rootView.getViewTreeObserver()
-                                .removeOnPreDrawListener(this);
+                        rootView.getViewTreeObserver().removeOnPreDrawListener(this);
                         MovieActivity.this.startEnterAnim(getIntent().getIntExtra(START_LOCATION_Y, 0));
                         return true;
                     }
@@ -185,8 +185,7 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
     public void showError(String errorMessage) {
         MovieActivity.this.closeRefresh();
         if (errorMessage != null) {
-            Toast.makeText(MovieActivity.this, errorMessage, Toast.LENGTH_SHORT)
-                 .show();
+            Toast.makeText(MovieActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -206,7 +205,6 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
         startBounds.offset(-globalOffset.x, -globalOffset.y);
 
         DetailActivity.navigateToActivity(MovieActivity.this, startBounds, globalOffset, movieEntity);
-        overridePendingTransition(0, 0);
     }
 
     private void startEnterAnim(int startLocationY) {
@@ -262,7 +260,6 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-
                 toolbar.setLayerType(View.LAYER_TYPE_NONE, null);
                 contentLayout.setLayerType(View.LAYER_TYPE_NONE, null);
                 MovieActivity.this.finish();
