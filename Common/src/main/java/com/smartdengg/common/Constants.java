@@ -16,7 +16,7 @@ public class Constants {
     public static final String APP_KEY = "e0b8426d4f107de733aed080e7ee65f8";
 
     public static final String BASE_TAG = "LOG";
-    public static final String OKHTTP_TAG = "OkHttp";
+    public static final String OKHTTP_TAG = "Http";
     public static final String ULTRA_TAG = "Ultra";
     public static final int MAX_LOG_LENGTH = 4 * 1000;
     public static final Integer RESULT_OK = 0;

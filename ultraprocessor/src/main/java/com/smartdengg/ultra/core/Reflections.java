@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
  */
 public class Reflections {
 
-    static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
+    public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
         Class<?>[] empty = {};
         try {
             clazz.getConstructor(empty);
@@ -20,7 +20,7 @@ public class Reflections {
         return true;
     }
 
-    static Constructor getConstructor(String className, Class<?>... parameterTypes) {
+    public static Constructor getConstructor(String className, Class<?>... parameterTypes) {
 
         Constructor constructor = null;
 
@@ -35,7 +35,7 @@ public class Reflections {
     }
 
     @SuppressWarnings("unchecked")
-    static Object newInstance(Constructor constructor, Object... parameters) {
+    public static Object newInstance(Constructor constructor, Object... parameters) {
 
         Object instance = null;
 
@@ -50,7 +50,7 @@ public class Reflections {
     }
 
     @SuppressWarnings("unchecked")
-    static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
+    public static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
 
         Method declaredMethod = null;
         try {
@@ -61,7 +61,7 @@ public class Reflections {
         return declaredMethod;
     }
 
-    static Object invokeMethod(Method method, Object instance, Object... parameters) {
+    public static Object invokeMethod(Method method, Object instance, Object... parameters) {
 
         Object returnObject = null;
 
@@ -77,7 +77,7 @@ public class Reflections {
 
     /** Safe because of generics erasure */
     @SuppressWarnings("unchecked")
-    static <T> T invokeMethod(Annotation classAnnotation, Class<? extends Annotation> clazz, String methodName) {
+    public static <T> T invokeMethod(Annotation classAnnotation, Class<? extends Annotation> clazz, String methodName) {
         try {
             Method declaredMethod = clazz.getDeclaredMethod(methodName);
             if (!Modifier.isPublic(declaredMethod.getModifiers())) declaredMethod.setAccessible(true);

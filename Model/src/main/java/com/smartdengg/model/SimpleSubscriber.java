@@ -1,9 +1,9 @@
 package com.smartdengg.model;
 
 import android.support.annotation.CallSuper;
+import com.lianjia.httpservice.errors.HttpException;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
-import com.smartdengg.model.errors.RetrofitHttpException;
 import retrofit2.Response;
 import rx.Subscriber;
 
@@ -20,9 +20,9 @@ public class SimpleSubscriber<T> extends Subscriber<T> {
     @Override
     public void onError(Throwable e) {
         Logger.t(Constants.OKHTTP_TAG, 0).e(e.toString());
-        if (e instanceof RetrofitHttpException) {
-            Response<?> response = ((RetrofitHttpException) e).response();
-            if (response != null) Logger.t(Constants.OKHTTP_TAG, 1).e(((RetrofitHttpException) e).response().raw().toString());
+        if (e instanceof HttpException) {
+            Response<?> response = ((HttpException) e).response();
+            if (response != null) Logger.t(Constants.OKHTTP_TAG, 1).e(((HttpException) e).response().raw().toString());
         }
     }
 

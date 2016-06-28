@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Created by Joker on 2016/4/25.
  */
-public class Utils {
+class Utils {
 
     static RuntimeException methodError(Class clazz, String message, Object... args) {
         message = (args.length == 0) ? message : String.format(message, args);

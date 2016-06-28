@@ -11,9 +11,9 @@ import java.lang.reflect.WildcardType;
  * Created by Joker on 2016/2/19.
  * thanks to Square
  */
-public class Types {
+class Types {
 
-     static Class<?> getRawType(Type type) {
+    static Class<?> getRawType(Type type) {
 
         if (type instanceof Class<?>) {
             // Type is a normal class.
@@ -29,8 +29,7 @@ public class Types {
         } else if (type instanceof GenericArrayType) {
 
             Type componentType = ((GenericArrayType) type).getGenericComponentType();
-            return Array.newInstance(getRawType(componentType), 0)
-                        .getClass();
+            return Array.newInstance(getRawType(componentType), 0).getClass();
         } else if (type instanceof TypeVariable) {
 
             // We could use the variable's bounds, but that won't work if there are multiple. Having a raw
@@ -41,8 +40,7 @@ public class Types {
             return getRawType(((WildcardType) type).getUpperBounds()[0]);
         } else {
 
-            String className = type == null ? "null" : type.getClass()
-                                                           .getName();
+            String className = type == null ? "null" : type.getClass().getName();
             throw new IllegalArgumentException(
                     "Expected a Class, ParameterizedType, or " + "GenericArrayType, but <" + type + "> is of type " + className);
         }
