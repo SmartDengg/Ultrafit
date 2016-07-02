@@ -1,4 +1,4 @@
-package com.smartdengg.model.service.provider;
+package com.smartdengg.model.injector.provider;
 
 import android.app.Application;
 import android.content.Context;

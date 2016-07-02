@@ -20,7 +20,7 @@ public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntit
   private UseCase<MovieIdRequest, List<MovieEntity>> listUseCase;
 
   private MovieListPresenterImp() {
-    this.listUseCase = MovieListUseCase.<MovieIdRequest>createdUseCase();
+    this.listUseCase = MovieListUseCase.createdUseCase();
   }
 
   public static MovieListPresenterImp createdPresenter() {

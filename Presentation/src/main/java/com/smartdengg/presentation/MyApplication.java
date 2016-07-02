@@ -10,8 +10,8 @@ import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.common.utils.CacheUtil;
 import com.smartdengg.httpservice.lib.HttpService;
-import com.smartdengg.model.service.generator.StethoGenerator;
-import com.smartdengg.model.service.provider.Injector;
+import com.smartdengg.model.injector.generator.StethoGenerator;
+import com.smartdengg.model.injector.provider.Injector;
 import com.squareup.picasso.Picasso;
 import okhttp3.OkHttpClient;
 

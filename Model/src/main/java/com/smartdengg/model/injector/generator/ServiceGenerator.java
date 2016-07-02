@@ -1,4 +1,4 @@
-package com.smartdengg.model.service.generator;
+package com.smartdengg.model.injector.generator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,7 +8,7 @@ import com.smartdengg.httpservice.lib.adapter.rxadapter.RxJavaCallAdapterFactory
 import com.smartdengg.httpservice.lib.converter.GsonConverterFactory;
 import com.smartdengg.httpservice.lib.interceptor.HttpLoggingInterceptor;
 import com.smartdengg.model.BuildConfig;
-import com.smartdengg.model.service.provider.Injector;
+import com.smartdengg.model.injector.provider.Injector;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 

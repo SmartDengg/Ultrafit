@@ -67,7 +67,7 @@ public class RequestEntity {
      * @param <T>
      * @return
      */
-    public <T> T as(Class<T> rx) {
+    public <T, R> R as(Class<T> rx) {
 
         Utils.checkNotNull(rx, "observable == null");
         if (rx == Void.class) throw Utils.methodError(RequestEntity.class, "Observable cannot be void.");
@@ -88,8 +88,8 @@ public class RequestEntity {
     @Override
     public String toString() {
         return "Request entity !!!!" +
-                "\n  --> " + " Type    : " + RequestEntity.this.getRestType() +
-                "\n  --> " + " Url     : " + RequestEntity.this.getUrl() +
-                "\n  --> " + " Params  : " + RequestEntity.this.getParamMap();
+                "\n  -->  Type    : " + RequestEntity.this.getRestType() +
+                "\n  -->  Url     : " + RequestEntity.this.getUrl() +
+                "\n  -->  Params  : " + RequestEntity.this.getParamMap();
     }
 }
