@@ -4,8 +4,6 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
-import com.smartdengg.domain.rxcompat.SchedulersCompat;
-import com.smartdengg.domain.rxcompat.SmartExecutors;
 import com.smartdengg.ultra.core.RequestEntity;
 import com.smartdengg.ultra.core.UltraParserFactory;
 import java.util.Map;
@@ -13,11 +11,9 @@ import rx.Observable;
 import rx.Observer;
 import rx.Single;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
 
 /**
@@ -60,7 +56,7 @@ public abstract class UseCase<R, S> {
       @Override public Boolean call(S s) {
         return !subscription.isUnsubscribed();
       }
-    }).compose(SchedulersCompat.<S>applyExecutorSchedulers()).subscribe(useCaseSubscriber);
+    }).subscribe(useCaseSubscriber);
   }
 
   @SuppressWarnings("unchecked")
@@ -78,26 +74,20 @@ public abstract class UseCase<R, S> {
       @Override public Single<RequestEntity> call() {
         return UltraParserFactory.createParser(requestEntity).parseRequestEntity().as(Single.class);
       }
-    })
-        .map(new Func1<RequestEntity, RequestEntity>() {
-          @Override public RequestEntity call(RequestEntity requestEntity) {
-            if (action != null) {
-              action.call(requestEntity);
-            } else {
-              Logger.t(Constants.OKHTTP_TAG, 0).d(requestEntity.toString());
-            }
-            return null;
-          }
-        })
-        .flatMap(new Func1<RequestEntity, Single<S>>() {
-          @Override public Single<S> call(RequestEntity requestEntity) {
-            return UseCase.this.interactorSingle(requestEntity.getUrl(),
-                requestEntity.getParamMap());
-          }
-        })
-        .subscribeOn(Schedulers.from(SmartExecutors.eventExecutor))
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(onSuccess, onError);
+    }).map(new Func1<RequestEntity, RequestEntity>() {
+      @Override public RequestEntity call(RequestEntity requestEntity) {
+        if (action != null) {
+          action.call(requestEntity);
+        } else {
+          Logger.t(Constants.OKHTTP_TAG, 0).d(requestEntity.toString());
+        }
+        return null;
+      }
+    }).flatMap(new Func1<RequestEntity, Single<S>>() {
+      @Override public Single<S> call(RequestEntity requestEntity) {
+        return UseCase.this.interactorSingle(requestEntity.getUrl(), requestEntity.getParamMap());
+      }
+    }).subscribe(onSuccess, onError);
   }
 
   public void unsubscribe() {

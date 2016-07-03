@@ -1,6 +1,7 @@
 package com.smartdengg.model.service.city;
 
 import android.support.annotation.NonNull;
+import com.smartdengg.httpservice.lib.adapter.rxadapter.rxcompat.SchedulersCompat;
 import com.smartdengg.httpservice.lib.annotation.LogResult;
 import com.smartdengg.httpservice.lib.annotation.RetryCount;
 import com.smartdengg.model.entity.CityEntity;
@@ -19,13 +20,13 @@ import rx.Observable;
  */
 public class CityService {
 
-  private static final int MAX_CONNECT = 5;
+  private static final int RETRY_COUNT = 3;
 
   private final InternalService service;
 
   interface InternalService {
 
-    @LogResult(enable = false) @RetryCount(count = MAX_CONNECT) @GET
+    @LogResult(enable = false) @RetryCount(count = RETRY_COUNT) @GET
     Observable<ResponseS<CityListResponse>> getCityList(@Url String url,
         @QueryMap Map<String, String> params);
   }
@@ -40,6 +41,8 @@ public class CityService {
 
   public Observable<List<CityEntity>> getCityEntities(@NonNull String url,
       @NonNull Map<String, String> params) {
-    return CityService.this.service.getCityList(url, params).compose(new CityEntityTransfer());
+    return CityService.this.service.getCityList(url, params)
+        .compose(new CityEntityTransfer())
+        .compose(SchedulersCompat.<List<CityEntity>>applyExecutorSchedulers());
   }
 }
