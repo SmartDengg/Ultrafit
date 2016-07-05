@@ -11,7 +11,8 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.ANNOTATION_TYPE) public @interface RestMethod {
+@Target(value = ElementType.ANNOTATION_TYPE)
+public @interface RestMethod {
 
     RestType type();
 }
