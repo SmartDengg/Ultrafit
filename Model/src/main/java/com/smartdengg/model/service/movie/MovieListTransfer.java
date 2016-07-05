@@ -12,11 +12,11 @@ import rx.functions.Func1;
 /**
  * Created by SmartDengg on 2016/7/2.
  */
-public class MovieListTransfer
-    implements Observable.Transformer<ResponseS<MovieListResponse>, RequestEntity> {
+@SuppressWarnings("unchecked") public class MovieListTransfer implements
+    Observable.Transformer<ResponseS<MovieListResponse>, RequestEntity<MovieDetailRequest>> {
 
-  @Override
-  public Observable<RequestEntity> call(Observable<ResponseS<MovieListResponse>> sObservable) {
+  @Override public Observable<RequestEntity<MovieDetailRequest>> call(
+      Observable<ResponseS<MovieListResponse>> sObservable) {
 
     return sObservable.concatMap(
         new Func1<ResponseS<MovieListResponse>, Observable<List<MovieListResponse>>>() {
@@ -30,12 +30,14 @@ public class MovieListTransfer
         //return Observable.from(movieListResponses);
         return Observable.just(movieListResponses.get(0));
       }
-    }).concatMap(new Func1<MovieListResponse, Observable<RequestEntity>>() {
-      @Override public Observable<RequestEntity> call(MovieListResponse movieListResponse) {
+    }).concatMap(new Func1<MovieListResponse, Observable<RequestEntity<MovieDetailRequest>>>() {
+      @Override public Observable<RequestEntity<MovieDetailRequest>> call(
+          MovieListResponse movieListResponse) {
 
-        return UltraParserFactory.createParser(new MovieDetailRequest(movieListResponse.movieId))
-            .parseRequestEntity()
-            .as(Observable.class);
+        MovieDetailRequest movieDetailRequest = new MovieDetailRequest(movieListResponse.movieId);
+
+        return (Observable<RequestEntity<MovieDetailRequest>>) UltraParserFactory.createParser(
+            movieDetailRequest).parseRequestEntity().as(Observable.class);
       }
     });
   }

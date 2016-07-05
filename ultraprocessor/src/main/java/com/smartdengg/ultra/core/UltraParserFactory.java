@@ -9,15 +9,14 @@ public class UltraParserFactory<R> {
 
   private static final String TAG = UltraParserFactory.class.getSimpleName();
 
-  R request;
+  private R request;
 
   @SuppressWarnings("unchecked")
-  public static <R> UltraParserFactory createParser(R requestEntity) {
-    return new UltraParserFactory(Utils.checkNotNull(requestEntity, "requestEntity == null"));
+  public static <R> UltraParserFactory createParser(R request) {
+    return new UltraParserFactory(Utils.checkNotNull(request, "request == null"));
   }
 
   private UltraParserFactory(R request) {
-
     if (Modifier.isInterface(
         Utils.checkNotNull(request, "request == null").getClass().getModifiers())) {
       throw Utils.methodError(request.getClass(), "Only class can be parsed,%s is a Interface",
@@ -26,7 +25,7 @@ public class UltraParserFactory<R> {
     this.request = request;
   }
 
-  public RequestEntity parseRequestEntity() {
+  public RequestEntity<R> parseRequestEntity() {
     return new RequestBuilder<>(request).build();
   }
 }

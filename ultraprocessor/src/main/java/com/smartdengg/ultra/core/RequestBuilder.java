@@ -5,28 +5,29 @@ package com.smartdengg.ultra.core;
  */
 class RequestBuilder<R> {
 
-    static final String HTTP_METHOD = "stringUrl";
-    static final String LOG_FLAG = "LOG";
+  static final String HTTP_METHOD = "stringUrl";
+  static final String LOG_FLAG = "LOG";
 
-    private R request;
+  private R request;
 
-    RequestEntity requestEntity = new RequestEntity();
+  RequestEntity<R> requestEntity = new RequestEntity<>();
 
-    public RequestBuilder(R request) {
-        this.request = request;
-    }
+  public RequestBuilder(R request) {
+    this.request = request;
+  }
 
-    public RequestEntity build() {
+  public RequestEntity<R> build() {
 
-        UrlHandler.handler(RequestBuilder.this, request);
-        ParameterHandler.handler(RequestBuilder.this, request);
+    UrlHandler.handler(RequestBuilder.this, request);
+    ParameterHandler.handler(RequestBuilder.this, request);
+    this.requestEntity.setSourceRequest(request);
 
-        if (requestEntity.isShouldOutputs()) this.outputs();
+    if (this.requestEntity.isShouldOutputs()) this.outputs();
 
-        return this.requestEntity;
-    }
+    return this.requestEntity;
+  }
 
-    private void outputs() {
-        System.out.println(Utils.checkNotNull(requestEntity, "requestEntity == null").toString());
-    }
+  private void outputs() {
+    System.out.println(Utils.checkNotNull(requestEntity, "requestEntity == null").toString());
+  }
 }
