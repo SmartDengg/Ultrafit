@@ -93,7 +93,7 @@ public abstract class UseCase<R, S> {
 
   @CheckResult
   protected Single<S> interactorSingle(@NonNull String url, @NonNull Map<String, String> params) {
-    throw new IllegalArgumentException("If you use the 'Single', you must implement this method");
+    throw new IllegalArgumentException("If you use the 'Single', you can not call super");
   }
 
   @CheckResult protected abstract Observable<S> interactor(@NonNull String url,

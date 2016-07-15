@@ -66,17 +66,18 @@ public class RequestEntity<R> {
   /**
    * Be care of ConnectableObservable
    *
-   * @param rx rx.Observable or rx.Single
+   * @param rxClazz rx.Observable or rx.Single
    */
-  public <T> T as(Class<T> rx) {
+  public <T> T as(Class<T> rxClazz) {
 
-    if (Utils.checkNotNull(rx, "observable == null") == Void.class) {
+    if (Utils.checkNotNull(rxClazz, "observable == null") == Void.class) {
       throw Utils.methodError(RequestEntity.class, "Observable cannot be void.");
     }
 
-    Class<?> rawType = Types.getRawType(rx);
-    boolean isObservable = "rx.Observable".equals(rawType.getCanonicalName());
-    boolean isSingle = "rx.Single".equals(rawType.getCanonicalName());
+    Class<?> rawType = Types.getRawType(rxClazz);
+    String canonicalName = rawType.getCanonicalName();
+    boolean isObservable = "rx.Observable".equals(canonicalName);
+    boolean isSingle = "rx.Single".equals(canonicalName);
 
     if (!isObservable && !isSingle) {
       throw new IllegalStateException("Neither Observable nor Single");
