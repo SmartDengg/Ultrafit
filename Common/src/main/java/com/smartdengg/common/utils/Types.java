@@ -10,7 +10,6 @@ import java.util.Arrays;
 
 /**
  * Created by Joker on 2016/2/19.
- * thanks to Square
  */
 public class Types {
 
@@ -21,6 +20,19 @@ public class Types {
       return (Class<?>) type;
     } else if (type instanceof ParameterizedType) {
       ParameterizedType parameterizedType = (ParameterizedType) type;
+
+      Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+      for (Type actualType : actualTypeArguments) {
+        if (actualType instanceof WildcardType) {
+          Type[] upperBounds = ((WildcardType) actualType).getUpperBounds();
+          System.out.println("bounds = [" + Arrays.toString(upperBounds) + "]");
+        }
+
+        if (actualType instanceof TypeVariable) {
+          Type[] bounds = ((TypeVariable) actualType).getBounds();
+          System.out.println("bounds = [" + Arrays.toString(bounds) + "]");
+        }
+      }
 
       // I'm not exactly sure why getRawType() returns Type instead of Class. Neal isn't either but
       // suspects some pathological case related to nested classes exists.
@@ -33,6 +45,8 @@ public class Types {
       return Array.newInstance(getRawType(componentType), 0).getClass();
     } else if (type instanceof TypeVariable) {
 
+      Type[] bounds = ((TypeVariable) type).getBounds();
+
       // We could use the variable's bounds, but that won't work if there are multiple. Having a raw
       // type that's more general than necessary is okay.
       return Object.class;
@@ -42,8 +56,11 @@ public class Types {
     } else {
 
       String className = type == null ? "null" : type.getClass().getName();
-      throw new IllegalArgumentException(
-          "Expected a Class, ParameterizedType, or " + "GenericArrayType, but <" + type + "> is of type " + className);
+      throw new IllegalArgumentException("Expected a Class, ParameterizedType, or "
+          + "GenericArrayType, but <"
+          + type
+          + "> is of type "
+          + className);
     }
   }
 
