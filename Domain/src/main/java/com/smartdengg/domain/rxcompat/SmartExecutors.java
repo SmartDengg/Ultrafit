@@ -27,8 +27,8 @@ public class SmartExecutors {
   private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
   private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
   private static final int KEEP_ALIVE = 1;
-  private static final BlockingQueue<Runnable> eventPoolWaitQueue = new PriorityBlockingQueue<>(128);
-  private static final ThreadFactory eventThreadFactory = new ThreadFactory() {
+  private static final BlockingQueue<Runnable> executePoolWaitQueue = new PriorityBlockingQueue<>(128);
+  private static final ThreadFactory executeThreadFactory = new ThreadFactory() {
     private final AtomicInteger mCount = new AtomicInteger(1);
 
     public Thread newThread(@NonNull Runnable r) {
@@ -36,12 +36,12 @@ public class SmartExecutors {
     }
   };
 
-  private static final RejectedExecutionHandler eventHandler = new ThreadPoolExecutor.DiscardOldestPolicy();
+  private static final RejectedExecutionHandler rejectedHandler = new ThreadPoolExecutor.DiscardOldestPolicy();
 
   static {
     eventExecutor =
-        new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS, eventPoolWaitQueue,
-                               eventThreadFactory, eventHandler);
+        new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS,
+            executePoolWaitQueue, executeThreadFactory, rejectedHandler);
   }
 
   /**
