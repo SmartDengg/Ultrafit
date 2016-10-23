@@ -72,7 +72,6 @@ public class DetailActivity extends BaseActivity {
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     DetailActivity.this.initView(savedInstanceState);
   }
 
@@ -89,7 +88,6 @@ public class DetailActivity extends BaseActivity {
         viewTreeObserver.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
           @Override public boolean onPreDraw() {
             rootView.getViewTreeObserver().removeOnPreDrawListener(this);
-
             DetailActivity.this.runEnterAnimation(getIntent().getExtras());
             return true;
           }

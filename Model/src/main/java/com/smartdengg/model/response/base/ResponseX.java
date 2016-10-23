@@ -21,12 +21,11 @@ public class ResponseX<X> extends BaseResponse<X> {
       "error_code": 10012
     }*/
 
-  @Override
-  public Observable<X> filterWebServiceErrors() {
-    if (Constants.RESULT_OK.equals(errorCode)) {
+  @Override public Observable<X> filterWebServiceErrors() {
+    if (Constants.RESULT_OK.equals(errorCode) && null != data) {
       return Observable.just(data);
     } else {
-      return Observable.<X>error(new WebServiceException(reason));
+      return Observable.error(new WebServiceException(reason));
     }
   }
 }
