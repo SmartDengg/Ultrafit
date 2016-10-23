@@ -3,6 +3,7 @@ package com.smartdengg.model.entity;
 /**
  * Created by SmartDengg on 2016/2/24.
  */
+
 public class CityEntity implements Cloneable {
 
   private String cityId;

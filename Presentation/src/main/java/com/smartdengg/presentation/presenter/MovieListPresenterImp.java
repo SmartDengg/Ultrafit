@@ -16,7 +16,7 @@ import rx.functions.Func0;
  */
 public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntity>> {
 
-  private ViewInterface viewInterface;
+  private ViewInterface<List<MovieEntity>> viewInterface;
   private UseCase<MovieIdRequest, List<MovieEntity>> listUseCase;
 
   private MovieListPresenterImp() {
@@ -27,27 +27,21 @@ public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntit
     return new MovieListPresenterImp();
   }
 
-  @Override
-  public void attachView(ViewInterface<List<MovieEntity>> view) {
+  @Override public void attachView(ViewInterface<List<MovieEntity>> view) {
     this.viewInterface = view;
   }
 
-  @Override
-  public void loadData(String cityId) {
+  @Override public void loadData(String cityId) {
     this.listUseCase.subscribe(new MovieIdRequest(Integer.parseInt(cityId)), new ListSubscriber());
   }
 
-  @Override
-  public void detachView() {
+  @Override public void detachView() {
     this.listUseCase.unsubscribe();
   }
 
-  @SuppressWarnings("unchecked")
   private void showContent(final List<MovieEntity> movieEntities) {
-
     this.viewInterface.showData(Observable.fromCallable(new Func0<List<MovieEntity>>() {
-      @Override
-      public List call() {
+      @Override public List<MovieEntity> call() {
         return movieEntities;
       }
     }));
@@ -59,8 +53,7 @@ public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntit
 
   private final class ListSubscriber extends SimpleSubscriber<List<MovieEntity>> {
 
-    @Override
-    public void onError(Throwable e) {
+    @Override public void onError(Throwable e) {
       super.onError(e);
       if (e instanceof WebServiceException) {
         MovieListPresenterImp.this.showError(e.getMessage());
@@ -69,8 +62,7 @@ public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntit
       }
     }
 
-    @Override
-    public void onNext(List<MovieEntity> movieEntities) {
+    @Override public void onNext(List<MovieEntity> movieEntities) {
       MovieListPresenterImp.this.showContent(movieEntities);
     }
   }

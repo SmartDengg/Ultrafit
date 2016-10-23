@@ -10,80 +10,80 @@ import java.lang.reflect.Modifier;
  */
 public class Reflections {
 
-    public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
-        Class<?>[] empty = {};
-        try {
-            clazz.getConstructor(empty);
-        } catch (NoSuchMethodException e) {
-            return false;
-        }
-        return true;
+  public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
+    Class<?>[] empty = {};
+    try {
+      clazz.getConstructor(empty);
+    } catch (NoSuchMethodException e) {
+      return false;
+    }
+    return true;
+  }
+
+  public static Constructor getConstructor(String className, Class<?>... parameterTypes) {
+
+    Constructor constructor = null;
+
+    try {
+      Class<?> clazz = Class.forName(className);
+      constructor = clazz.getDeclaredConstructor(parameterTypes);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    public static Constructor getConstructor(String className, Class<?>... parameterTypes) {
+    return constructor;
+  }
 
-        Constructor constructor = null;
+  @SuppressWarnings("unchecked")
+  public static Object newInstance(Constructor constructor, Object... parameters) {
 
-        try {
-            Class<?> clazz = Class.forName(className);
-            constructor = clazz.getDeclaredConstructor(parameterTypes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    Object instance = null;
 
-        return constructor;
+    try {
+      if (!Modifier.isPublic(constructor.getModifiers())) constructor.setAccessible(true);
+      instance = constructor.newInstance(parameters);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    @SuppressWarnings("unchecked")
-    public static Object newInstance(Constructor constructor, Object... parameters) {
+    return instance;
+  }
 
-        Object instance = null;
+  @SuppressWarnings("unchecked") public static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
 
-        try {
-            if (!Modifier.isPublic(constructor.getModifiers())) constructor.setAccessible(true);
-            instance = constructor.newInstance(parameters);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    Method declaredMethod = null;
+    try {
+      declaredMethod = clazz.getDeclaredMethod(name, parameterTypes);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return declaredMethod;
+  }
 
-        return instance;
+  static Object invokeMethod(Method method, Object instance, Object... parameters) {
+
+    Object returnObject = null;
+
+    try {
+      if (!Modifier.isPublic(method.getModifiers())) method.setAccessible(true);
+      returnObject = method.invoke(instance, parameters);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    @SuppressWarnings("unchecked")
-    public static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
+    return returnObject;
+  }
 
-        Method declaredMethod = null;
-        try {
-            declaredMethod = clazz.getDeclaredMethod(name, parameterTypes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return declaredMethod;
+  /** Safe because of generics erasure */
+  @SuppressWarnings("unchecked") static <T> T invokeMethod(Annotation classAnnotation,
+      Class<? extends Annotation> clazz, String methodName) {
+    try {
+      Method declaredMethod = clazz.getDeclaredMethod(methodName);
+      if (!Modifier.isPublic(declaredMethod.getModifiers())) declaredMethod.setAccessible(true);
+      return (T) declaredMethod.invoke(classAnnotation);
+    } catch (Exception ignore) {
+      throw Utils.methodError(clazz, "Failed to extract String 'value' from @%s annotation.",
+          clazz.getSimpleName());
     }
-
-    public static Object invokeMethod(Method method, Object instance, Object... parameters) {
-
-        Object returnObject = null;
-
-        try {
-            if (!Modifier.isPublic(method.getModifiers())) method.setAccessible(true);
-            returnObject = method.invoke(instance, parameters);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return returnObject;
-    }
-
-    /** Safe because of generics erasure */
-    @SuppressWarnings("unchecked")
-    public static <T> T invokeMethod(Annotation classAnnotation, Class<? extends Annotation> clazz, String methodName) {
-        try {
-            Method declaredMethod = clazz.getDeclaredMethod(methodName);
-            if (!Modifier.isPublic(declaredMethod.getModifiers())) declaredMethod.setAccessible(true);
-            return (T) declaredMethod.invoke(classAnnotation);
-        } catch (Exception ignore) {
-            throw Utils.methodError(clazz, "Failed to extract String 'value' from @%s annotation.", clazz.getSimpleName());
-        }
-    }
+  }
 }

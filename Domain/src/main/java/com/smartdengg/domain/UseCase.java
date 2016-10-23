@@ -51,7 +51,7 @@ public abstract class UseCase<R, S> {
       @Override public Observable<S> call(RequestEntity<R> requestEntity) {
         return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParamMap());
       }
-    }).onBackpressureBuffer().limit(1).subscribe(useCaseSubscriber);
+    }).onBackpressureDrop().subscribe(useCaseSubscriber);
   }
 
   @SuppressWarnings("unchecked")

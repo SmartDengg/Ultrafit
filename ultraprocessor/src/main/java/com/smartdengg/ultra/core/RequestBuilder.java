@@ -12,7 +12,7 @@ class RequestBuilder<R> {
 
   RequestEntity<R> requestEntity = new RequestEntity<>();
 
-  public RequestBuilder(R request) {
+  RequestBuilder(R request) {
     this.request = request;
   }
 

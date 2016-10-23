@@ -1,8 +1,6 @@
 package com.smartdengg.presentation.views.activity;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,45 +11,41 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import com.smartdengg.common.Constants;
 import com.smartdengg.common.utils.DensityUtil;
-import com.smartdengg.common.utils.Types;
 import com.smartdengg.model.entity.CityEntity;
-import com.smartdengg.model.request.CityListRequest;
-import com.smartdengg.model.response.CityListResponse;
+import com.smartdengg.presentation.AnimationHelper;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.adapter.CityListAdapter;
 import com.smartdengg.presentation.presenter.CityListPresenter;
 import com.smartdengg.presentation.presenter.CityListPresenterImp;
 import com.smartdengg.presentation.ui.MarginDecoration;
 import com.smartdengg.presentation.views.ViewInterface;
-import java.io.Serializable;
-import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.List;
 import rx.Observable;
 
 /**
  * Created by SmartDengg on 2016/2/24.
  */
-public class CityActivity<T extends Observable<CityListResponse>, S extends Observable<CityListResponse>>
-    extends BaseActivity implements ViewInterface<List<CityEntity>> {
+public class CityActivity extends BaseActivity implements ViewInterface<List<CityEntity>> {
 
   @NonNull @BindString(R.string.city_title) protected String title;
 
-  @NonNull @Bind(R.id.city_layout_root_view) protected ViewGroup rootView;
-  @NonNull @Bind(R.id.city_layout_toolbar) protected Toolbar toolbar;
-  @NonNull @Bind(R.id.city_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
-  @NonNull @Bind(R.id.city_layout_rv) protected RecyclerView recyclerView;
+  @NonNull @BindView(R.id.city_layout_root_view) protected ViewGroup rootView;
+  @NonNull @BindView(R.id.city_layout_toolbar) protected Toolbar toolbar;
+  @NonNull @BindView(R.id.city_layout_srl) protected SwipeRefreshLayout swipeRefreshLayout;
+  @NonNull @BindView(R.id.city_layout_rv) protected RecyclerView recyclerView;
 
   private ActionBar actionBar;
-
   private CityListAdapter cityListAdapter = new CityListAdapter(CityActivity.this);
   private CityListPresenter<List<CityEntity>> cityListPresenter;
 
@@ -73,41 +67,71 @@ public class CityActivity<T extends Observable<CityListResponse>, S extends Obse
         }
       };
 
-  private List<? extends Observable<CityListRequest>> list1;
-  private List<T> list2;
+  // component type is a parameteriazed type
+  public List<String>[] listArrayDemo() {
+    return null;
+  }
+
+  public <F> F[] arrayF() {
+    return null;
+  }
+
+  public List<? extends String>[] arrayWhat() {
+    return null;
+  }
+
+  public static void showGenericArrayType() {
+    for (Method method : CityActivity.class.getDeclaredMethods()) {
+      System.out.println("############################################");
+      System.out.println("Method name : " + method.getName());
+      Type type = method.getGenericReturnType();
+      if (type instanceof GenericArrayType) {
+        Type componentType = ((GenericArrayType) type).getGenericComponentType();
+        System.out.println("GenericArrayType's componentType is : " + componentType);
+        if (componentType instanceof TypeVariable) {
+          System.out.println(componentType + " is a TypeVariable!");
+          TypeVariable typeVariable = (TypeVariable) componentType;
+          System.out.println(
+              "TypeVariable.getGenericDeclaration() is : " + typeVariable.getGenericDeclaration());
+        } else if (componentType instanceof ParameterizedType) {
+          System.out.println(componentType + " is a ParameterizedType!");
+          ParameterizedType parameterizedType = (ParameterizedType) componentType;
+          System.out.println("It's raw type is : " + parameterizedType.getRawType());
+          System.out.println("It's owner type is : " + parameterizedType.getOwnerType());
+          for (Type type1 : parameterizedType.getActualTypeArguments()) {
+            System.out.println("Actual Type is : " + type1);
+            if (type1 instanceof WildcardType) {
+              Type[] upperBounds = ((WildcardType) type1).getUpperBounds();
+              for (Type type2 : upperBounds) {
+                System.out.println("upperBound is " + type2);
+              }
+            }
+          }
+        }
+      } else if (type instanceof Class) {
+        System.out.println("GenericeReturnType is a class : " + type);
+        Class cl = (Class) type;
+        System.out.println("It's name is : " + cl.getCanonicalName());
+        if (cl.isArray()) {
+          System.out.println("It is a array!");
+          Class<?> componentType = cl.getComponentType();
+          System.out.println("The component type of this array is : " + componentType);
+        }
+      }
+      System.out.println("############################################");
+    }
+  }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getWindow().setBackgroundDrawable(null);
 
-    try {
-      Field fieldA = CityActivity.class.getDeclaredField("list1");
-      Field fieldB = CityActivity.class.getDeclaredField("list2");
-      Class<?> rawType1 = Types.getRawType(fieldA.getGenericType());
-      Class<?> rawType2 = Types.getRawType(fieldB.getGenericType());
-    } catch (NoSuchFieldException e) {
-      e.printStackTrace();
-    }
+    //System.out.println("~0 = " + ~0);
 
-    try {
-      Method testGeneric = CityActivity.class.getDeclaredMethod("testGeneric");
-      Type genericReturnType = testGeneric.getGenericReturnType();
-      Class<?> rawType = Types.getRawType(genericReturnType);
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    }
-
-    TypeVariable<Class<CityActivity>>[] typeParameters = CityActivity.class.getTypeParameters();
-    for (TypeVariable<Class<CityActivity>> typeVariable : typeParameters) {
-      Class<?> rawType = Types.getRawType(typeVariable);
-    }
+    //showGenericArrayType();
 
     CityActivity.this.initPresenter();
     CityActivity.this.initView(savedInstanceState);
-  }
-
-  private <D extends Observable<CityEntity> & Serializable> List testGeneric() {
-    return null;
   }
 
   @Override protected int getLayoutId() {
@@ -115,7 +139,7 @@ public class CityActivity<T extends Observable<CityListResponse>, S extends Obse
   }
 
   private void initPresenter() {
-    this.cityListPresenter = CityListPresenterImp.createdPresenter();
+    this.cityListPresenter = CityListPresenterImp.created();
     this.cityListPresenter.attachView(CityActivity.this);
   }
 
@@ -123,8 +147,7 @@ public class CityActivity<T extends Observable<CityListResponse>, S extends Obse
 
     CityActivity.this.setSupportActionBar(toolbar);
     actionBar = CityActivity.this.getSupportActionBar();
-    if (actionBar == null) return;
-    actionBar.setTitle(null);
+    if (actionBar != null) actionBar.setTitle(null);
 
     this.swipeRefreshLayout.setColorSchemeColors(Constants.colors);
     this.swipeRefreshLayout.setOnRefreshListener(listener);
@@ -163,34 +186,14 @@ public class CityActivity<T extends Observable<CityListResponse>, S extends Obse
     }
   }
 
-  @SuppressWarnings("unchecked") private void collapseToolbar() {
-
-    Integer shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-    Integer longAnimTime = getResources().getInteger(android.R.integer.config_longAnimTime);
-
-    int contentViewHeight = toolbar.getHeight();
-    int toolBarHeight = DensityUtil.getActionBarSize(CityActivity.this);
-    ValueAnimator valueHeightAnimator = ValueAnimator.ofInt(contentViewHeight, toolBarHeight);
-    valueHeightAnimator.setDuration(longAnimTime * 2);
-    valueHeightAnimator.setInterpolator(new DecelerateInterpolator(2.0f));
-    valueHeightAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-      @Override public void onAnimationUpdate(ValueAnimator animation) {
-        ViewGroup.LayoutParams layoutParams = toolbar.getLayoutParams();
-        layoutParams.height = (Integer) animation.getAnimatedValue();
-        toolbar.setLayoutParams(layoutParams);
-      }
-    });
-
-    valueHeightAnimator.addListener(new AnimatorListenerAdapter() {
-      @Override public void onAnimationEnd(Animator animation) {
-
-        if (actionBar == null) return;
-        actionBar.setTitle(title);
-        CityActivity.this.initData();
-      }
-    });
-    valueHeightAnimator.setStartDelay(shortAnimTime);
-    valueHeightAnimator.start();
+  private void collapseToolbar() {
+    AnimationHelper.collapseToolbar(CityActivity.this, toolbar,
+        new AnimationHelper.AnimationEndListener() {
+          @Override public void onAnimationEnd(Animator animation) {
+            if (actionBar != null) actionBar.setTitle(title);
+            CityActivity.this.initData();
+          }
+        });
   }
 
   private void initData() {

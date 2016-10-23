@@ -1,8 +1,8 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.smartdengg.common">
+<manifest package="com.smartdengg.common"
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <application android:allowBackup="true"
-      android:supportsRtl="true"
-      />
+  <application
+    android:allowBackup="true"
+    android:supportsRtl="true" />
 
 </manifest>

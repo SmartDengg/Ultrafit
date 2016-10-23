@@ -10,73 +10,72 @@ import java.util.Map;
 /**
  * Created by Joker on 2016/6/28.
  */
-public class ParameterHandler<T> extends UltraHandler<T> {
+class ParameterHandler<T> extends UltraHandler<T> {
 
-    private Map<String, String> params = new HashMap<>();
+  private Map<String, String> params = new HashMap<>();
 
-    @SuppressWarnings("unchecked")
-    static <T> void handler(RequestBuilder builder, T request) {
-        new ParameterHandler().apply(builder, request);
+  @SuppressWarnings("unchecked") static <T> void handler(RequestBuilder builder, T request) {
+    new ParameterHandler().apply(builder, request);
+  }
+
+  @Override void apply(RequestBuilder builder, T request) {
+
+    Class<?> clazz = request.getClass();
+    Class<?> superClazz = clazz.getSuperclass();
+
+    while (superClazz != null) {
+
+      if (Object.class.getName().equalsIgnoreCase(superClazz.getName())) break;
+
+      Field[] superFields = superClazz.getDeclaredFields();
+      superClazz = superClazz.getSuperclass();
+
+      ParameterHandler.this.hunterParams(superFields, request);
     }
 
-    @Override
-    void apply(RequestBuilder builder, T request) {
+    Field[] declaredFields = clazz.getDeclaredFields();
+    ParameterHandler.this.hunterParams(declaredFields, request);
 
-        Class<?> clazz = request.getClass();
-        Class<?> superClazz = clazz.getSuperclass();
+    builder.requestEntity.setParamMap(Collections.unmodifiableMap(this.params));
+  }
 
-        while (superClazz != null) {
+  private void hunterParams(Field[] declaredFields, T request) {
 
-            if (Object.class.getName().equalsIgnoreCase(superClazz.getName())) break;
+    if (declaredFields == null || declaredFields.length == 0) return;
 
-            Field[] superFields = superClazz.getDeclaredFields();
-            superClazz = superClazz.getSuperclass();
+    for (Field field : declaredFields) {
 
-            ParameterHandler.this.hunterParams(superFields, request);
+      if (field.isAnnotationPresent(Argument.class)) {
+
+        String key;
+        Object value;
+        String ultraValue;
+
+        if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
+
+        try {
+          value = field.get(request);
+        } catch (IllegalAccessException e) {
+          throw Utils.methodError(field.getDeclaringClass(),
+              "IllegalAccessException was happened when access " + "%s field", field.getName());
         }
 
-        Field[] declaredFields = clazz.getDeclaredFields();
-        ParameterHandler.this.hunterParams(declaredFields, request);
+        if (value == null) continue;
 
-        builder.requestEntity.setParamMap(Collections.unmodifiableMap(this.params));
-    }
+        key = field.getAnnotation(Argument.class).parameter();
+        ultraValue = Utils.toString(value, Types.getRawType(field.getType()));
 
-    private void hunterParams(Field[] declaredFields, T request) {
-
-        if (declaredFields == null || declaredFields.length == 0) return;
-
-        for (Field field : declaredFields) {
-
-            if (field.isAnnotationPresent(Argument.class)) {
-
-                String key;
-                Object value;
-                String ultraValue;
-
-                if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
-
-                try {
-                    value = field.get(request);
-                } catch (IllegalAccessException e) {
-                    throw Utils.methodError(field.getDeclaringClass(),
-                            "IllegalAccessException was happened when access " + "%s field", field.getName());
-                }
-
-                if (value == null) continue;
-
-                key = field.getAnnotation(Argument.class).parameter();
-                ultraValue = Utils.toString(value, Types.getRawType(field.getType()));
-
-                if (this.params.containsKey(key)) {
-                    throw Utils.methodError(field.getDeclaringClass(),//
-                            "The parameter %s at least already exists one.You must choose one from these which value is '%s' or '%s'", //
-                            key, this.params.get(key), ultraValue);
-                }
-
-                if (key == null || key.trim().isEmpty()) key = field.getName();
-
-                this.params.put(key, ultraValue);
-            }
+        if (this.params.containsKey(key)) {
+          throw Utils.methodError(field.getDeclaringClass(),//
+              "The parameter %s at least already exists one.You must choose one from these which value is '%s' or '%s'",
+              //
+              key, this.params.get(key), ultraValue);
         }
+
+        if (key == null || key.trim().isEmpty()) key = field.getName();
+
+        this.params.put(key, ultraValue);
+      }
     }
+  }
 }

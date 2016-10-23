@@ -11,8 +11,7 @@ public class UltraParserFactory<R> {
 
   private R request;
 
-  @SuppressWarnings("unchecked")
-  public static <R> UltraParserFactory createParser(R request) {
+  @SuppressWarnings("unchecked") public static <R> UltraParserFactory createParser(R request) {
     return new UltraParserFactory(Utils.checkNotNull(request, "request == null"));
   }
 

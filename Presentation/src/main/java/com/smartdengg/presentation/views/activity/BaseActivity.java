@@ -5,6 +5,7 @@ import android.support.annotation.LayoutRes;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 /**
@@ -12,50 +13,45 @@ import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
  */
 public abstract class BaseActivity extends RxAppCompatActivity {
 
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        ButterKnife.bind(BaseActivity.this);
+  private Unbinder bind;
+
+  @Override public void setContentView(int layoutResID) {
+    super.setContentView(layoutResID);
+    this.bind = ButterKnife.bind(BaseActivity.this);
+  }
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(BaseActivity.this.getLayoutId());
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case android.R.id.home:
+        BaseActivity.this.exit();
+        return true;
     }
+    return super.onOptionsItemSelected(item);
+  }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(BaseActivity.this.getLayoutId());
+  @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+      BaseActivity.this.exit();
     }
+    return false;
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                BaseActivity.this.exit();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+  @Override public void finish() {
+    super.finish();
+    overridePendingTransition(0, 0);
+  }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            BaseActivity.this.exit();
-        }
-        return false;
-    }
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    if (this.bind != null) bind.unbind();
+  }
 
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(0, 0);
-    }
+  protected abstract void exit();
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(BaseActivity.this);
-    }
-
-    protected abstract void exit();
-
-    @LayoutRes
-    protected abstract int getLayoutId();
+  @LayoutRes protected abstract int getLayoutId();
 }

@@ -24,87 +24,78 @@ import okhttp3.Response;
  */
 public class Injector {
 
-    private static int MAXSIZE = 10 * 1024 * 1024;
-    private static final String HTTP_CACHE = "HTTP-cache";
-    private static final String CACHE_CONTROL = "Cache-Control";
+  private static int MAXSIZE = 10 * 1024 * 1024;
+  private static final String HTTP_CACHE = "HTTP-cache";
+  private static final String CACHE_CONTROL = "Cache-Control";
 
-    public static OkHttpClient.Builder builder;
+  public static OkHttpClient.Builder builder;
 
-    private Injector() {
-        throw new IllegalStateException("No instance!");
+  private Injector() {
+    throw new IllegalStateException("No instance!");
+  }
+
+  public static void setOkHttpBuilderInstance(Application application) {
+
+    builder = new OkHttpClient.Builder().addInterceptor(provideHeaderInterceptor())
+        .addInterceptor(provideOfflineCacheInterceptor(application))
+        .addNetworkInterceptor(provideCacheInterceptor())
+        .cache(provideCache(application));
+  }
+
+  private static Cache provideCache(Application application) {
+    Cache cache = null;
+    try {
+      cache = new Cache(new File(application.getCacheDir(), HTTP_CACHE), MAXSIZE); // 10 MB
+    } catch (Exception e) {
+      Logger.t(0).e(e.toString());
     }
+    return cache;
+  }
 
-    public static void setOkHttpBuilderInstance(Application application) {
+  private static Interceptor provideCacheInterceptor() {
+    return new Interceptor() {
+      @Override public Response intercept(Chain chain) throws IOException {
+        Response response = chain.proceed(chain.request());
+        // re-write response header to force use of cache
+        CacheControl cacheControl = new CacheControl.Builder().maxAge(2, TimeUnit.MINUTES).build();
+        return response.newBuilder().header(CACHE_CONTROL, cacheControl.toString()).build();
+      }
+    };
+  }
 
-        builder = new OkHttpClient.Builder().addInterceptor(provideHeaderInterceptor())
-                                            .addInterceptor(provideOfflineCacheInterceptor(application))
-                                            .addNetworkInterceptor(provideCacheInterceptor())
-                                            .cache(provideCache(application));
-    }
+  @SuppressWarnings("all") private static Interceptor provideOfflineCacheInterceptor(
+      @NonNull final Application application) {
+    return new Interceptor() {
+      @Override public Response intercept(Chain chain) throws IOException {
+        Request request = chain.request();
 
-    private static Cache provideCache(Application application) {
-        Cache cache = null;
-        try {
-            cache = new Cache(new File(application.getCacheDir(), HTTP_CACHE), MAXSIZE); // 10 MB
-        } catch (Exception e) {
-            Logger.t(0)
-                  .e(e.toString());
+        if (application != null && !hasNetwork(application)) {
+          CacheControl cacheControl = new CacheControl.Builder().maxStale(7, TimeUnit.DAYS).build();
+
+          request = request.newBuilder().cacheControl(cacheControl).build();
         }
-        return cache;
-    }
 
-    private static Interceptor provideCacheInterceptor() {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Response response = chain.proceed(chain.request());
-                // re-write response header to force use of cache
-                CacheControl cacheControl = new CacheControl.Builder().maxAge(2, TimeUnit.MINUTES)
-                                                                      .build();
-                return response.newBuilder()
-                               .header(CACHE_CONTROL, cacheControl.toString())
-                               .build();
-            }
-        };
-    }
+        return chain.proceed(request);
+      }
+    };
+  }
 
-    @SuppressWarnings("all")
-    private static Interceptor provideOfflineCacheInterceptor(@NonNull final Application application) {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request();
+  private static boolean hasNetwork(@NonNull Application application) {
+    ConnectivityManager cm =
+        (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+    return networkInfo != null && networkInfo.isConnected();
+  }
 
-                if (application != null && !hasNetwork(application)) {
-                    CacheControl cacheControl = new CacheControl.Builder().maxStale(7, TimeUnit.DAYS)
-                                                                          .build();
+  public static Interceptor provideHeaderInterceptor() {
+    return HeaderInterceptor.createdInterceptor();
+  }
 
-                    request = request.newBuilder()
-                                     .cacheControl(cacheControl)
-                                     .build();
-                }
+  public static Interceptor provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level level) {
+    return HttpLoggingInterceptor.createLoggingInterceptor().setLevel(level);
+  }
 
-                return chain.proceed(request);
-            }
-        };
-    }
-
-    private static boolean hasNetwork(@NonNull Application application) {
-        ConnectivityManager cm = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
-
-    public static Interceptor provideHeaderInterceptor() {
-        return HeaderInterceptor.createdInterceptor();
-    }
-
-    public static Interceptor provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level level) {
-        return HttpLoggingInterceptor.createLoggingInterceptor()
-                                     .setLevel(level);
-    }
-
-    public static Cache providePicCache(File diskPicCacheDir) {
-        return new Cache(diskPicCacheDir, CacheUtil.calculateDiskCacheSize(diskPicCacheDir));
-    }
+  public static Cache providePicCache(File diskPicCacheDir) {
+    return new Cache(diskPicCacheDir, CacheUtil.calculateDiskCacheSize(diskPicCacheDir));
+  }
 }

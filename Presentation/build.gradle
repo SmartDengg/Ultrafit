@@ -1,25 +1,28 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 apply plugin: 'com.frogermcs.androiddevmetrics'
 
 buildscript {
   repositories {
     jcenter()
+    mavenCentral()
   }
 
   dependencies {
     classpath 'com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:0.4'
+    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
   }
 }
 
 android {
 
-  compileSdkVersion 23
-  buildToolsVersion '23.0.3'
+  compileSdkVersion 24
+  buildToolsVersion '24.0.2'
 
   defaultConfig {
     applicationId "com.smartdengg.presentation"
-    minSdkVersion 14
-    targetSdkVersion 23
+    minSdkVersion 21
+    targetSdkVersion 24
     versionCode 1
     versionName "1.0"
 
@@ -33,6 +36,7 @@ android {
       debuggable false
     }
     debug {
+      manifestPlaceholders = [debuglable: "${rootProject.ext.debugLable}"]
       debuggable true
       applicationIdSuffix ".debug"
       versionNameSuffix '.dev'
@@ -64,10 +68,11 @@ task onReleaseTypeTriggered << {
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
   /*Google Library*/
-  compile 'com.android.support:design:23.2.0'
-  compile 'com.android.support:cardview-v7:23.2.0'
+  compile 'com.android.support:design:24.2.0'
+  compile 'com.android.support:cardview-v7:24.2.0'
   /*Square Library*/
-  compile 'com.jakewharton:butterknife:7.0.1'
+  compile 'com.jakewharton:butterknife:8.4.0'
+  apt 'com.jakewharton:butterknife-compiler:8.4.0'
   /*ReactiveX Library*/
   compile 'com.trello:rxlifecycle-components:0.4.0'
   compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
