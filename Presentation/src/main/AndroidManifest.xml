@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.smartdengg.presentation"
-  xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.smartdengg.presentation">
 
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,9 +11,9 @@
     android:allowBackup="false"
     android:icon="@mipmap/ic_launcher"
     android:label="@string/app_name"
+    android:largeHeap="true"
     android:supportsRtl="true"
-    android:theme="@style/AppTheme.SplashTheme"
-    >
+    android:theme="@style/AppTheme.SplashTheme">
 
     <activity
       android:name=".views.activity.CityActivity"

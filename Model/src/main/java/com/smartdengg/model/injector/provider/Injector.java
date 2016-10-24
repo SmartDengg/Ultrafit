@@ -71,7 +71,6 @@ public class Injector {
 
         if (application != null && !hasNetwork(application)) {
           CacheControl cacheControl = new CacheControl.Builder().maxStale(7, TimeUnit.DAYS).build();
-
           request = request.newBuilder().cacheControl(cacheControl).build();
         }
 
