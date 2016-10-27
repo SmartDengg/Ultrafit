@@ -3,7 +3,7 @@ package com.smartdengg.ultra;
 /**
  * Created by SmartDengg on 2016/4/24.
  */
-public class Platform {
+@Deprecated public class Platform {
 
   private Platform() {
     throw new IllegalStateException("No instance");

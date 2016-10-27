@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier;
 /**
  * Created by SmartDengg on 2016/4/24.
  */
-public class Reflections {
+@Deprecated public class Reflections {
 
   public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
     Class<?>[] empty = {};
@@ -61,7 +61,7 @@ public class Reflections {
     return declaredMethod;
   }
 
-  static Object invokeMethod(Method method, Object instance, Object... parameters) {
+  public static Object invokeMethod(Method method, Object instance, Object... parameters) {
 
     Object returnObject = null;
 
@@ -76,15 +76,14 @@ public class Reflections {
   }
 
   /** Safe because of generics erasure */
-  @SuppressWarnings("unchecked") static <T> T invokeMethod(Annotation classAnnotation,
+  @SuppressWarnings("unchecked") public static <T> T invokeMethod(Annotation classAnnotation,
       Class<? extends Annotation> clazz, String methodName) {
     try {
       Method declaredMethod = clazz.getDeclaredMethod(methodName);
       if (!Modifier.isPublic(declaredMethod.getModifiers())) declaredMethod.setAccessible(true);
       return (T) declaredMethod.invoke(classAnnotation);
-    } catch (Exception ignore) {
-      throw Utils.methodError(clazz, "Failed to extract String 'value' from @%s annotation.",
-          clazz.getSimpleName());
+    } catch (Exception e) {
+      throw new IllegalStateException(e);
     }
   }
 }

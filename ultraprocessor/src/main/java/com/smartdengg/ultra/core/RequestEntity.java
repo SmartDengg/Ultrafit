@@ -2,7 +2,6 @@ package com.smartdengg.ultra.core;
 
 import com.smartdengg.ultra.annotation.RestType;
 import java.util.Map;
-import rx.Completable;
 import rx.Observable;
 import rx.Single;
 
@@ -66,32 +65,6 @@ public class RequestEntity<R> {
     return RequestEntity.this;
   }
 
-  /**
-   * Be care of ConnectableObservable
-   *
-   * @param rxClazz rx.Observable or rx.Single
-   */
-  /*public <T> T as(Class<T> rxClazz) {
-
-    if (Utils.checkNotNull(rxClazz, "observable == null") == Void.class) {
-      throw Utils.methodError(RequestEntity.class, "Observable cannot be void.");
-    }
-
-    Class<?> rawType = Types.getRawType(rxClazz);
-    String canonicalName = rawType.getCanonicalName();
-    boolean isObservable = "rx.Observable".equals(canonicalName);
-    boolean isSingle = "rx.Single".equals(canonicalName);
-
-    if (!isObservable && !isSingle) {
-      throw new IllegalStateException("Neither Observable nor Single");
-    }
-
-    if (isObservable) {
-      return RxJavaGenerator.createdObservable(RequestEntity.this);
-    } else {
-      return RxJavaGenerator.createdSingle(RequestEntity.this);
-    }
-  }*/
   public Observable<RequestEntity<R>> asObservable() {
     return Observable.just(RequestEntity.this);
   }

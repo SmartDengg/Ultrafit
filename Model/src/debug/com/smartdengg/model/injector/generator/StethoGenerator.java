@@ -1,7 +1,7 @@
 package com.smartdengg.model.injector.generator;
 
 import android.content.Context;
-import com.smartdengg.ultra.Reflections;
+import com.smartdengg.ultra.core.Reflections;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import okhttp3.Interceptor;

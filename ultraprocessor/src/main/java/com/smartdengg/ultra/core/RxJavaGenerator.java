@@ -1,12 +1,14 @@
 package com.smartdengg.ultra.core;
 
 import com.smartdengg.ultra.Platform;
+import com.smartdengg.ultra.Reflections;
 import java.lang.reflect.Constructor;
 
 /**
  * Created by SmartDengg on 2016/4/24.
  */
-class RxJavaGenerator {
+@Deprecated
+/*package*/class RxJavaGenerator {
 
   @SuppressWarnings("unchecked") static <T> T createdObservable(RequestEntity requestEntity) {
 

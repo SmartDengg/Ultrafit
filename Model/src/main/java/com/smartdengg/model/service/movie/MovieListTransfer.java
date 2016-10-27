@@ -36,8 +36,7 @@ import rx.functions.Func1;
 
         MovieDetailRequest movieDetailRequest = new MovieDetailRequest(movieListResponse.movieId);
 
-        return (Observable<RequestEntity<MovieDetailRequest>>) UltraParserFactory.createParser(
-            movieDetailRequest).parseRequestEntity().asObservable();
+        return new UltraParserFactory<>(movieDetailRequest).parseRequestEntity().asObservable();
       }
     });
   }
