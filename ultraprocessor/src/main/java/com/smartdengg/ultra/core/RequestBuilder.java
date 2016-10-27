@@ -20,11 +20,11 @@ class RequestBuilder<R> {
 
     UrlHandler.handler(RequestBuilder.this, request);
     ParameterHandler.handler(RequestBuilder.this, request);
-    this.requestEntity.setSourceRequest(request);
+    requestEntity.setSourceRequest(request);
 
-    if (this.requestEntity.isShouldOutputs()) this.outputs();
+    if (requestEntity.isShouldOutputs()) this.outputs();
 
-    return this.requestEntity;
+    return requestEntity;
   }
 
   private void outputs() {

@@ -49,7 +49,8 @@ public class Reflections {
     return instance;
   }
 
-  @SuppressWarnings("unchecked") public static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
+  @SuppressWarnings("unchecked")
+  public static Method getDeclaredMethod(Class clazz, String name, Class<?>... parameterTypes) {
 
     Method declaredMethod = null;
     try {

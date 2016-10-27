@@ -2,6 +2,9 @@ package com.smartdengg.ultra.core;
 
 import com.smartdengg.ultra.annotation.RestType;
 import java.util.Map;
+import rx.Completable;
+import rx.Observable;
+import rx.Single;
 
 /**
  * Created by SmartDengg on 2016/2/21.
@@ -68,7 +71,7 @@ public class RequestEntity<R> {
    *
    * @param rxClazz rx.Observable or rx.Single
    */
-  public <T> T as(Class<T> rxClazz) {
+  /*public <T> T as(Class<T> rxClazz) {
 
     if (Utils.checkNotNull(rxClazz, "observable == null") == Void.class) {
       throw Utils.methodError(RequestEntity.class, "Observable cannot be void.");
@@ -88,6 +91,13 @@ public class RequestEntity<R> {
     } else {
       return RxJavaGenerator.createdSingle(RequestEntity.this);
     }
+  }*/
+  public Observable<RequestEntity<R>> asObservable() {
+    return Observable.just(RequestEntity.this);
+  }
+
+  public Single<RequestEntity<R>> asSingle() {
+    return Single.just(RequestEntity.this);
   }
 
   @Override public String toString() {

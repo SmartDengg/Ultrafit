@@ -8,4 +8,5 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
+  compileOnly 'io.reactivex:rxjava:1.2.1'
 }

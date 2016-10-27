@@ -27,17 +27,13 @@ public abstract class UseCase<R, S> {
     this.subscribe(request, useCaseSubscriber, null);
   }
 
-  @SuppressWarnings("unchecked")
   public void subscribe(final R request, Observer<S> useCaseSubscriber,
       final Action1<RequestEntity> action) {
 
     /**be care of ConnectableObservable!!!*/
     this.subscription = Observable.defer(new Func0<Observable<RequestEntity<R>>>() {
       @Override public Observable<RequestEntity<R>> call() {
-
-        return (Observable<RequestEntity<R>>) UltraParserFactory.createParser(request)
-            .parseRequestEntity()
-            .as(Observable.class);
+        return new UltraParserFactory<>(request).parseRequestEntity().asObservable();
       }
     }).doOnNext(new Action1<RequestEntity<R>>() {
       @Override public void call(RequestEntity<R> requestEntity) {
@@ -60,16 +56,13 @@ public abstract class UseCase<R, S> {
     this.subscribe(request, onSuccess, onError, null);
   }
 
-  @SuppressWarnings("unchecked")
   public void subscribe(final R request, final Action1<? super S> onSuccess,
       final Action1<Throwable> onError, final Action1<RequestEntity> action) {
 
     /**you can also use the operator {@link rx.Observable.toSingle}, it's simpler*/
     this.subscription = Single.defer(new Func0<Single<RequestEntity<R>>>() {
       @Override public Single<RequestEntity<R>> call() {
-        return (Single<RequestEntity<R>>) UltraParserFactory.createParser(request)
-            .parseRequestEntity()
-            .as(Single.class);
+        return new UltraParserFactory<>(request).parseRequestEntity().asSingle();
       }
     }).map(new Func1<RequestEntity<R>, RequestEntity<R>>() {
       @Override public RequestEntity<R> call(RequestEntity<R> requestEntity) {

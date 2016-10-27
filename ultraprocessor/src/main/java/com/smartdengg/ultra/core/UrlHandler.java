@@ -17,7 +17,7 @@ public class UrlHandler extends UltraHandler<Annotation[]> {
 
   static <T> void handler(RequestBuilder builder, T request) {
 
-    UrlHandler.CLASS = request.getClass();
+    CLASS = request.getClass();
 
     new UrlHandler().apply(builder, request.getClass().getAnnotations());
   }

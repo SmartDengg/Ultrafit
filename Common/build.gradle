@@ -28,4 +28,5 @@ dependencies {
   compile 'com.android.support:support-annotations:23.2.1'
   /*Third Library*/
   compile 'com.orhanobut:logger:1.11'
+  compile project(':ultraprocessor')
 }
