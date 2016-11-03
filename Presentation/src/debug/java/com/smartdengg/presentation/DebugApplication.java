@@ -10,8 +10,8 @@ public class DebugApplication extends ReleaseApplication {
 
   @Override public void onCreate() {
     super.onCreate();
-
     AndroidDevMetrics.initWith(DebugApplication.this);
     Stetho.initializeWithDefaults(DebugApplication.this);
+    OomExceptionHandler.install(DebugApplication.this);
   }
 }
