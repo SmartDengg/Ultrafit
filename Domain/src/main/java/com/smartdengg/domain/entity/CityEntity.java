@@ -1,4 +1,4 @@
-package com.smartdengg.model.entity;
+package com.smartdengg.domain.entity;
 
 /**
  * Created by SmartDengg on 2016/2/24.

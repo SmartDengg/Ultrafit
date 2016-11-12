@@ -1,15 +1,15 @@
 package com.smartdengg.presentation.presenter;
 
 import com.smartdengg.domain.UseCase;
+import com.smartdengg.domain.entity.CityEntity;
+import com.smartdengg.domain.interactor.CityListUseCase;
+import com.smartdengg.domain.request.CityListRequest;
 import com.smartdengg.model.SimpleSubscriber;
-import com.smartdengg.model.entity.CityEntity;
-import com.smartdengg.model.errors.WebServiceException;
-import com.smartdengg.model.interactor.CityListUseCase;
-import com.smartdengg.model.request.CityListRequest;
+import com.smartdengg.domain.errors.WebServiceException;
+import com.smartdengg.model.service.city.CityService;
 import com.smartdengg.presentation.views.ViewInterface;
 import java.util.List;
 import rx.Observable;
-import rx.functions.Func0;
 
 /**
  * Created by SmartDengg on 2016/2/22.
@@ -20,7 +20,7 @@ public class CityListPresenterImp implements CityListPresenter<List<CityEntity>>
   private UseCase<CityListRequest, List<CityEntity>> listUseCase;
 
   private CityListPresenterImp() {
-    this.listUseCase = CityListUseCase.createdUseCase();
+    this.listUseCase = CityListUseCase.create(CityService.create());
   }
 
   public static CityListPresenterImp created() {
@@ -40,11 +40,7 @@ public class CityListPresenterImp implements CityListPresenter<List<CityEntity>>
   }
 
   private void showContent(final List<CityEntity> cityEntities) {
-    this.viewInterface.showData(Observable.fromCallable(new Func0<List<CityEntity>>() {
-      @Override public List<CityEntity> call() {
-        return cityEntities;
-      }
-    }));
+    this.viewInterface.showData(Observable.just(cityEntities));
   }
 
   private void showError(String errorMessage) {

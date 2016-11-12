@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.smartdengg.model.entity.MovieEntity;
+import com.smartdengg.domain.entity.MovieEntity;
 import com.smartdengg.presentation.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;

@@ -1,6 +1,5 @@
 package com.smartdengg.presentation;
 
-import com.smartdengg.common.Constants;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -22,7 +21,7 @@ public class MainTest {
 
   static int item = 1;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
 
     /*List<String> fixedList = new ArrayList<>(3);
     fixedList.add("1");
@@ -33,7 +32,7 @@ public class MainTest {
 
     System.out.printf(Arrays.toString(strings));*/
 
-    String s1 = "users/list?sort=desc";
+    /*String s1 = "users/list?sort=desc";
     String s2 = "group/{id}/users";
     String url = Constants.BASE_URL + s1 + '/' + s2;
     //parseHttpMethodAndPath(url);
@@ -43,13 +42,15 @@ public class MainTest {
 
     b.getItem();
     // Crash
-    a.getItem();
+    a.getItem();*/
 
     //cache();
 
     //asyncSubject();
 
-    BehaviorSubject();
+    //BehaviorSubject();
+
+    //Schedulers.start();
 
     for (; ; ) ;
   }

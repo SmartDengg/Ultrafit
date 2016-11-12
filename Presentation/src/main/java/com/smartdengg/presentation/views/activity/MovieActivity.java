@@ -27,7 +27,7 @@ import android.widget.Toast;
 import butterknife.BindString;
 import butterknife.BindView;
 import com.smartdengg.common.Constants;
-import com.smartdengg.model.entity.MovieEntity;
+import com.smartdengg.domain.entity.MovieEntity;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.adapter.MovieAdapter;
 import com.smartdengg.presentation.bitmaps.BitmapUtil;

@@ -24,7 +24,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.smartdengg.common.utils.DensityUtil;
-import com.smartdengg.model.entity.MovieEntity;
+import com.smartdengg.domain.entity.MovieEntity;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.bitmaps.DateUtil;
 import com.squareup.picasso.Callback;

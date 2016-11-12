@@ -16,7 +16,8 @@ import butterknife.BindString;
 import butterknife.BindView;
 import com.smartdengg.common.Constants;
 import com.smartdengg.common.utils.DensityUtil;
-import com.smartdengg.model.entity.CityEntity;
+import com.smartdengg.common.utils.TypeVerify;
+import com.smartdengg.domain.entity.CityEntity;
 import com.smartdengg.presentation.AnimationHelper;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.adapter.CityListAdapter;
@@ -24,12 +25,8 @@ import com.smartdengg.presentation.presenter.CityListPresenter;
 import com.smartdengg.presentation.presenter.CityListPresenterImp;
 import com.smartdengg.presentation.ui.MarginDecoration;
 import com.smartdengg.presentation.views.ViewInterface;
-import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
 import java.util.List;
 import rx.Observable;
 
@@ -85,39 +82,19 @@ public class CityActivity extends BaseActivity implements ViewInterface<List<Cit
       System.out.println("############################################");
       System.out.println("Method name : " + method.getName());
       Type type = method.getGenericReturnType();
-      if (type instanceof GenericArrayType) {
-        Type componentType = ((GenericArrayType) type).getGenericComponentType();
-        System.out.println("GenericArrayType's componentType is : " + componentType);
-        if (componentType instanceof TypeVariable) {
-          System.out.println(componentType + " is a TypeVariable!");
-          TypeVariable typeVariable = (TypeVariable) componentType;
-          System.out.println(
-              "TypeVariable.getGenericDeclaration() is : " + typeVariable.getGenericDeclaration());
-        } else if (componentType instanceof ParameterizedType) {
-          System.out.println(componentType + " is a ParameterizedType!");
-          ParameterizedType parameterizedType = (ParameterizedType) componentType;
-          System.out.println("It's raw type is : " + parameterizedType.getRawType());
-          System.out.println("It's owner type is : " + parameterizedType.getOwnerType());
-          for (Type type1 : parameterizedType.getActualTypeArguments()) {
-            System.out.println("Actual Type is : " + type1);
-            if (type1 instanceof WildcardType) {
-              Type[] upperBounds = ((WildcardType) type1).getUpperBounds();
-              for (Type type2 : upperBounds) {
-                System.out.println("upperBound is " + type2);
-              }
-            }
-          }
-        }
-      } else if (type instanceof Class) {
-        System.out.println("GenericeReturnType is a class : " + type);
-        Class cl = (Class) type;
-        System.out.println("It's name is : " + cl.getCanonicalName());
-        if (cl.isArray()) {
-          System.out.println("It is a array!");
-          Class<?> componentType = cl.getComponentType();
-          System.out.println("The component type of this array is : " + componentType);
-        }
-      }
+
+      //
+      TypeVerify.verifyGenericArrayType(type);
+
+      //
+      TypeVerify.verifyParameterizedType(type);
+
+      //
+      TypeVerify.verifyClass(type);
+
+      //
+      TypeVerify.verifyArray(type);
+
       System.out.println("############################################");
     }
   }

@@ -1,4 +1,4 @@
-package com.smartdengg.model.request;
+package com.smartdengg.domain.request;
 
 import com.smartdengg.common.Constants;
 import com.smartdengg.ultra.annotation.Argument;

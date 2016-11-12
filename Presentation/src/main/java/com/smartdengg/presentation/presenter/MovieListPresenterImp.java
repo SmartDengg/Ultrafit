@@ -1,15 +1,15 @@
 package com.smartdengg.presentation.presenter;
 
 import com.smartdengg.domain.UseCase;
+import com.smartdengg.domain.entity.MovieEntity;
+import com.smartdengg.domain.interactor.MovieListUseCase;
+import com.smartdengg.domain.request.MovieIdRequest;
 import com.smartdengg.model.SimpleSubscriber;
-import com.smartdengg.model.entity.MovieEntity;
-import com.smartdengg.model.errors.WebServiceException;
-import com.smartdengg.model.interactor.MovieListUseCase;
-import com.smartdengg.model.request.MovieIdRequest;
+import com.smartdengg.domain.errors.WebServiceException;
+import com.smartdengg.model.service.movie.MovieService;
 import com.smartdengg.presentation.views.ViewInterface;
 import java.util.List;
 import rx.Observable;
-import rx.functions.Func0;
 
 /**
  * Created by SmartDengg on 2016/2/22.
@@ -20,7 +20,7 @@ public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntit
   private UseCase<MovieIdRequest, List<MovieEntity>> listUseCase;
 
   private MovieListPresenterImp() {
-    this.listUseCase = MovieListUseCase.createdUseCase();
+    this.listUseCase = MovieListUseCase.create(MovieService.createdService());
   }
 
   public static MovieListPresenterImp createdPresenter() {
@@ -40,11 +40,7 @@ public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntit
   }
 
   private void showContent(final List<MovieEntity> movieEntities) {
-    this.viewInterface.showData(Observable.fromCallable(new Func0<List<MovieEntity>>() {
-      @Override public List<MovieEntity> call() {
-        return movieEntities;
-      }
-    }));
+    this.viewInterface.showData(Observable.just(movieEntities));
   }
 
   private void showError(String errorMessage) {

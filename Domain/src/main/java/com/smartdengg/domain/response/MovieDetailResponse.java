@@ -1,4 +1,4 @@
-package com.smartdengg.model.response;
+package com.smartdengg.domain.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -31,36 +31,22 @@ public class MovieDetailResponse {
         },
        ]*/
 
-  @Expose
-  @SerializedName("poster")
-  public String movieThumbUrl;
-  @Expose
-  @SerializedName("title")
-  public String movieName;
-  @Expose
-  @SerializedName("plot_simple")
-  public String movieSketch;
-
-  @Expose
-  @SerializedName("writers")
-  public String movieWriters;
-  @Expose
-  @SerializedName("directors")
-  public String movieDirectors;
-  @Expose
-  @SerializedName("actors")
-  public String movieActors;
-  @Expose
-  @SerializedName("genres")
-  public String movieCategory;
-  @Expose
-  @SerializedName("rating")
-  public String movieScore;
-
-  @Expose
-  @SerializedName("release_date")
-  public String movieReleaseTime;
-  @Expose
-  @SerializedName("country")
-  public String movieCountry;
+  @Expose @SerializedName("movieid") public String movieId;
+  @Expose public String rating;
+  @Expose public String genres;
+  @Expose public String runtime;
+  @Expose public String language;
+  @Expose public String title;
+  @Expose public String poster;
+  @Expose public String writers;
+  @Expose @SerializedName("film_locations") public String filmLocations;
+  @Expose public String directors;
+  @Expose @SerializedName("rating_count") public String ratingCount;
+  @Expose public String actors;
+  @Expose @SerializedName("plot_simple") public String movieSketch;
+  @Expose public String year;
+  @Expose @SerializedName("country") public String movieCountry;
+  @Expose public String type;
+  @Expose @SerializedName("release_date") public String movieReleaseTime;
+  @Expose @SerializedName("also_known_as") public String alsoKnownAs;
 }

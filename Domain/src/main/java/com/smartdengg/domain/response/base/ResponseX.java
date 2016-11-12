@@ -1,7 +1,7 @@
-package com.smartdengg.model.response.base;
+package com.smartdengg.domain.response.base;
 
 import com.smartdengg.common.Constants;
-import com.smartdengg.model.errors.WebServiceException;
+import com.smartdengg.domain.errors.WebServiceException;
 import rx.Observable;
 
 /**

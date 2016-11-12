@@ -1,4 +1,4 @@
-package com.smartdengg.model.response.base;
+package com.smartdengg.domain.response.base;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

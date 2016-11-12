@@ -1,4 +1,4 @@
-package com.smartdengg.model.errors;
+package com.smartdengg.domain.errors;
 
 /**
  * Created by SmartDengg on 2016/2/21.

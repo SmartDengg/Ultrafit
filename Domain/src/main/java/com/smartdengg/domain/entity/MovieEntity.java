@@ -1,4 +1,4 @@
-package com.smartdengg.model.entity;
+package com.smartdengg.domain.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;

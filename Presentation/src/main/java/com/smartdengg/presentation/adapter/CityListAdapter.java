@@ -11,7 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.smartdengg.model.entity.CityEntity;
+import com.smartdengg.domain.entity.CityEntity;
 import com.smartdengg.presentation.R;
 import java.util.List;
 import rx.Observer;

@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -21,13 +21,14 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
  */
 public class SmartExecutors {
 
-  public static final int DEVICE_INFO_UNKNOWN = 0;
+  private static final int DEVICE_INFO_UNKNOWN = 0;
   public static ExecutorService eventExecutor;
   private static final int CPU_COUNT = SmartExecutors.getCountOfCPU();
   private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
   private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;
   private static final int KEEP_ALIVE = 1;
-  private static final BlockingQueue<Runnable> executePoolWaitQueue = new PriorityBlockingQueue<>(128);
+  private static final BlockingQueue<Runnable> executePoolWaitQueue =
+      new LinkedBlockingQueue<>(128);
   private static final ThreadFactory executeThreadFactory = new ThreadFactory() {
     private final AtomicInteger mCount = new AtomicInteger(1);
 
@@ -36,7 +37,8 @@ public class SmartExecutors {
     }
   };
 
-  private static final RejectedExecutionHandler rejectedHandler = new ThreadPoolExecutor.DiscardOldestPolicy();
+  private static final RejectedExecutionHandler rejectedHandler =
+      new ThreadPoolExecutor.DiscardOldestPolicy();
 
   static {
     eventExecutor =
@@ -65,8 +67,7 @@ public class SmartExecutors {
   }
 
   private static final FileFilter CPU_FILTER = new FileFilter() {
-    @Override
-    public boolean accept(File pathname) {
+    @Override public boolean accept(File pathname) {
 
       String path = pathname.getName();
       if (path.startsWith("cpu")) {
@@ -86,8 +87,7 @@ public class SmartExecutors {
       super(runnable, threadName);
     }
 
-    @Override
-    public void run() {
+    @Override public void run() {
       Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND);
       super.run();
     }
