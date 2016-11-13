@@ -24,12 +24,4 @@ public class Constants {
   public static int[] colors = new int[] {
       Color.parseColor("#70AF41"), Color.parseColor("#42A5F5"), Color.parseColor("#42A5F5")
   };
-
- /* public void test() {
-
-    Integer integer = 1;
-
-    Observable<RequestEntity<Integer>> requestEntityObservable =
-        new UltraParserFactory<>(integer).parseRequestEntity().asObservable();
-  }*/
 }

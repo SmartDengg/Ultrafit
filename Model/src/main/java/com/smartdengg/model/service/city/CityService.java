@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import com.smartdengg.domain.repository.CityRepository;
 import com.smartdengg.domain.response.CityResponse;
 import com.smartdengg.domain.response.base.ResponseS;
-import com.smartdengg.domain.rxcompat.SchedulersCompat;
 import com.smartdengg.httpservice.lib.annotation.LogResult;
 import com.smartdengg.httpservice.lib.annotation.RetryCount;
 import com.smartdengg.model.injector.generator.ServiceGenerator;
@@ -49,7 +48,6 @@ public class CityService implements CityRepository {
           public Observable<? extends List<CityResponse>> call(ResponseS<CityResponse> responseS) {
             return responseS.filterWebServiceErrors();
           }
-        })
-        .compose(SchedulersCompat.<List<CityResponse>>applyExecutorSchedulers());
+        });
   }
 }

@@ -56,4 +56,5 @@ dependencies {
   /*Third Library*/
   compile 'com.github.SmartDengg:HttpService:0.2.5'
   compile project(':Domain')
+  compile project(':Common')
 }

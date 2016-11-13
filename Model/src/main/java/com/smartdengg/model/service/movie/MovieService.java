@@ -6,7 +6,6 @@ import com.smartdengg.domain.response.MovieDetailResponse;
 import com.smartdengg.domain.response.MovieListResponse;
 import com.smartdengg.domain.response.base.ResponseS;
 import com.smartdengg.domain.response.base.ResponseX;
-import com.smartdengg.domain.rxcompat.SchedulersCompat;
 import com.smartdengg.httpservice.lib.annotation.RetryCount;
 import com.smartdengg.model.injector.generator.ServiceGenerator;
 import java.util.List;
@@ -50,8 +49,7 @@ public class MovieService implements MovieRepository {
           public Observable<List<MovieListResponse>> call(ResponseS<MovieListResponse> responseS) {
             return responseS.filterWebServiceErrors();
           }
-        })
-        .compose(SchedulersCompat.<List<MovieListResponse>>applyExecutorSchedulers());
+        });
   }
 
   @Override public Observable<MovieDetailResponse> getMovieDetailResponse(@NonNull String url,
@@ -62,7 +60,6 @@ public class MovieService implements MovieRepository {
           public Observable<MovieDetailResponse> call(ResponseX<MovieDetailResponse> responseX) {
             return responseX.filterWebServiceErrors();
           }
-        })
-        .compose(SchedulersCompat.<MovieDetailResponse>applyExecutorSchedulers());
+        });
   }
 }

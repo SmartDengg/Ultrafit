@@ -2,6 +2,7 @@ package com.smartdengg.presentation.rxcompat;
 
 import android.os.Build;
 import android.os.Process;
+import android.support.annotation.NonNull;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.concurrent.BlockingQueue;
@@ -12,7 +13,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.jetbrains.annotations.NotNull;
 
 import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 
@@ -32,7 +32,7 @@ public class SmartExecutors {
   private static final ThreadFactory executeThreadFactory = new ThreadFactory() {
     private final AtomicInteger mCount = new AtomicInteger(1);
 
-    public Thread newThread(@NotNull Runnable r) {
+    public Thread newThread(@NonNull Runnable r) {
       return new SmartThread(r, "EventAsyncOrBackground #" + mCount.getAndIncrement());
     }
   };
