@@ -1,6 +1,5 @@
 package com.smartdengg.domain.response.base;
 
-import com.smartdengg.common.Constants;
 import com.smartdengg.domain.errors.WebServiceException;
 import rx.Observable;
 
@@ -22,7 +21,7 @@ public class ResponseX<X> extends BaseResponse<X> {
     }*/
 
   @Override public Observable<X> filterWebServiceErrors() {
-    if (Constants.RESULT_OK.equals(errorCode) && null != data) {
+    if (RESULT_OK.equals(errorCode) && null != data) {
       return Observable.just(data);
     } else {
       return Observable.error(new WebServiceException(reason));

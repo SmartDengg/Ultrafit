@@ -4,6 +4,7 @@ import com.smartdengg.domain.UseCase;
 import com.smartdengg.domain.entity.CityEntity;
 import com.smartdengg.domain.interactor.CityListUseCase;
 import com.smartdengg.domain.request.CityListRequest;
+import com.smartdengg.httpservice.lib.adapter.rxadapter.rxcompat.SchedulersCompat;
 import com.smartdengg.model.SimpleSubscriber;
 import com.smartdengg.domain.errors.WebServiceException;
 import com.smartdengg.model.service.city.CityService;
@@ -20,7 +21,8 @@ public class CityListPresenterImp implements CityListPresenter<List<CityEntity>>
   private UseCase<CityListRequest, List<CityEntity>> listUseCase;
 
   private CityListPresenterImp() {
-    this.listUseCase = CityListUseCase.create(CityService.create());
+    this.listUseCase = CityListUseCase.create(CityService.create(),
+        SchedulersCompat.<List<CityEntity>>applyExecutorSchedulers());
   }
 
   public static CityListPresenterImp created() {

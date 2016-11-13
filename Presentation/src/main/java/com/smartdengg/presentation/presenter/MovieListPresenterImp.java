@@ -4,6 +4,7 @@ import com.smartdengg.domain.UseCase;
 import com.smartdengg.domain.entity.MovieEntity;
 import com.smartdengg.domain.interactor.MovieListUseCase;
 import com.smartdengg.domain.request.MovieIdRequest;
+import com.smartdengg.httpservice.lib.adapter.rxadapter.rxcompat.SchedulersCompat;
 import com.smartdengg.model.SimpleSubscriber;
 import com.smartdengg.domain.errors.WebServiceException;
 import com.smartdengg.model.service.movie.MovieService;
@@ -20,7 +21,8 @@ public class MovieListPresenterImp implements MovieListPresenter<List<MovieEntit
   private UseCase<MovieIdRequest, List<MovieEntity>> listUseCase;
 
   private MovieListPresenterImp() {
-    this.listUseCase = MovieListUseCase.create(MovieService.createdService());
+    this.listUseCase = MovieListUseCase.create(MovieService.createdService(),
+        SchedulersCompat.<List<MovieEntity>>applyExecutorSchedulers());
   }
 
   public static MovieListPresenterImp createdPresenter() {

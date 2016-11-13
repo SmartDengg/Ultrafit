@@ -1,33 +1,21 @@
-apply plugin: 'com.android.library'
+apply plugin: 'java'
 
-android {
-  compileSdkVersion 23
-  buildToolsVersion '23.0.3'
+//noinspection GroovyUnusedAssignment
+targetCompatibility = JavaVersion.VERSION_1_7
 
-  defaultConfig {
-    minSdkVersion 14
-    targetSdkVersion 23
-    versionCode 1
-    versionName "1.0"
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-      debuggable false
-    }
-    debug {
-      debuggable true
-    }
-  }
-}
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
   /*ReactiveX Library*/
-  compile 'io.reactivex:rxandroid:1.1.0'
   compile 'io.reactivex:rxjava:1.1.8'
   /*Google Library*/
-  compile 'com.google.code.gson:gson:2.4'
-  compile project(':Common')
+  compile 'com.google.code.gson:gson:2.8.0'
+
+  compileOnly 'com.google.android:android:4.1.1.4'
+  compileOnly 'com.google.android:annotations:4.1.1.4'
+  compileOnly 'org.jetbrains:annotations:13.0'
+
+  compile project(':ultraprocessor')
 }

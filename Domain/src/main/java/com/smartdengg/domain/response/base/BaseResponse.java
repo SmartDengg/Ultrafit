@@ -9,13 +9,11 @@ import rx.Observable;
  */
 abstract class BaseResponse<T> {
 
+  static final Integer RESULT_OK = 0;
+
   @Expose protected String reason;
-  @Expose
-  @SerializedName("error_code")
-  protected Integer errorCode;
-  @Expose
-  @SerializedName("result")
-  protected T data;
+  @Expose @SerializedName("error_code") protected Integer errorCode;
+  @Expose @SerializedName("result") protected T data;
 
   public abstract Observable<T> filterWebServiceErrors();
 }
