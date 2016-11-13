@@ -1,5 +1,6 @@
 package com.smartdengg.domain.interactor;
 
+import android.support.annotation.NonNull;
 import com.smartdengg.domain.UseCase;
 import com.smartdengg.domain.entity.MovieEntity;
 import com.smartdengg.domain.repository.MovieRepository;
@@ -12,7 +13,6 @@ import com.smartdengg.domain.transforms.MovieListTransfer;
 import com.smartdengg.ultra.core.RequestEntity;
 import java.util.List;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -34,8 +34,8 @@ public class MovieListUseCase extends UseCase<MovieIdRequest, List<MovieEntity>>
     return new MovieListUseCase(movieRepository, transformer);
   }
 
-  @Override protected Observable<List<MovieEntity>> interactor(@NotNull String url,
-      @NotNull Map<String, String> params) {
+  @Override protected Observable<List<MovieEntity>> interactor(@NonNull String url,
+      @NonNull Map<String, String> params) {
 
     return this.fetchMovieList(url, params)
         .compose(MovieListTransfer.create())
@@ -49,8 +49,8 @@ public class MovieListUseCase extends UseCase<MovieIdRequest, List<MovieEntity>>
         .compose(MovieEntityTransfer.create());
   }
 
-  private Observable<List<MovieListResponse>> fetchMovieList(@NotNull String url,
-      @NotNull Map<String, String> params) {
+  private Observable<List<MovieListResponse>> fetchMovieList(@NonNull String url,
+      @NonNull Map<String, String> params) {
     return mMovieRepository.getMoviesResponse(url, params);
   }
 }

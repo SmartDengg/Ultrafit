@@ -1,9 +1,10 @@
 package com.smartdengg.domain;
 
+import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import com.smartdengg.ultra.core.RequestEntity;
 import com.smartdengg.ultra.core.UltraParserFactory;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
@@ -72,18 +73,18 @@ public abstract class UseCase<Request, Response> {
       @Override public Single<Response> call(RequestEntity<Request> requestEntity) {
         return UseCase.this.interactorSingle(requestEntity.getUrl(), requestEntity.getParamMap());
       }
-    }).subscribe(onSuccess, onError);
+    }).toObservable().compose(transformer).toSingle().subscribe(onSuccess, onError);
   }
 
   public void unsubscribe() {
     if (!subscription.isUnsubscribed()) subscription.unsubscribe();
   }
 
-  protected Single<Response> interactorSingle(@NotNull String url,
-      @NotNull Map<String, String> params) {
+  @CheckResult protected Single<Response> interactorSingle(@NonNull String url,
+      @NonNull Map<String, String> params) {
     throw new IllegalArgumentException("If you use the 'Single', you can not call super");
   }
 
-  protected abstract Observable<Response> interactor(@NotNull String url,
-      @NotNull Map<String, String> params);
+  @CheckResult protected abstract Observable<Response> interactor(@NonNull String url,
+      @NonNull Map<String, String> params);
 }

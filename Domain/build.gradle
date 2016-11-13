@@ -6,16 +6,26 @@ targetCompatibility = JavaVersion.VERSION_1_7
 //noinspection GroovyUnusedAssignment
 sourceCompatibility = JavaVersion.VERSION_1_7
 
+repositories {
+  jcenter()
+  // Work around https://code.google.com/p/android/issues/detail?id=69270.
+  def androidHome = System.getenv("ANDROID_HOME")
+  maven {
+    url "$androidHome/extras/android/m2repository/"
+  }
+}
+
 dependencies {
   compile fileTree(include: ['*.jar'], dir: 'libs')
   /*ReactiveX Library*/
   compile 'io.reactivex:rxjava:1.1.8'
   /*Google Library*/
   compile 'com.google.code.gson:gson:2.8.0'
+  compileOnly 'com.android.support:support-annotations:25.0.0'
 
   compileOnly 'com.google.android:android:4.1.1.4'
   compileOnly 'com.google.android:annotations:4.1.1.4'
-  compileOnly 'org.jetbrains:annotations:13.0'
+//  compileOnly 'org.jetbrains:annotations:13.0'
 
   compile project(':ultraprocessor')
 }

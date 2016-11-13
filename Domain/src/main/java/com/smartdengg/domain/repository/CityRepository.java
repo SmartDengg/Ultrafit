@@ -1,9 +1,9 @@
 package com.smartdengg.domain.repository;
 
+import android.support.annotation.NonNull;
 import com.smartdengg.domain.response.CityResponse;
 import java.util.List;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 
 /**
@@ -13,6 +13,6 @@ import rx.Observable;
  */
 public interface CityRepository {
 
-  Observable<List<CityResponse>> getCitiesResponse(@NotNull String url,
-      @NotNull Map<String, String> params);
+  Observable<List<CityResponse>> getCitiesResponse(@NonNull String url,
+      @NonNull Map<String, String> params);
 }

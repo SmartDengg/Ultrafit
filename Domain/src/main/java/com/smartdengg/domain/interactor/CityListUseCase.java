@@ -1,5 +1,6 @@
 package com.smartdengg.domain.interactor;
 
+import android.support.annotation.NonNull;
 import com.smartdengg.domain.UseCase;
 import com.smartdengg.domain.entity.CityEntity;
 import com.smartdengg.domain.repository.CityRepository;
@@ -7,7 +8,6 @@ import com.smartdengg.domain.request.CityListRequest;
 import com.smartdengg.domain.transforms.CityEntityTransfer;
 import java.util.List;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
 import rx.Observable;
 
 /**
@@ -28,8 +28,8 @@ public class CityListUseCase extends UseCase<CityListRequest, List<CityEntity>> 
     return new CityListUseCase(cityRepository, transformer);
   }
 
-  @Override protected Observable<List<CityEntity>> interactor(@NotNull String url,
-      @NotNull Map<String, String> params) {
+  @Override protected Observable<List<CityEntity>> interactor(@NonNull String url,
+      @NonNull Map<String, String> params) {
     return mCityRepository.getCitiesResponse(url, params).compose(CityEntityTransfer.newInstance());
   }
 }
