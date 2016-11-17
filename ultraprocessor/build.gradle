@@ -9,4 +9,5 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compileOnly 'io.reactivex:rxjava:1.2.1'
+  compileOnly 'com.google.android:android:4.1.1.4'
 }

@@ -19,8 +19,17 @@ import rx.subjects.BehaviorSubject;
  */
 public class MainTest {
 
+  /**
+   * The Item.
+   */
   static int item = 1;
 
+  /**
+   * The entry point of application.
+   *
+   * @param args the input arguments
+   * @throws InterruptedException the interrupted exception
+   */
   public static void main(String[] args) throws InterruptedException {
 
     /*List<String> fixedList = new ArrayList<>(3);
@@ -44,7 +53,7 @@ public class MainTest {
     // Crash
     a.getItem();*/
 
-    //cache();
+    cache();
 
     //asyncSubject();
 
@@ -109,7 +118,7 @@ public class MainTest {
         subscriber.onNext(item);
         subscriber.onCompleted();
       }
-    }).cache();
+    }).cache().onTerminateDetach();
 
     cache.subscribe(new Action1<Integer>() {
       @Override public void call(Integer integer) {
@@ -136,8 +145,14 @@ public class MainTest {
   }
 
   private class Inner {
+    /**
+     * The constant TAG.
+     */
     public static final String TAG = "";
 
+    /**
+     * Instantiates a new Inner.
+     */
     public Inner() {
     }
 
@@ -147,10 +162,16 @@ public class MainTest {
   }
 
   private interface Callback {
+    /**
+     * On call.
+     */
     void onCall();
   }
 
   private abstract class Listener implements Callback {
+    /**
+     * On observer.
+     */
     abstract void onObserver();
 
     @Override public final void onCall() {
@@ -165,8 +186,17 @@ public class MainTest {
     }
   }
 
+  /**
+   * The Param.
+   */
   static final String PARAM = "[a-zA-Z][a-zA-Z0-9_-]*";
+  /**
+   * The Param url regex.
+   */
   static final Pattern PARAM_URL_REGEX = Pattern.compile("\\{(" + PARAM + ")\\}");
+  /**
+   * The Param name regex.
+   */
   static final Pattern PARAM_NAME_REGEX = Pattern.compile(PARAM);
 
   private static void parseHttpMethodAndPath(String value) {
@@ -195,6 +225,12 @@ public class MainTest {
     System.out.println("relativeUrlParamNames = " + relativeUrlParamNames);
   }
 
+  /**
+   * Parse path parameters set.
+   *
+   * @param path the path
+   * @return the set
+   */
   static Set<String> parsePathParameters(String path) {
     Matcher m = PARAM_URL_REGEX.matcher(path);
     Set<String> patterns = new LinkedHashSet<>();
@@ -204,10 +240,21 @@ public class MainTest {
     return patterns;
   }
 
+  /**
+   * The interface A.
+   */
   interface A {
+    /**
+     * Gets item.
+     *
+     * @return the item
+     */
     Object getItem();
   }
 
+  /**
+   * The interface B.
+   */
   interface B extends A {
     String getItem();
   }

@@ -1,14 +1,20 @@
 package com.smartdengg.ultra.core;
 
+import android.util.Log;
 import com.smartdengg.ultra.annotation.RestType;
 import java.util.Map;
 import rx.Observable;
 import rx.Single;
 
 /**
- * Created by SmartDengg on 2016/2/21.
+ * 创建时间: 2016/11/18 00:36 <br>
+ * 作者: dengwei <br>
+ * 描述:
  */
 public class RequestEntity<R> {
+
+  /** Log tag, apps may override it. */
+  public static String TAG = RequestEntity.class.getSimpleName();
 
   private RestType restType;
   private String url;
@@ -73,10 +79,24 @@ public class RequestEntity<R> {
     return Single.just(RequestEntity.this);
   }
 
+  //@formatter:off
+  public void dump() {
+    StringBuilder info = new StringBuilder();
+    info.append("Type").append('=').append(this.getRestType()).append(Printer.SEPARATOR);
+    info.append("Url").append('=').append('"').append(this.getUrl()).append('\'').append(Printer.SEPARATOR);
+    info.append("Params").append('=').append(this.getParamMap()).append(Printer.SEPARATOR);
+    info.append("Source").append('=').append(this.sourceRequest).append(Printer.SEPARATOR);
+    String result = Printer.translate("Request entity !!!!", info.toString());
+    Log.v(TAG, result);
+  }
+
   @Override public String toString() {
-    return "Request entity !!!!" +
-        "\n  -->  Type    : " + RequestEntity.this.getRestType() +
-        "\n  -->  Url     : " + RequestEntity.this.getUrl() +
-        "\n  -->  Params  : " + RequestEntity.this.getParamMap();
+    return "RequestEntity{" +
+        "restType=" + restType +
+        ", url='" + url + '\'' +
+        ", paramMap=" + paramMap +
+        ", sourceRequest=" + sourceRequest +
+        ", shouldOutputs=" + shouldOutputs +
+        '}';
   }
 }

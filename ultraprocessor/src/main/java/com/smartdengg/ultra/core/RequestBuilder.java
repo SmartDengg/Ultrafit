@@ -28,6 +28,6 @@ class RequestBuilder<R> {
   }
 
   private void outputs() {
-    System.out.println(Utils.checkNotNull(requestEntity, "requestEntity == null").toString());
+    Utils.checkNotNull(requestEntity, "requestEntity == null").dump();
   }
 }
