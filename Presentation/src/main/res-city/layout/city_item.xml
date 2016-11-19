@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:foreground="?android:attr/selectableItemBackground"
+  app:cardBackgroundColor="@android:color/white"
+  app:cardCornerRadius="@dimen/material_4dp"
+  app:cardElevation="@dimen/material_4dp"
+  app:contentPadding="@dimen/material_1dp">
+
+  <com.smartdengg.presentation.ui.SmartTextView
+    android:id="@+id/city_item_name_tv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:gravity="center"
+    android:padding="@dimen/material_16dp"
+    android:textColor="@color/colorAccent"
+    android:textSize="@dimen/material_24sp"
+    tools:text="北京" />
+
+</android.support.v7.widget.CardView>

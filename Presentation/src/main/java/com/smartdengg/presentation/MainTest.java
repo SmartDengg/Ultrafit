@@ -19,17 +19,10 @@ import rx.subjects.BehaviorSubject;
  */
 public class MainTest {
 
-  /**
-   * The Item.
-   */
+  private static boolean stop = false;
+
   static int item = 1;
 
-  /**
-   * The entry point of application.
-   *
-   * @param args the input arguments
-   * @throws InterruptedException the interrupted exception
-   */
   public static void main(String[] args) throws InterruptedException {
 
     /*List<String> fixedList = new ArrayList<>(3);
@@ -53,7 +46,15 @@ public class MainTest {
     // Crash
     a.getItem();*/
 
-    cache();
+    /*ThreadWrapper threadWrapper = new ThreadWrapper();
+    threadWrapper.start();
+
+    Thread.sleep(1000);
+    System.out.println("sleep");
+
+    threadWrapper.close();*/
+
+    //cache();
 
     //asyncSubject();
 
@@ -61,7 +62,54 @@ public class MainTest {
 
     //Schedulers.start();
 
+    threadTest();
+
     for (; ; ) ;
+  }
+
+  private static void threadTest() throws InterruptedException {
+
+    new Thread(new Runnable() {
+      @Override public void run() {
+        while (!stop) {
+          try {
+            System.out.println("call");
+            Thread.sleep(100);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+    }).start();
+
+    Thread.sleep(1000);
+    System.out.println("sleep");
+
+    new Thread(new Runnable() {
+      @Override public void run() {
+        stop = true;
+      }
+    }).start();
+
+  }
+
+  public static class ThreadWrapper extends Thread {
+    private boolean flag = false;
+
+    public void run() {
+      while (!flag) {
+        try {
+          System.out.println("call");
+          Thread.sleep(100);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+
+    public void close() {
+      flag = true;
+    }
   }
 
   private static void BehaviorSubject() {

@@ -76,7 +76,7 @@ public class DetailActivity extends BaseActivity {
   }
 
   @Override protected int getLayoutId() {
-    return R.layout.detail_activity;
+    return R.layout.movie_detail_activity;
   }
 
   private void initView(Bundle savedInstanceState) {

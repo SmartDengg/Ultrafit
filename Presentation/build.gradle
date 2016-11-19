@@ -43,6 +43,17 @@ android {
       versionNameSuffix '.dev'
     }
   }
+
+  sourceSets {
+    main {
+      res.srcDirs = ['src/main/res-main',
+                     'src/main/res-city',
+                     'src/main/res-movie',]
+      /*file('src/main/res-screen')
+          .listFiles()
+          .each { res.srcDirs += it.path }*/
+    }
+  }
 }
 
 // Trigger build type (as soon as possible) and make some action via corresponding tasks
