@@ -6,11 +6,6 @@ import java.util.Map;
 import rx.Observable;
 import rx.Single;
 
-/**
- * 创建时间: 2016/11/18 00:36 <br>
- * 作者: dengwei <br>
- * 描述:
- */
 public class RequestEntity<R> {
 
   /** Log tag, apps may override it. */

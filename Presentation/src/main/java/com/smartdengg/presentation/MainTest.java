@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.LinkedHashSet;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -62,7 +63,28 @@ public class MainTest {
 
     //Schedulers.start();
 
-    threadTest();
+    //threadTest();
+
+    Subscriber<Integer> subscriber = new Subscriber<Integer>() {
+      @Override public void onNext(Integer t) {
+        if (t == 1) {
+          throw new IllegalArgumentException();
+        }
+      }
+
+      @Override
+
+      public void onError(Throwable e) {
+        if (e instanceof IllegalArgumentException) {
+          throw new UnsupportedOperationException();
+        }
+      }
+
+      @Override public void onCompleted() {
+        throw new NoSuchElementException();
+      }
+    };
+    Observable.just(1).subscribe(subscriber);
 
     for (; ; ) ;
   }
@@ -90,7 +112,6 @@ public class MainTest {
         stop = true;
       }
     }).start();
-
   }
 
   public static class ThreadWrapper extends Thread {

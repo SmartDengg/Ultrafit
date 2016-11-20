@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'com.frogermcs.androiddevmetrics'
+apply plugin: 'project-report'
 
 buildscript {
   repositories {
@@ -54,6 +55,10 @@ android {
           .each { res.srcDirs += it.path }*/
     }
   }
+
+  lintOptions {
+    abortOnError false
+  }
 }
 
 // Trigger build type (as soon as possible) and make some action via corresponding tasks
@@ -95,3 +100,12 @@ dependencies {
   debugCompile 'com.facebook.stetho:stetho:1.3.0'
   compile project(':Model')
 }
+
+task showCache(/*dependsOn: [clean, build]*/) {
+  doLast {
+    configurations.compile.each { println(it) }
+  }
+}
+
+showCache.doFirst { println "---------------------- Cache List ----------------------" }
+
