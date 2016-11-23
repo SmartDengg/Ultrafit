@@ -21,7 +21,7 @@ android {
   buildToolsVersion '24.0.3'
 
   defaultConfig {
-    applicationId "com.smartdengg.presentation"
+//    applicationId "com.smartdengg.presentation"
     minSdkVersion 21
     targetSdkVersion 24
     versionCode 1
@@ -29,6 +29,15 @@ android {
 
     renderscriptTargetApi 19
     renderscriptSupportModeEnabled true
+  }
+
+  productFlavors {
+    pro {
+      applicationId = "com.smartdengg.presentation.pro"
+    }
+    free {
+      applicationId = "com.smartdengg.presentation.free"
+    }
   }
 
   buildTypes {

@@ -24,7 +24,7 @@ allprojects {
 
 ext {
   variantRelease =false
-  debugLable = "debug-ultrafit"
+  debugLable = "ultrafit-debug"
 }
 
 task clean(type: Delete) {
