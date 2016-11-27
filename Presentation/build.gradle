@@ -21,7 +21,7 @@ android {
   buildToolsVersion '24.0.3'
 
   defaultConfig {
-//    applicationId "com.smartdengg.presentation"
+    //    applicationId "com.smartdengg.presentation"
     minSdkVersion 21
     targetSdkVersion 24
     versionCode 1
@@ -31,14 +31,32 @@ android {
     renderscriptSupportModeEnabled true
   }
 
+  /*abi > version > defaultConfig*/
+  flavorDimensions "abi", "version"
+
   productFlavors {
     pro {
+      dimension "version"
       applicationId = "com.smartdengg.presentation.pro"
     }
     free {
+      dimension "version"
       applicationId = "com.smartdengg.presentation.free"
     }
+
+    arm {
+      dimension "abi"
+    }
+
+    mips {
+      dimension "abi"
+    }
+
+    x86 {
+      dimension "abi"
+    }
   }
+
 
   buildTypes {
     release {
@@ -58,15 +76,14 @@ android {
     main {
       res.srcDirs = ['src/main/res-main',
                      'src/main/res-city',
-                     'src/main/res-movie',]
-      /*file('src/main/res-screen')
-          .listFiles()
-          .each { res.srcDirs += it.path }*/
+                     'src/main/res-movie']
     }
   }
 
+  //Needed because of this https://github.com/square/okio/issues/58
   lintOptions {
     abortOnError false
+    warning 'InvalidPackage'
   }
 }
 

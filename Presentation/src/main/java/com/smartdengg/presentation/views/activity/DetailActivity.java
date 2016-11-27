@@ -18,8 +18,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,7 +42,7 @@ public class DetailActivity extends BaseActivity {
   @NonNull @BindView(R.id.detail_layout_root_view) protected ViewGroup rootView;
 
   @NonNull @BindView(R.id.detail_layout_thumb_iv) protected ImageView movieThumbIv;
-  @NonNull @BindView(R.id.detail_layout_content_fl) protected FrameLayout contentLayout;
+  @NonNull @BindView(R.id.detail_layout_content_rl) protected RelativeLayout contentLayout;
 
   @NonNull @BindView(R.id.detail_layout_name_tv) protected TextView movieNameTv;
   @NonNull @BindView(R.id.detail_layout_category_tv) protected TextView movieCategoryTv;

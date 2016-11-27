@@ -1,199 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/detail_layout_root_view"
+<RelativeLayout android:id="@+id/detail_layout_root_view"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <ImageView
+    android:id="@+id/detail_layout_cancel_iv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="24dp"
+    android:layout_marginTop="24dp"
+    android:scaleType="centerCrop"
+    android:src="@drawable/ic_cancel"
+    android:tint="@android:color/white" />
+
+  <RelativeLayout
+    android:id="@+id/detail_layout_content_rl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
->
+    android:layout_below="@id/detail_layout_cancel_iv"
+    android:layout_margin="@dimen/material_24dp"
+    android:background="@drawable/background"
+    android:padding="@dimen/material_8dp">
 
-  <ImageView
-      android:id="@+id/detail_layout_cancel_iv"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="24dp"
-      android:layout_marginLeft="24dp"
-      android:scaleType="centerCrop"
-      android:tint="@android:color/white"
-      android:src="@drawable/ic_cancel"
-  />
-
-  <FrameLayout
-      android:id="@+id/detail_layout_content_fl"
-      android:layout_below="@id/detail_layout_cancel_iv"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_margin="@dimen/material_24dp"
-      android:padding="@dimen/material_8dp"
-      android:background="@drawable/background"
-  >
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-      <ImageView
-          android:id="@+id/detail_layout_holder_iv"
-          android:layout_marginTop="@dimen/material_24dp"
-          android:layout_marginLeft="@dimen/material_16dp"
-          android:layout_width="128dp"
-          android:layout_height="128dp"
-          android:visibility="invisible"
-      />
-
-      <RelativeLayout
-          android:layout_toRightOf="@id/detail_layout_holder_iv"
-          android:layout_marginTop="@dimen/material_24dp"
-          android:layout_marginRight="@dimen/material_8dp"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/material_128dp"
-      >
-
-        <com.smartdengg.presentation.ui.SmartTextView
-            android:id="@+id/detail_layout_name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:paddingTop="@dimen/material_8dp"
-            android:paddingBottom="@dimen/material_8dp"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/material_blue_400"
-            android:textSize="@dimen/material_21sp"
-            tools:text="美人鱼"
-        />
-
-        <TextView
-            android:id="@+id/detail_layout_category_tv"
-            android:layout_below="@id/detail_layout_name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/material_8dp"
-            android:paddingBottom="@dimen/material_8dp"
-            android:textColor="@color/material_blue_400"
-            android:textSize="@dimen/material_13sp"
-            android:textStyle="italic"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="动作/冒险/科幻"
-        />
-
-        <TextView
-            android:id="@+id/detail_layout_release_tv"
-            android:layout_below="@id/detail_layout_category_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|start"
-            android:layout_alignParentBottom="true"
-            android:paddingTop="@dimen/material_8dp"
-            android:paddingBottom="@dimen/material_8dp"
-            android:textStyle="italic"
-            android:textColor="@color/material_blue_400"
-            android:textSize="@dimen/material_13sp"
-            tools:text="上映时间：20140101"
-        />
-      </RelativeLayout>
-
-      <android.support.v4.widget.NestedScrollView
-          android:layout_below="@id/detail_layout_holder_iv"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-      >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-        >
-          <!--地区-->
-          <TextView
-              android:id="@+id/detail_layout_area_tv"
-              android:layout_below="@id/detail_layout_name_tv"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:layout_alignParentBottom="true"
-              android:layout_marginTop="@dimen/material_8dp"
-              android:padding="@dimen/material_8dp"
-              android:textColor="@color/material_purple_400"
-              android:textSize="@dimen/material_14sp"
-              tools:text="地区：美国|日本"
-          />
-
-          <!--编剧-->
-          <TextView
-              android:id="@+id/detail_layout_writers_tv"
-              android:layout_below="@id/detail_layout_name_tv"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:layout_alignParentBottom="true"
-              android:layout_marginTop="@dimen/material_4dp"
-              android:padding="@dimen/material_8dp"
-              android:textColor="@color/material_purple_400"
-              android:textSize="@dimen/material_14sp"
-              tools:text="编剧:麦克斯·鲍任斯坦,达夫·卡拉汉姆"
-          />
-
-          <!--导演-->
-          <TextView
-              android:id="@+id/detail_layout_director_tv"
-              android:layout_below="@id/detail_layout_name_tv"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:layout_alignParentBottom="true"
-              android:layout_marginTop="@dimen/material_4dp"
-              android:padding="@dimen/material_8dp"
-              android:textColor="@color/material_purple_400"
-              android:textSize="@dimen/material_14sp"
-              tools:text="导演：加里斯·爱德华斯"
-          />
-
-          <!--演员-->
-          <TextView
-              android:id="@+id/detail_layout_actor_tv"
-              android:layout_below="@id/detail_layout_name_tv"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:layout_alignParentBottom="true"
-              android:layout_marginTop="@dimen/material_4dp"
-              android:padding="@dimen/material_8dp"
-              android:textColor="@color/material_purple_400"
-              android:textSize="@dimen/material_14sp"
-              tools:text="演员：亚伦·泰勒-约翰逊 Aaron Taylor-Johnson,布莱恩·科兰斯顿"
-          />
-
-          <!--剧情概要-->
-          <TextView
-              android:id="@+id/detail_layout_sketch_tv"
-              android:layout_below="@id/detail_layout_name_tv"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:gravity="center"
-              android:layout_alignParentBottom="true"
-              android:layout_marginTop="@dimen/material_4dp"
-              android:padding="@dimen/material_8dp"
-              android:textColor="@color/material_purple_400"
-              android:textSize="@dimen/material_14sp"
-              tools:text="剧情概要：改编自1954年日本电影《哥斯拉》，围绕一位人类大兵的生活展开。"
-          />
-        </LinearLayout>
-      </android.support.v4.widget.NestedScrollView>
-    </RelativeLayout>
-  </FrameLayout>
-
-  <ImageView
-      android:id="@+id/detail_layout_thumb_iv"
-      android:layout_below="@id/detail_layout_cancel_iv"
-      android:layout_marginTop="@dimen/material_56dp"
-      android:layout_marginLeft="@dimen/material_40dp"
+    <ImageView
+      android:id="@+id/detail_layout_holder_iv"
       android:layout_width="128dp"
       android:layout_height="128dp"
-      android:background="@android:color/transparent"
-  />
+      android:layout_marginLeft="@dimen/material_16dp"
+      android:layout_marginTop="@dimen/material_24dp"
+      android:visibility="invisible" />
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/material_128dp"
+      android:layout_marginRight="@dimen/material_8dp"
+      android:layout_marginTop="@dimen/material_24dp"
+      android:layout_toRightOf="@id/detail_layout_holder_iv">
+
+      <com.smartdengg.presentation.ui.SmartTextView
+        android:id="@+id/detail_layout_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="@dimen/material_8dp"
+        android:paddingTop="@dimen/material_8dp"
+        android:textColor="@color/material_blue_400"
+        android:textSize="@dimen/material_21sp"
+        android:textStyle="bold"
+        tools:text="美人鱼" />
+
+      <TextView
+        android:id="@+id/detail_layout_category_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_layout_name_tv"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="@dimen/material_8dp"
+        android:paddingTop="@dimen/material_8dp"
+        android:textColor="@color/material_blue_400"
+        android:textSize="@dimen/material_13sp"
+        android:textStyle="italic"
+        tools:text="动作/冒险/科幻" />
+
+      <TextView
+        android:id="@+id/detail_layout_release_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/detail_layout_category_tv"
+        android:gravity="center|start"
+        android:paddingBottom="@dimen/material_8dp"
+        android:paddingTop="@dimen/material_8dp"
+        android:textColor="@color/material_blue_400"
+        android:textSize="@dimen/material_13sp"
+        android:textStyle="italic"
+        tools:text="上映时间：20140101" />
+    </RelativeLayout>
+
+    <android.support.v4.widget.NestedScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@id/detail_layout_holder_iv">
+
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--地区-->
+        <TextView
+          android:id="@+id/detail_layout_area_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/material_8dp"
+          android:gravity="center"
+          android:padding="@dimen/material_8dp"
+          android:textColor="@color/material_purple_400"
+          android:textSize="@dimen/material_14sp"
+          tools:text="地区：美国|日本" />
+
+        <!--编剧-->
+        <TextView
+          android:id="@+id/detail_layout_writers_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/material_4dp"
+          android:gravity="center"
+          android:padding="@dimen/material_8dp"
+          android:textColor="@color/material_purple_400"
+          android:textSize="@dimen/material_14sp"
+          tools:text="编剧:麦克斯·鲍任斯坦,达夫·卡拉汉姆" />
+
+        <!--导演-->
+        <TextView
+          android:id="@+id/detail_layout_director_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/material_4dp"
+          android:gravity="center"
+          android:padding="@dimen/material_8dp"
+          android:textColor="@color/material_purple_400"
+          android:textSize="@dimen/material_14sp"
+          tools:text="导演：加里斯·爱德华斯" />
+
+        <!--演员-->
+        <TextView
+          android:id="@+id/detail_layout_actor_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/material_4dp"
+          android:gravity="center"
+          android:padding="@dimen/material_8dp"
+          android:textColor="@color/material_purple_400"
+          android:textSize="@dimen/material_14sp"
+          tools:text="演员：亚伦·泰勒-约翰逊 Aaron Taylor-Johnson,布莱恩·科兰斯顿" />
+
+        <!--剧情概要-->
+        <TextView
+          android:id="@+id/detail_layout_sketch_tv"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/material_4dp"
+          android:gravity="center"
+          android:padding="@dimen/material_8dp"
+          android:textColor="@color/material_purple_400"
+          android:textSize="@dimen/material_14sp"
+          tools:text="剧情概要：改编自1954年日本电影《哥斯拉》，围绕一位人类大兵的生活展开。" />
+      </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+  </RelativeLayout>
+
+  <ImageView
+    android:id="@+id/detail_layout_thumb_iv"
+    android:layout_width="128dp"
+    android:layout_height="128dp"
+    android:layout_below="@id/detail_layout_cancel_iv"
+    android:layout_marginLeft="@dimen/material_40dp"
+    android:layout_marginTop="@dimen/material_56dp"
+    android:background="@android:color/transparent" />
 
 
 </RelativeLayout>

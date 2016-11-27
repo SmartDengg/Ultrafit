@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.smartdengg.presentation"
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools">
 
   <application
@@ -9,6 +8,6 @@
     android:label="${debuglable}"
     android:largeHeap="false"
     android:theme="@style/AppTheme.SplashTheme"
-    tools:replace="label,largeHeap" />
+    tools:replace="name,label,largeHeap" />
 
 </manifest>

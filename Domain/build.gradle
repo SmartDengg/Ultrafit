@@ -1,11 +1,5 @@
 apply plugin: 'java'
 
-//noinspection GroovyUnusedAssignment
-targetCompatibility = JavaVersion.VERSION_1_7
-
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = JavaVersion.VERSION_1_7
-
 repositories {
   jcenter()
   // Work around https://code.google.com/p/android/issues/detail?id=69270.

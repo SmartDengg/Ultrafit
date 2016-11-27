@@ -3,9 +3,6 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.SmartDengg'
 
-targetCompatibility = JavaVersion.VERSION_1_7
-sourceCompatibility = JavaVersion.VERSION_1_7
-
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compileOnly 'io.reactivex:rxjava:1.2.1'
