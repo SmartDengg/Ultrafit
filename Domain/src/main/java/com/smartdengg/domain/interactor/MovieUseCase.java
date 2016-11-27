@@ -19,19 +19,19 @@ import rx.functions.Func1;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public class MovieListUseCase extends UseCase<MovieIdRequest, List<MovieEntity>> {
+public class MovieUseCase extends UseCase<MovieIdRequest, List<MovieEntity>> {
 
   private MovieRepository mMovieRepository;
 
-  private MovieListUseCase(MovieRepository movieRepository,
+  private MovieUseCase(MovieRepository movieRepository,
       Observable.Transformer<List<MovieEntity>, List<MovieEntity>> transformer) {
     super(transformer);
     this.mMovieRepository = movieRepository;
   }
 
-  public static MovieListUseCase create(MovieRepository movieRepository,
+  public static MovieUseCase create(MovieRepository movieRepository,
       Observable.Transformer<List<MovieEntity>, List<MovieEntity>> transformer) {
-    return new MovieListUseCase(movieRepository, transformer);
+    return new MovieUseCase(movieRepository, transformer);
   }
 
   @Override protected Observable<List<MovieEntity>> interactor(@NonNull String url,

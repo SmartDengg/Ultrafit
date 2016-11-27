@@ -1,11 +1,11 @@
-package com.smartdengg.presentation.views;
+package com.smartdengg.presentation;
 
 import rx.Observable;
 
 /**
  * Created by Joker on 2016/2/22.
  */
-public interface ViewInterface<T> {
+public interface BaseView<T> {
 
   void showData(Observable<T> data);
 

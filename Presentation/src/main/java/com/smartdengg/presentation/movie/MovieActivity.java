@@ -1,4 +1,4 @@
-package com.smartdengg.presentation.views.activity;
+package com.smartdengg.presentation.movie;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -28,17 +28,16 @@ import butterknife.BindString;
 import butterknife.BindView;
 import com.smartdengg.common.Constants;
 import com.smartdengg.domain.entity.MovieEntity;
+import com.smartdengg.presentation.BaseActivity;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.adapter.MovieAdapter;
 import com.smartdengg.presentation.bitmaps.BitmapUtil;
-import com.smartdengg.presentation.presenter.MovieListPresenter;
-import com.smartdengg.presentation.presenter.MovieListPresenterImp;
+import com.smartdengg.presentation.detail.DetailActivity;
 import com.smartdengg.presentation.ui.MarginDecoration;
-import com.smartdengg.presentation.views.ViewInterface;
 import java.util.List;
 import rx.Observable;
 
-public class MovieActivity extends BaseActivity implements ViewInterface<List<MovieEntity>> {
+public class MovieActivity extends BaseActivity implements MovieContract.View<List<MovieEntity>> {
 
   private static final String START_LOCATION_Y = "START_LOCATION_Y";
   private static final String CITY_ID = "CITY_ID";
@@ -54,7 +53,7 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
   @NonNull @BindView(R.id.movie_layout_vs) protected ViewStub viewStub;
 
   private MovieAdapter movieAdapter = new MovieAdapter(MovieActivity.this);
-  private MovieListPresenter<List<MovieEntity>> movieListPresenter;
+  private MovieContract.Presenter<List<MovieEntity>> moviePresenter;
 
   private View itemView;
   private ImageView blurIv;
@@ -103,8 +102,8 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
   }
 
   private void initPresenter() {
-    this.movieListPresenter = MovieListPresenterImp.createdPresenter();
-    this.movieListPresenter.attachView(MovieActivity.this);
+    this.moviePresenter = MoviePresenterImp.createdPresenter();
+    this.moviePresenter.attachView(MovieActivity.this);
   }
 
   @SuppressWarnings("all") private void initView(Bundle savedInstanceState) {
@@ -147,7 +146,7 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
   }
 
   private void initData() {
-    this.movieListPresenter.loadData(getIntent().getStringExtra(CITY_ID));
+    this.moviePresenter.loadData(getIntent().getStringExtra(CITY_ID));
   }
 
   @Override public void showData(Observable<List<MovieEntity>> data) {
@@ -250,6 +249,6 @@ public class MovieActivity extends BaseActivity implements ViewInterface<List<Mo
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    this.movieListPresenter.detachView();
+    this.moviePresenter.detachView();
   }
 }

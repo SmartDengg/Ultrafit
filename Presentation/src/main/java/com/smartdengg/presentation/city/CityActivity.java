@@ -1,4 +1,4 @@
-package com.smartdengg.presentation.views.activity;
+package com.smartdengg.presentation.city;
 
 import android.animation.Animator;
 import android.os.Bundle;
@@ -18,13 +18,12 @@ import com.smartdengg.common.Constants;
 import com.smartdengg.common.utils.DensityUtil;
 import com.smartdengg.common.utils.TypeVerify;
 import com.smartdengg.domain.entity.CityEntity;
-import com.smartdengg.presentation.AnimationHelper;
+import com.smartdengg.presentation.BaseActivity;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.adapter.CityListAdapter;
-import com.smartdengg.presentation.presenter.CityListPresenter;
-import com.smartdengg.presentation.presenter.CityListPresenterImp;
+import com.smartdengg.presentation.ui.AnimationHelper;
 import com.smartdengg.presentation.ui.MarginDecoration;
-import com.smartdengg.presentation.views.ViewInterface;
+import com.smartdengg.presentation.movie.MovieActivity;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -33,7 +32,7 @@ import rx.Observable;
 /**
  * Created by SmartDengg on 2016/2/24.
  */
-public class CityActivity extends BaseActivity implements ViewInterface<List<CityEntity>> {
+public class CityActivity extends BaseActivity implements CityContract.View<List<CityEntity>> {
 
   @NonNull @BindString(R.string.city_title) protected String title;
 
@@ -44,7 +43,7 @@ public class CityActivity extends BaseActivity implements ViewInterface<List<Cit
 
   private ActionBar actionBar;
   private CityListAdapter cityListAdapter = new CityListAdapter(CityActivity.this);
-  private CityListPresenter<List<CityEntity>> cityListPresenter;
+  private CityContract.Presenter<List<CityEntity>> cityPresenter;
 
   private CityListAdapter.Callback callback = new CityListAdapter.Callback() {
     @Override public void onItemClick(View itemView, CityEntity cityEntity) {
@@ -116,8 +115,8 @@ public class CityActivity extends BaseActivity implements ViewInterface<List<Cit
   }
 
   private void initPresenter() {
-    this.cityListPresenter = CityListPresenterImp.created();
-    this.cityListPresenter.attachView(CityActivity.this);
+    this.cityPresenter = CityPresenterImp.created();
+    this.cityPresenter.attachView(CityActivity.this);
   }
 
   private void initView(Bundle savedInstanceState) {
@@ -174,7 +173,7 @@ public class CityActivity extends BaseActivity implements ViewInterface<List<Cit
   }
 
   private void initData() {
-    this.cityListPresenter.loadData();
+    this.cityPresenter.loadData();
   }
 
   @Override public void showData(Observable<List<CityEntity>> data) {
@@ -202,6 +201,6 @@ public class CityActivity extends BaseActivity implements ViewInterface<List<Cit
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    this.cityListPresenter.detachView();
+    this.cityPresenter.detachView();
   }
 }

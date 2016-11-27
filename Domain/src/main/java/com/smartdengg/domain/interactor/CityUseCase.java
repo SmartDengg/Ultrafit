@@ -13,19 +13,19 @@ import rx.Observable;
 /**
  * Created by SmartDengg on 2016/2/22.
  */
-public class CityListUseCase extends UseCase<CityListRequest, List<CityEntity>> {
+public class CityUseCase extends UseCase<CityListRequest, List<CityEntity>> {
 
   private CityRepository mCityRepository;
 
-  private CityListUseCase(CityRepository cityRepository,
+  private CityUseCase(CityRepository cityRepository,
       Observable.Transformer<List<CityEntity>, List<CityEntity>> transformer) {
     super(transformer);
     this.mCityRepository = cityRepository;
   }
 
-  public static CityListUseCase create(CityRepository cityRepository,
+  public static CityUseCase create(CityRepository cityRepository,
       Observable.Transformer<List<CityEntity>, List<CityEntity>> transformer) {
-    return new CityListUseCase(cityRepository, transformer);
+    return new CityUseCase(cityRepository, transformer);
   }
 
   @Override protected Observable<List<CityEntity>> interactor(@NonNull String url,

@@ -1,4 +1,4 @@
-package com.smartdengg.presentation;
+package com.smartdengg.presentation.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

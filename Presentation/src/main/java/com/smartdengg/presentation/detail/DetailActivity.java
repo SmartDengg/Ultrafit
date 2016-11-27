@@ -1,4 +1,4 @@
-package com.smartdengg.presentation.views.activity;
+package com.smartdengg.presentation.detail;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import com.smartdengg.common.utils.DensityUtil;
 import com.smartdengg.domain.entity.MovieEntity;
+import com.smartdengg.presentation.BaseActivity;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.bitmaps.DateUtil;
 import com.squareup.picasso.Callback;

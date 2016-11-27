@@ -1,4 +1,4 @@
-package com.smartdengg.presentation.views.activity;
+package com.smartdengg.presentation;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;

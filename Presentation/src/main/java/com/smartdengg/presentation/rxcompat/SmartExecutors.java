@@ -19,10 +19,10 @@ import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
 /**
  * Created by Joker on 2015/8/24.
  */
-public class SmartExecutors {
+class SmartExecutors {
 
   private static final int DEVICE_INFO_UNKNOWN = 0;
-  public static ExecutorService eventExecutor;
+  static ExecutorService eventExecutor;
   private static final int CPU_COUNT = SmartExecutors.getCountOfCPU();
   private static final int CORE_POOL_SIZE = CPU_COUNT + 1;
   private static final int MAXIMUM_POOL_SIZE = CPU_COUNT * 2 + 1;

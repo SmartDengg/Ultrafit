@@ -18,7 +18,7 @@
     tools:replace="android:allowBackup">
 
     <activity
-      android:name=".views.activity.CityActivity"
+      android:name=".city.CityActivity"
       android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
@@ -27,12 +27,12 @@
     </activity>
 
     <activity
-      android:name=".views.activity.MovieActivity"
+      android:name=".movie.MovieActivity"
       android:screenOrientation="portrait"
       android:theme="@style/AppTheme.TransparentActivity" />
 
     <activity
-      android:name=".views.activity.DetailActivity"
+      android:name=".detail.DetailActivity"
       android:screenOrientation="portrait"
       android:theme="@style/AppTheme.TransparentActivity" />
 

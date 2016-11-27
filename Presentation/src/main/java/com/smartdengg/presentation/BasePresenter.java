@@ -1,9 +1,9 @@
-package com.smartdengg.presentation.presenter;
+package com.smartdengg.presentation;
 
 /**
  * Created by Joker on 2015/2/22.
  */
-public interface Presenter<P> {
+public interface BasePresenter<P> {
 
   void attachView(P view);
 
