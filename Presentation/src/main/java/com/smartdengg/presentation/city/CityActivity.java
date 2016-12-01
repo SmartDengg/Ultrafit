@@ -1,6 +1,8 @@
 package com.smartdengg.presentation.city;
 
 import android.animation.Animator;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,9 +23,9 @@ import com.smartdengg.domain.entity.CityEntity;
 import com.smartdengg.presentation.BaseActivity;
 import com.smartdengg.presentation.R;
 import com.smartdengg.presentation.adapter.CityListAdapter;
+import com.smartdengg.presentation.movie.MovieActivity;
 import com.smartdengg.presentation.ui.AnimationHelper;
 import com.smartdengg.presentation.ui.MarginDecoration;
-import com.smartdengg.presentation.movie.MovieActivity;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -33,6 +35,8 @@ import rx.Observable;
  * Created by SmartDengg on 2016/2/24.
  */
 public class CityActivity extends BaseActivity implements CityContract.View<List<CityEntity>> {
+
+  private static final String TAG = CityActivity.class.getSimpleName();
 
   @NonNull @BindString(R.string.city_title) protected String title;
 
@@ -96,6 +100,10 @@ public class CityActivity extends BaseActivity implements CityContract.View<List
 
       System.out.println("############################################");
     }
+  }
+
+  public static void start(Context context) {
+    context.startActivity(new Intent(context, CityActivity.class));
   }
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +181,10 @@ public class CityActivity extends BaseActivity implements CityContract.View<List
   }
 
   private void initData() {
+
+    Toast.makeText(this, getString(com.smartdengg.model.R.string.app_name), Toast.LENGTH_LONG)
+        .show();
+
     this.cityPresenter.loadData();
   }
 
@@ -194,8 +206,12 @@ public class CityActivity extends BaseActivity implements CityContract.View<List
   }
 
   private void closeRefresh() {
-    if (swipeRefreshLayout.isRefreshing()) {
-      swipeRefreshLayout.setRefreshing(false);
+    if (!isFinishing() && swipeRefreshLayout != null) {
+      swipeRefreshLayout.post(new Runnable() {
+        @Override public void run() {
+          swipeRefreshLayout.setRefreshing(false);
+        }
+      });
     }
   }
 

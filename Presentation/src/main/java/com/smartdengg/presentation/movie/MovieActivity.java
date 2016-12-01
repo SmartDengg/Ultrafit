@@ -216,9 +216,7 @@ public class MovieActivity extends BaseActivity implements MovieContract.View<Li
   @Override protected void onPostResume() {
     super.onPostResume();
 
-    if (this.itemView != null) {
-      this.itemView.setVisibility(View.VISIBLE);
-    }
+    if (this.itemView != null) this.itemView.setVisibility(View.VISIBLE);
     this.viewStub.setVisibility(View.GONE);
   }
 

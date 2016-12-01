@@ -10,6 +10,10 @@
   </style>
 
   <style name="AppTheme.SplashTheme">
+    <item name="android:windowBackground">@drawable/logo_placeholder</item>
+  </style>
+
+  <style name="AppTheme.MainTheme">
     <item name="android:windowBackground">@drawable/toolbar_placeholder</item>
   </style>
 
@@ -19,8 +23,8 @@
   </style>
 
   <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-    <!-- This would set the toolbar's background color -->
-    <item name="android:background">@color/homeLinkGreen</item>
+    <!-- This would set the toolbar's background_item color -->
+    <item name="android:background">@color/home_green</item>
     <item name="android:textColorPrimary">@color/material_white</item>
   </style>
 

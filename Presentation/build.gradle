@@ -16,10 +16,16 @@ buildscript {
 }
 
 android {
-
+  signingConfigs {
+    config {
+      keyAlias 'deng'
+      keyPassword 'dw206101'
+      storeFile file('/Users/SmartDengg/workspace/SmartDengg/ultra-keystore.jks')
+      storePassword 'dw206101'
+    }
+  }
   compileSdkVersion 24
   buildToolsVersion '24.0.3'
-
   defaultConfig {
     //    applicationId "com.smartdengg.presentation"
     minSdkVersion 21
@@ -30,10 +36,8 @@ android {
     renderscriptTargetApi 19
     renderscriptSupportModeEnabled true
   }
-
   /*abi > version > defaultConfig*/
   flavorDimensions "abi", "version"
-
   productFlavors {
     pro {
       dimension "version"
@@ -56,22 +60,22 @@ android {
       dimension "abi"
     }
   }
-
-
   buildTypes {
     release {
+      manifestPlaceholders = [releaselable: "${rootProject.ext.releaseLable}"]
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       debuggable false
+      signingConfig signingConfigs.config
     }
     debug {
-      manifestPlaceholders = [debuglable: "${rootProject.ext.debugLable}"]
+      manifestPlaceholders =
+          [debuglable: "${rootProject.ext.debugLable}", releaselable: "${rootProject.ext.releaseLable}"]
       debuggable true
       applicationIdSuffix ".debug"
       versionNameSuffix '.dev'
     }
   }
-
   sourceSets {
     main {
       res.srcDirs = ['src/main/res-main',
@@ -79,7 +83,6 @@ android {
                      'src/main/res-movie']
     }
   }
-
   //Needed because of this https://github.com/square/okio/issues/58
   lintOptions {
     abortOnError false

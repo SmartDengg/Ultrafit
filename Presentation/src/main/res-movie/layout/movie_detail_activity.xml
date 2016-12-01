@@ -22,7 +22,7 @@
     android:layout_height="match_parent"
     android:layout_below="@id/detail_layout_cancel_iv"
     android:layout_margin="@dimen/material_24dp"
-    android:background="@drawable/background"
+    android:background="@drawable/background_item"
     android:padding="@dimen/material_8dp">
 
     <ImageView

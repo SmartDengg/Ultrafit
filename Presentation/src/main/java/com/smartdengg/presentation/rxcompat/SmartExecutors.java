@@ -49,14 +49,12 @@ class SmartExecutors {
   /**
    * Linux中的设备都是以文件的形式存在，CPU也不例外，因此CPU的文件个数就等价与核数。
    * Android的CPU 设备文件位于/sys/devices/system/cpu/目录，文件名的的格式为cpu\d+。
-   * 引用：http://www.jianshu.com/p/f7add443cd32#，感谢 liangfeizc :)
    * https://github.com/facebook/device-year-class
    */
-  public static int getCountOfCPU() {
+  private static int getCountOfCPU() {
 
-    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-      return 1;
-    }
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) return 1;
+
     int count;
     try {
       count = new File("/sys/devices/system/cpu/").listFiles(CPU_FILTER).length;
@@ -83,7 +81,7 @@ class SmartExecutors {
   };
 
   private static class SmartThread extends Thread {
-    public SmartThread(Runnable runnable, String threadName) {
+    SmartThread(Runnable runnable, String threadName) {
       super(runnable, threadName);
     }
 

@@ -4,7 +4,7 @@
   <color name="colorPrimaryDark">#303F9F</color>
   <color name="colorAccent">#DA498C</color>
 
-  <color name="homeLinkGreen">#00ae66</color>
+  <color name="home_green">#00ae66</color>
 
   <!-- Red(红色) -->
   <color name="material_red_50">#FFEBEE</color>
