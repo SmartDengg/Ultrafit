@@ -131,6 +131,8 @@ public class MainTest {
         .repeatWhen(new Func1<Observable<? extends Void>, Observable<?>>() {
           @Override public Observable<?> call(Observable<? extends Void> observable) {
 
+            System.out.println("repeatWhen.call");
+
             return observable.map(new Func1<Void, Integer>() {
               @Override public Integer call(Void aVoid) {
                 return getDelay();
