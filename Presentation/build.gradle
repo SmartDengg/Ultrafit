@@ -16,18 +16,9 @@ buildscript {
 }
 
 android {
-  signingConfigs {
-    config {
-      keyAlias 'deng'
-      keyPassword 'dw206101'
-      storeFile file('/Users/SmartDengg/workspace/SmartDengg/ultra-keystore.jks')
-      storePassword 'dw206101'
-    }
-  }
   compileSdkVersion 24
   buildToolsVersion '24.0.3'
   defaultConfig {
-    //    applicationId "com.smartdengg.presentation"
     minSdkVersion 21
     targetSdkVersion 24
     versionCode 1
@@ -60,17 +51,27 @@ android {
       dimension "abi"
     }
   }
+
+  signingConfigs {
+    config {
+      keyAlias 'deng'
+      keyPassword 'dw206101'
+      storeFile file('/Users/SmartDengg/workspace/SmartDengg/ultra-keystore.jks')
+      storePassword 'dw206101'
+    }
+  }
+
   buildTypes {
     release {
-      manifestPlaceholders = [releaselable: "${rootProject.ext.releaseLable}"]
+      manifestPlaceholders = [release_label: "${rootProject.ext.release_label}"]
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       debuggable false
       signingConfig signingConfigs.config
     }
     debug {
-      manifestPlaceholders =
-          [debuglable: "${rootProject.ext.debugLable}", releaselable: "${rootProject.ext.releaseLable}"]
+      manifestPlaceholders = [debug_label  : "${rootProject.ext.debug_label}",
+                              release_label: "${rootProject.ext.release_label}"]
       debuggable true
       applicationIdSuffix ".debug"
       versionNameSuffix '.dev'
@@ -87,6 +88,27 @@ android {
   lintOptions {
     abortOnError false
     warning 'InvalidPackage'
+  }
+
+  packagingOptions {
+    exclude 'proguard-project.txt'
+    exclude 'project.properties'
+    exclude 'META-INF/LICENSE.txt'
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/NOTICE.txt'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/DEPENDENCIES.txt'
+    exclude 'META-INF/DEPENDENCIES'
+  }
+}
+
+android.applicationVariants.all { variant ->
+  variant.outputs.each { output ->
+    if (output.zipAlign != null) {
+      output.zipAlign.doLast {
+        output.zipAlign.inputFile.delete()
+      }
+    }
   }
 }
 

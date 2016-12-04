@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  package="com.smartdengg.presentation">
+<manifest package="com.smartdengg.presentation"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
 
   <application
     android:name=".DebugApplication"
     android:icon="@mipmap/ic_launcher"
-    android:label="${debuglable}"
+    android:label="${debug_label}"
     android:largeHeap="false"
     android:theme="@style/AppTheme"
     tools:replace="name,label,largeHeap">
@@ -22,6 +22,7 @@
 
     <activity
       android:name=".LogoActivity"
+      android:enabled="false"
       tools:remove="theme">
       <intent-filter>
         <action

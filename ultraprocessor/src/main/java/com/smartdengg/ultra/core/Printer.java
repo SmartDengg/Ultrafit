@@ -4,19 +4,19 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * åˆ›å»ºæ—¶é—´:  2016/10/31 14:18 <br>
- * ä½œè€…:  dengwei <br>
- * æè¿°:  æ‰“å°å·¥å…·ç±»
+ * ´´½¨Ê±¼ä:  2016/10/31 14:18 <br>
+ * ×÷Õß:  dengwei <br>
+ * ÃèÊö:  ´òÓ¡¹¤¾ßÀà
  */
 class Printer {
 
   /** Drawing toolbox */
-  private static final char TOP_LEFT_CORNER = 'â•”';
-  private static final char BOTTOM_LEFT_CORNER = 'â•š';
-  private static final char MIDDLE_CORNER = 'â•Ÿ';
-  private static final char HORIZONTAL_DOUBLE_LINE = 'â•‘';
-  private static final String DOUBLE_DIVIDER = "â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•";
-  private static final String SINGLE_DIVIDER = "â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€";
+  private static final char TOP_LEFT_CORNER = '¨X';
+  private static final char BOTTOM_LEFT_CORNER = '¨^';
+  private static final char MIDDLE_CORNER = '¨c';
+  private static final char HORIZONTAL_DOUBLE_LINE = '¨U';
+  private static final String DOUBLE_DIVIDER = "¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T";
+  private static final String SINGLE_DIVIDER = "©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤";
   private static final String TOP_BORDER = TOP_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
   private static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
   private static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;
@@ -76,7 +76,7 @@ class Printer {
 
     /*box title*/
     result.append(TOP_BORDER).append(SEPARATOR);
-    result.append("â•‘").append("\t").append(title).append(SEPARATOR);
+    result.append("¨U").append("\t").append(title).append(SEPARATOR);
     result.append(MIDDLE_BORDER).append(SEPARATOR);
 
     /*box message*/

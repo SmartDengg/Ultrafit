@@ -11,7 +11,7 @@
     android:name=".ReleaseApplication"
     android:allowBackup="false"
     android:icon="@mipmap/ic_launcher"
-    android:label="${releaselable}"
+    android:label="${release_label}"
     android:largeHeap="true"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
