@@ -37,7 +37,7 @@ public abstract class UseCase<Request, Response> {
     /**be care of ConnectableObservable!!!*/
     this.subscription = Observable.defer(new Func0<Observable<RequestEntity<Request>>>() {
       @Override public Observable<RequestEntity<Request>> call() {
-        return new UltraParserFactory<>(request).parseRequestEntity().asObservable();
+        return UltraParserFactory.createWith(request).parse().asObservable();
       }
     }).doOnNext(new Action1<RequestEntity<Request>>() {
       @Override public void call(RequestEntity<Request> requestEntity) {
@@ -62,7 +62,7 @@ public abstract class UseCase<Request, Response> {
     /**you can also use the operator {@link rx.Observable.toSingle}, it's simpler*/
     this.subscription = Single.defer(new Func0<Single<RequestEntity<Request>>>() {
       @Override public Single<RequestEntity<Request>> call() {
-        return new UltraParserFactory<>(request).parseRequestEntity().asSingle();
+        return UltraParserFactory.createWith(request).parse().asSingle();
       }
     }).map(new Func1<RequestEntity<Request>, RequestEntity<Request>>() {
       @Override public RequestEntity<Request> call(RequestEntity<Request> requestEntity) {

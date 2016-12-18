@@ -1,9 +1,14 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.common.utils;
 
 import java.util.Arrays;
 import java.util.List;
 
-class Printer {
+/**
+ * 创建时间:  2016/10/31 14:18 <br>
+ * 作者:  dengwei <br>
+ * 描述:  打印工具类
+ */
+class LibPrintUtil {
 
   /** Drawing toolbox */
   private static final char TOP_LEFT_CORNER = '╔';
@@ -16,9 +21,9 @@ class Printer {
   private static final String BOTTOM_BORDER = BOTTOM_LEFT_CORNER + DOUBLE_DIVIDER + DOUBLE_DIVIDER;
   private static final String MIDDLE_BORDER = MIDDLE_CORNER + SINGLE_DIVIDER + SINGLE_DIVIDER;
 
-  static final String SEPARATOR = System.getProperty("line.separator");
+  private static final String SEPARATOR = System.getProperty("line.separator");
 
-  private Printer() {
+  private LibPrintUtil() {
     throw new AssertionError("no instance");
   }
 
@@ -71,13 +76,13 @@ class Printer {
 
     /*box title*/
     result.append(TOP_BORDER).append(SEPARATOR);
-    result.append('║').append('\t').append(title).append(SEPARATOR);
+    result.append("║").append("\t").append(title).append(SEPARATOR);
     result.append(MIDDLE_BORDER).append(SEPARATOR);
 
     /*box message*/
     String[] lines = message.split(SEPARATOR);
     for (String chunk : lines) {
-      result.append(HORIZONTAL_DOUBLE_LINE).append('\t').append(chunk).append(SEPARATOR);
+      result.append(HORIZONTAL_DOUBLE_LINE).append("\t").append(chunk).append(SEPARATOR);
     }
     result.append(BOTTOM_BORDER);
 

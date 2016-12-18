@@ -3,18 +3,6 @@ apply plugin: 'android-apt'
 apply plugin: 'com.frogermcs.androiddevmetrics'
 apply plugin: 'project-report'
 
-buildscript {
-  repositories {
-    jcenter()
-    mavenCentral()
-  }
-
-  dependencies {
-    classpath 'com.frogermcs.androiddevmetrics:androiddevmetrics-plugin:0.4'
-    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-  }
-}
-
 android {
   compileSdkVersion 24
   buildToolsVersion '24.0.3'
@@ -88,6 +76,7 @@ android {
   lintOptions {
     abortOnError false
     warning 'InvalidPackage'
+    fatal 'UnusedResources'
   }
 
   packagingOptions {
@@ -141,6 +130,7 @@ dependencies {
   /*Square Library*/
   compile 'com.jakewharton:butterknife:8.4.0'
   apt 'com.jakewharton:butterknife-compiler:8.4.0'
+  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
   /*ReactiveX Library*/
   compile 'com.trello:rxlifecycle-components:0.4.0'
   compile 'io.reactivex:rxandroid:1.1.0'
@@ -149,10 +139,11 @@ dependencies {
   /*Facebook Library*/
   debugCompile 'com.facebook.stetho:stetho-okhttp3:1.3.0'
   debugCompile 'com.facebook.stetho:stetho:1.3.0'
+
   compile project(':Model')
 }
 
-task showCache(/*dependsOn: [clean, build]*/) {
+task showCache() {
   doLast {
     configurations.compile.each { println(it) }
   }
@@ -160,3 +151,8 @@ task showCache(/*dependsOn: [clean, build]*/) {
 
 showCache.doFirst { println "---------------------- Cache List ----------------------" }
 
+task list(dependsOn: configurations.compile) {
+  doLast {
+    println "classpath = ${configurations.compile.collect { File file -> file.name }}"
+  }
+}

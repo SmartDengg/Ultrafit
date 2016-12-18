@@ -1,4 +1,4 @@
-package com.smartdengg.ultra;
+package com.smartdengg.ultra.core;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier;
 /**
  * Created by SmartDengg on 2016/4/24.
  */
-@Deprecated public class Reflections {
+class Reflections {
 
   public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
     Class<?>[] empty = {};
@@ -20,7 +20,7 @@ import java.lang.reflect.Modifier;
     return true;
   }
 
-  public static Constructor getConstructor(String className, Class<?>... parameterTypes) {
+  static Constructor getConstructor(String className, Class<?>... parameterTypes) {
 
     Constructor constructor = null;
 

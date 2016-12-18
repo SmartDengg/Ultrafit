@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.smartdengg.presentation"
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.smartdengg.presentation">
 
   <application
     android:name=".DebugApplication"
     android:icon="@mipmap/ic_launcher"
     android:label="${debug_label}"
     android:largeHeap="false"
+    android:supportsRtl="false"
     android:theme="@style/AppTheme"
-    tools:replace="name,label,largeHeap">
+    tools:replace="name,label,largeHeap,supportsRtl">
 
     <activity
       android:name=".city.CityActivity"
@@ -24,14 +25,7 @@
       android:name=".LogoActivity"
       android:enabled="false"
       tools:remove="theme">
-      <intent-filter>
-        <action
-          android:name="android.intent.action.MAIN"
-          tools:node="remove" />
-        <category
-          android:name="android.intent.category.LAUNCHER"
-          tools:node="remove" />
-      </intent-filter>
+      <intent-filter tools:node="removeAll" />
     </activity>
 
   </application>

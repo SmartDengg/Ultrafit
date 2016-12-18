@@ -5,19 +5,19 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.LinkedHashSet;
-import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import rx.AsyncEmitter;
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
 import rx.functions.Action1;
+import rx.functions.Func0;
 import rx.functions.Func1;
+import rx.functions.Func2;
+import rx.observables.SyncOnSubscribe;
 import rx.schedulers.Schedulers;
 import rx.subjects.AsyncSubject;
 import rx.subjects.BehaviorSubject;
@@ -54,67 +54,35 @@ public class MainTest {
 
     //delay();
 
-    final ScheduledExecutorService mainExecutorService =
-        Executors.newScheduledThreadPool(1, new ThreadFactory() {
-          @Override public Thread newThread(Runnable r) {
-            Thread thread = new Thread(r, "Main thread");
-            thread.setDaemon(true);
-            return thread;
-          }
-        });
-
-    //for (int i = 0, n = 10; i <= n; i++) {
-    //final int finalI = i;
-
-    mainExecutorService.scheduleWithFixedDelay(new Runnable() {
-      @Override public void run() {
-
-        System.out.println("UpdateView");
-
-        Observable.create(new Observable.OnSubscribe<Integer>() {
-          @Override public void call(Subscriber<? super Integer> subscriber) {
-
-            try {
-              int t = new Random().nextInt(10) * 1000;
-              Thread.sleep(t);
-              subscriber.onNext(t);
-              subscriber.onCompleted();
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-          }
-        })
-            .concatMap(new Func1<Integer, Observable<Integer>>() {
-              @Override public Observable<Integer> call(Integer integer) {
-                return Observable.just(integer);
-              }
-            })
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.from(mainExecutorService))
-            .subscribe(new Subscriber<Integer>() {
-              @Override public void onCompleted() {
-                System.out.println("MainTest.onCompleted");
-                System.out.println("=================================");
-              }
-
-              @Override public void onError(Throwable e) {
-                e.printStackTrace();
-              }
-
-              @Override public void onNext(final Integer integer) {
-
-                mainExecutorService.execute(new Runnable() {
-                  @Override public void run() {
-                    System.out.println(
-                        "integer = [" + integer + "]" + " Thread = " + Thread.currentThread()
-                            .getName());
-                  }
-                });
-              }
-            });
+    Observable.create(SyncOnSubscribe.createStateful(new Func0<Integer>() {
+      @Override public Integer call() {
+        return 0;
       }
-    }, 3, 3, TimeUnit.SECONDS);
-    //}
+    }, new Func2<Integer, Observer<? super Integer>, Integer>() {
+      @Override public Integer call(Integer integer, Observer<? super Integer> observer) {
+
+        observer.onNext(integer);
+
+        return integer + 1;
+      }
+    })).subscribe(new Subscriber<Integer>() {
+
+      @Override public void onStart() {
+        //super.onStart();
+        request(10);
+      }
+
+      @Override public void onCompleted() {
+      }
+
+      @Override public void onError(Throwable e) {
+
+      }
+
+      @Override public void onNext(Integer integer) {
+        System.out.println("integer = " + integer);
+      }
+    });
 
     for (; ; ) ;
   }

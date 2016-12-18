@@ -14,11 +14,12 @@ class ParameterHandler<T> extends UltraHandler<T> {
 
   private Map<String, String> params = new HashMap<>();
 
-  @SuppressWarnings("unchecked") static <T> void handler(RequestBuilder builder, T request) {
-    new ParameterHandler().apply(builder, request);
+  @SuppressWarnings("unchecked")
+  static <Request> void apply(RequestBuilder builder, Request Request) {
+    new ParameterHandler().process(builder, Request);
   }
 
-  @Override void apply(RequestBuilder builder, T request) {
+  @Override void process(RequestBuilder builder, T request) {
 
     Class<?> clazz = request.getClass();
     Class<?> superClazz = clazz.getSuperclass();

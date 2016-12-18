@@ -1,6 +1,5 @@
 package com.smartdengg.ultra.core;
 
-import com.smartdengg.ultra.Reflections;
 import com.smartdengg.ultra.annotation.RestMethod;
 import com.smartdengg.ultra.annotation.RestType;
 import java.lang.annotation.Annotation;
@@ -16,14 +15,14 @@ public class UrlHandler extends UltraHandler<Annotation[]> {
   private String url = null;
   private boolean logFlag = true;
 
-  static <T> void handler(RequestBuilder builder, T request) {
+  static <T> void apply(RequestBuilder builder, T request) {
 
     CLASS = request.getClass();
 
-    new UrlHandler().apply(builder, request.getClass().getAnnotations());
+    new UrlHandler().process(builder, request.getClass().getAnnotations());
   }
 
-  @Override void apply(RequestBuilder builder, Annotation[] annotations) {
+  @Override void process(RequestBuilder builder, Annotation[] annotations) {
 
     for (Annotation httpAnnotation : annotations) {
 

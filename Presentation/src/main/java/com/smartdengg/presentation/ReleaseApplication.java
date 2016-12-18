@@ -7,7 +7,6 @@ import com.jakewharton.picasso.OkHttp3Downloader;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
-import com.smartdengg.common.utils.CacheUtil;
 import com.smartdengg.httpservice.lib.HttpService;
 import com.smartdengg.model.injector.provider.Injector;
 import com.squareup.picasso.Picasso;
@@ -27,19 +26,19 @@ public class ReleaseApplication extends Application {
   @Override public void onCreate() {
     super.onCreate();
 
-    OkHttpClient okHttpClient = new OkHttpClient.Builder().cache(
-        Injector.providePicCache(CacheUtil.createDiskCacheDir(ReleaseApplication.this))).build();
+    OkHttp3Downloader okHttp3Downloader = new OkHttp3Downloader(
+        new OkHttpClient.Builder().cache(Injector.providePicCache(ReleaseApplication.this))
+            .build());
 
-    Picasso picasso =
-        new Picasso.Builder(ReleaseApplication.this).downloader(new OkHttp3Downloader(okHttpClient))
-            .listener(picassoListener)
-            .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
-            .build();
+    Picasso picasso = new Picasso.Builder(ReleaseApplication.this).downloader(okHttp3Downloader)
+        .listener(picassoListener)
+        .defaultBitmapConfig(Bitmap.Config.ARGB_8888)
+        .build();
     Picasso.setSingletonInstance(picasso);
 
     Logger.init(Constants.BASE_TAG).setMethodOffset(0).setMethodCount(3).setLogLevel(LogLevel.FULL);
 
-    Injector.setOkHttpBuilderInstance(ReleaseApplication.this);
+    Injector.setupOkHttpBuilder(ReleaseApplication.this);
 
     HttpService.setHttpTAG("LOG-HTTP").enableResponseLog(true);
   }

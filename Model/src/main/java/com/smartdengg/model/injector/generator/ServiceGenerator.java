@@ -9,6 +9,7 @@ import com.smartdengg.httpservice.lib.converter.GsonConverterFactory;
 import com.smartdengg.httpservice.lib.interceptor.HttpLoggingInterceptor;
 import com.smartdengg.model.BuildConfig;
 import com.smartdengg.model.injector.provider.Injector;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
@@ -28,20 +29,20 @@ public class ServiceGenerator {
         .create();
 
     if (!BuildConfig.RELEASE && StethoGenerator.HAS_STETHO_INTERCEPTOR) {
-      ServiceGenerator.httpClientBuilder.addNetworkInterceptor(
-          StethoGenerator.createdStethoInterceptor());
+      Interceptor interceptor = StethoGenerator.createStethoInterceptor();
+      if (interceptor != null) httpClientBuilder.addNetworkInterceptor(interceptor);
     }
 
     if (Injector.builder != null) {
-      ServiceGenerator.httpClientBuilder = Injector.builder;
+      httpClientBuilder = Injector.builder;
     } else {
-      ServiceGenerator.httpClientBuilder.addInterceptor(Injector.provideHeaderInterceptor());
+      httpClientBuilder.addInterceptor(Injector.provideHeaderInterceptor());
     }
 
-    ServiceGenerator.httpClientBuilder.addInterceptor(
+    httpClientBuilder.addInterceptor(
         Injector.provideHttpLoggingInterceptor(HttpLoggingInterceptor.Level.BODY));
 
-    ServiceGenerator.retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
+    retrofit = new Retrofit.Builder().baseUrl(Constants.BASE_URL)
         .addCallAdapterFactory(HttpCallAdapterFactory.create())
         .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(gson))

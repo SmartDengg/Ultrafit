@@ -19,14 +19,14 @@ public class RequestEntity<R> {
 
   private boolean shouldOutputs;
 
-  public RequestEntity() {
+  RequestEntity() {
   }
 
   public RestType getRestType() {
     return restType;
   }
 
-  public RequestEntity setRestType(RestType restType) {
+  RequestEntity setRestType(RestType restType) {
     this.restType = restType;
     return RequestEntity.this;
   }
@@ -35,7 +35,7 @@ public class RequestEntity<R> {
     return url;
   }
 
-  public RequestEntity setUrl(String url) {
+  RequestEntity setUrl(String url) {
     this.url = url;
     return RequestEntity.this;
   }
@@ -44,7 +44,7 @@ public class RequestEntity<R> {
     return paramMap;
   }
 
-  public RequestEntity setParamMap(Map<String, String> paramMap) {
+  RequestEntity setParamMap(Map<String, String> paramMap) {
     this.paramMap = paramMap;
     return RequestEntity.this;
   }
@@ -75,10 +75,10 @@ public class RequestEntity<R> {
   }
 
   //@formatter:off
-  public void dump() {
+  void dump() {
     StringBuilder info = new StringBuilder();
     info.append("Type").append('=').append(this.getRestType()).append(Printer.SEPARATOR);
-    info.append("Url").append('=').append('"').append(this.getUrl()).append('\'').append(Printer.SEPARATOR);
+    info.append("Url").append('=').append('\'').append(this.getUrl()).append('\'').append(Printer.SEPARATOR);
     info.append("Params").append('=').append(this.getParamMap()).append(Printer.SEPARATOR);
     info.append("Source").append('=').append(this.sourceRequest).append(Printer.SEPARATOR);
     String result = Printer.translate("Request entity !!!!", info.toString());
@@ -94,4 +94,8 @@ public class RequestEntity<R> {
         ", shouldOutputs=" + shouldOutputs +
         '}';
   }
+
+
+
+
 }

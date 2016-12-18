@@ -1,15 +1,13 @@
 package com.smartdengg.model.injector.generator;
 
-import android.content.Context;
-import com.smartdengg.ultra.Reflections;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import okhttp3.Interceptor;
 
 /**
  * Created by SmartDengg on 2016/5/16.
  */
-public class StethoGenerator {
+class StethoGenerator {
 
   public static final boolean HAS_STETHO = hasStethoOnClasspath();
   public static final boolean HAS_STETHO_INTERCEPTOR = hasStethoInterceptorOnClasspath();
@@ -17,10 +15,9 @@ public class StethoGenerator {
   private static final String stethoClassName = "com.facebook.stetho.Stetho";
   private static final String stethoInterceptorClassName =
       "com.facebook.stetho.okhttp3.StethoInterceptor";
-  private static final String initializeWithDefaults = "initializeWithDefaults";
 
   private StethoGenerator() {
-    throw new IllegalStateException("No instance");
+    throw new AssertionError("No instance");
   }
 
   private static boolean hasStethoOnClasspath() {
@@ -44,23 +41,22 @@ public class StethoGenerator {
   }
 
   /*package*/
-  static void initializeWithDefaults(Context context) {
+  static Interceptor createStethoInterceptor() {
+
+    Constructor StethoInterceptorConstructor;
+    Interceptor interceptor = null;
 
     try {
-      Method initializeWithDefaultsMethod =
-          Reflections.getDeclaredMethod(Class.forName(stethoClassName), initializeWithDefaults,
-              Context.class);
-      /**null for static methods*/
-      initializeWithDefaultsMethod.invoke(null, context);
+      Class<?> clazz = Class.forName(stethoInterceptorClassName);
+      StethoInterceptorConstructor = clazz.getDeclaredConstructor();
+      if (!Modifier.isPublic(StethoInterceptorConstructor.getModifiers())) {
+        StethoInterceptorConstructor.setAccessible(true);
+      }
+      interceptor = (Interceptor) StethoInterceptorConstructor.newInstance();
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
 
-  /*package*/
-  static Interceptor createdStethoInterceptor() {
-    Constructor StethoInterceptorConstructor =
-        Reflections.getConstructor(stethoInterceptorClassName);
-    return (Interceptor) Reflections.newInstance(StethoInterceptorConstructor);
+    return interceptor;
   }
 }

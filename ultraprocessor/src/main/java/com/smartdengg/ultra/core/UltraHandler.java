@@ -5,5 +5,5 @@ package com.smartdengg.ultra.core;
  */
 abstract class UltraHandler<T> {
 
-  abstract void apply(RequestBuilder builder, T value);
+  abstract void process(RequestBuilder builder, T value);
 }

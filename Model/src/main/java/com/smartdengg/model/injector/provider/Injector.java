@@ -31,21 +31,30 @@ public class Injector {
   public static OkHttpClient.Builder builder;
 
   private Injector() {
-    throw new IllegalStateException("No instance!");
+    throw new AssertionError("No instance!");
   }
 
-  public static void setOkHttpBuilderInstance(Application application) {
+  public static void setupOkHttpBuilder(@NonNull Context context) {
+    //noinspection ConstantConditions
+    if (context == null) throw new NullPointerException("context == null");
+
+    Context appContext;
+    if (context instanceof Application) {
+      appContext = context;
+    } else {
+      appContext = context.getApplicationContext();
+    }
 
     builder = new OkHttpClient.Builder().addInterceptor(provideHeaderInterceptor())
-        .addInterceptor(provideOfflineCacheInterceptor(application))
+        .addInterceptor(provideOfflineCacheInterceptor(appContext))
         .addNetworkInterceptor(provideCacheInterceptor())
-        .cache(provideCache(application));
+        .cache(provideApiCache(appContext));
   }
 
-  private static Cache provideCache(Application application) {
+  private static Cache provideApiCache(Context context) {
     Cache cache = null;
     try {
-      cache = new Cache(new File(application.getCacheDir(), HTTP_CACHE), MAXSIZE); // 10 MB
+      cache = new Cache(new File(context.getCacheDir(), HTTP_CACHE), MAXSIZE); // 10 MB
     } catch (Exception e) {
       Logger.t(0).e(e.toString());
     }
@@ -63,13 +72,11 @@ public class Injector {
     };
   }
 
-  @SuppressWarnings("all") private static Interceptor provideOfflineCacheInterceptor(
-      @NonNull final Application application) {
+  private static Interceptor provideOfflineCacheInterceptor(final Context context) {
     return new Interceptor() {
       @Override public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-
-        if (application != null && !hasNetwork(application)) {
+        if (!hasNetwork(context)) {
           CacheControl cacheControl = new CacheControl.Builder().maxStale(7, TimeUnit.DAYS).build();
           request = request.newBuilder().cacheControl(cacheControl).build();
         }
@@ -79,9 +86,9 @@ public class Injector {
     };
   }
 
-  private static boolean hasNetwork(@NonNull Application application) {
+  private static boolean hasNetwork(Context context) {
     ConnectivityManager cm =
-        (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
+        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo networkInfo = cm.getActiveNetworkInfo();
     return networkInfo != null && networkInfo.isConnected();
   }
@@ -94,7 +101,8 @@ public class Injector {
     return HttpLoggingInterceptor.createLoggingInterceptor().setLevel(level);
   }
 
-  public static Cache providePicCache(File diskPicCacheDir) {
-    return new Cache(diskPicCacheDir, CacheUtil.calculateDiskCacheSize(diskPicCacheDir));
+  public static Cache providePicCache(Context context) {
+    File diskCacheDir = CacheUtil.createDiskCacheDir(context);
+    return new Cache(diskCacheDir, CacheUtil.calculateDiskCacheSize(diskCacheDir));
   }
 }

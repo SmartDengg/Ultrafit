@@ -1,1 +1,3 @@
-<resources></resources>
+<resources>
+  <public name="model_ignore" type="string" />
+</resources>

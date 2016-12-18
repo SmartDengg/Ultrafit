@@ -5,20 +5,24 @@ import java.lang.reflect.Modifier;
 /**
  * Created by SmartDengg on 2016/2/21.
  */
-public class UltraParserFactory<R> {
+public class UltraParserFactory<Request> {
 
-  private R request;
+  private Request mRequest;
 
-  public UltraParserFactory(R request) {
+  public static <Request> UltraParserFactory<Request> createWith(Request request) {
     if (Modifier.isInterface(
-        Utils.checkNotNull(request, "request == null").getClass().getModifiers())) {
+        Utils.checkNotNull(request, "mRequest == null").getClass().getModifiers())) {
       throw Utils.methodError(request.getClass(), "Only class can be parsed,%s is a Interface",
           request.getClass().getSimpleName());
     }
-    this.request = request;
+    return new UltraParserFactory<>(request);
   }
 
-  public RequestEntity<R> parseRequestEntity() {
-    return new RequestBuilder<>(request).build();
+  private UltraParserFactory(Request request) {
+    this.mRequest = request;
+  }
+
+  public RequestEntity<Request> parse() {
+    return new RequestBuilder<>(mRequest).build();
   }
 }

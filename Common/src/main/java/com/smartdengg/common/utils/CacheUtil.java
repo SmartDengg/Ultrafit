@@ -34,6 +34,7 @@ public class CacheUtil {
   public static File createDiskCacheDir(Context context) {
     File cache = new File(context.getApplicationContext().getCacheDir(), ULTRA_CACHE);
     if (!cache.exists()) {
+      //noinspection ResultOfMethodCallIgnored
       cache.mkdirs();
     }
     return cache;
@@ -54,8 +55,7 @@ public class CacheUtil {
     return Math.max(Math.min(size, MAX_DISK_CACHE_SIZE), MIN_DISK_CACHE_SIZE);
   }
 
-  @SuppressWarnings("unchecked")
-  static <T> T getService(Context context, String service) {
+  @SuppressWarnings("unchecked") static <T> T getService(Context context, String service) {
     return (T) context.getSystemService(service);
   }
 }
