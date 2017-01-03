@@ -5,7 +5,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.2'
+    classpath 'com.android.tools.build:gradle:2.2.3'
 
     // JitPack Maven Gradle Plugin
     classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
@@ -19,6 +19,15 @@ buildscript {
 
   tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+  }
+
+  //skip Test tasks
+  gradle.taskGraph.whenReady {
+    tasks.each { task ->
+      if (task.name.contains("Test")) {
+        task.enabled = false
+      }
+    }
   }
 }
 

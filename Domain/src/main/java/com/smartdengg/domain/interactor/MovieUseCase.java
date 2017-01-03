@@ -10,7 +10,7 @@ import com.smartdengg.domain.response.MovieDetailResponse;
 import com.smartdengg.domain.response.MovieListResponse;
 import com.smartdengg.domain.transforms.MovieEntityTransfer;
 import com.smartdengg.domain.transforms.MovieListTransfer;
-import com.smartdengg.ultra.core.RequestEntity;
+import com.smartdengg.ultra.RequestEntity;
 import java.util.List;
 import java.util.Map;
 import rx.Observable;

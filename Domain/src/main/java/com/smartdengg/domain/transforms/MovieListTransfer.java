@@ -2,8 +2,8 @@ package com.smartdengg.domain.transforms;
 
 import com.smartdengg.domain.request.MovieDetailRequest;
 import com.smartdengg.domain.response.MovieListResponse;
-import com.smartdengg.ultra.core.RequestEntity;
-import com.smartdengg.ultra.core.UltraParserFactory;
+import com.smartdengg.ultra.RequestEntity;
+import com.smartdengg.ultra.UltraParserFactory;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;

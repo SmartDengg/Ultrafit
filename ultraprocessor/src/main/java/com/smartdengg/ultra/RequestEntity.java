@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 import android.util.Log;
 import com.smartdengg.ultra.annotation.RestType;

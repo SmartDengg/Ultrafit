@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 /**
  * Created by Joker on 2016/6/28.

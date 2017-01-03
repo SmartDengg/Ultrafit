@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 import java.util.Arrays;
 

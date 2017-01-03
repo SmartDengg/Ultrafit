@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 import com.smartdengg.ultra.annotation.RestMethod;
 import com.smartdengg.ultra.annotation.RestType;
@@ -7,13 +7,16 @@ import java.lang.annotation.Annotation;
 /**
  * Created by Joker on 2016/6/28.
  */
-public class UrlHandler extends UltraHandler<Annotation[]> {
+class UrlHandler extends UltraHandler<Annotation[]> {
 
   private static Class<?> CLASS;
 
   private RestType restType = null;
   private String url = null;
   private boolean logFlag = true;
+
+  private UrlHandler() {
+  }
 
   static <T> void apply(RequestBuilder builder, T request) {
 

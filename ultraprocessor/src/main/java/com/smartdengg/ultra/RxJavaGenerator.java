@@ -1,6 +1,5 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
-import com.smartdengg.ultra.Platform;
 import java.lang.reflect.Constructor;
 
 /**

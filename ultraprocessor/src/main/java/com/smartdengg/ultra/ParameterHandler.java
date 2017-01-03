@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 import com.smartdengg.ultra.annotation.Argument;
 import java.lang.reflect.Field;

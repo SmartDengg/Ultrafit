@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 /**
  * Created by SmartDengg on 2016/6/25.

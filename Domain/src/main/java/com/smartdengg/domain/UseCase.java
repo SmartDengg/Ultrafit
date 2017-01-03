@@ -2,8 +2,8 @@ package com.smartdengg.domain;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.smartdengg.ultra.core.RequestEntity;
-import com.smartdengg.ultra.core.UltraParserFactory;
+import com.smartdengg.ultra.RequestEntity;
+import com.smartdengg.ultra.UltraParserFactory;
 import java.util.Map;
 import rx.Observable;
 import rx.Observer;

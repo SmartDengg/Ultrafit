@@ -1,4 +1,4 @@
-package com.smartdengg.ultra.core;
+package com.smartdengg.ultra;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
