@@ -6,4 +6,11 @@ package com.smartdengg.ultra;
 abstract class UltraHandler<T> {
 
   abstract void process(RequestBuilder builder, T value);
+
+
+
+
+
+
+
 }

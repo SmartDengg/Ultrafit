@@ -34,8 +34,7 @@ class ParameterHandler<T> extends UltraHandler<T> {
       ParameterHandler.this.hunterParams(superFields, request);
     }
 
-    Field[] declaredFields = clazz.getDeclaredFields();
-    ParameterHandler.this.hunterParams(declaredFields, request);
+    ParameterHandler.this.hunterParams(clazz.getDeclaredFields(), request);
 
     builder.requestEntity.setParamMap(Collections.unmodifiableMap(this.params));
   }

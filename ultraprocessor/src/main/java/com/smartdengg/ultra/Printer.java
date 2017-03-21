@@ -60,7 +60,7 @@ class Printer {
        /*Bottom border*/
       if (i == maxLength) return result.append(BOTTOM_BORDER).toString();
 
-       /*Middle border*/
+      /*Middle border*/
       result.append(MIDDLE_BORDER).append(SEPARATOR);
     }
   }

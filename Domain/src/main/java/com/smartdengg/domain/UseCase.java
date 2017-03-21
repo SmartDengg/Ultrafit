@@ -34,7 +34,7 @@ public abstract class UseCase<Request, Response> {
   public void subscribe(final Request request, Observer<Response> useCaseSubscriber,
       final Action1<RequestEntity> action) {
 
-    /**be care of ConnectableObservable!!!*/
+    /*be care of ConnectableObservable!!!*/
     this.subscription = Observable.defer(new Func0<Observable<RequestEntity<Request>>>() {
       @Override public Observable<RequestEntity<Request>> call() {
         return UltraParserFactory.createWith(request).parse().asObservable();
@@ -59,7 +59,7 @@ public abstract class UseCase<Request, Response> {
   public void subscribe(final Request request, final Action1<? super Response> onSuccess,
       final Action1<Throwable> onError, final Action1<RequestEntity> action) {
 
-    /**you can also use the operator {@link rx.Observable.toSingle}, it's simpler*/
+    /*you can also use the operator {@link rx.Observable.toSingle}, it's simpler*/
     this.subscription = Single.defer(new Func0<Single<RequestEntity<Request>>>() {
       @Override public Single<RequestEntity<Request>> call() {
         return UltraParserFactory.createWith(request).parse().asSingle();
@@ -76,10 +76,6 @@ public abstract class UseCase<Request, Response> {
     }).toObservable().compose(transformer).toSingle().subscribe(onSuccess, onError);
   }
 
-  public void unsubscribe() {
-    if (!subscription.isUnsubscribed()) subscription.unsubscribe();
-  }
-
   @CheckResult protected Single<Response> interactorSingle(@NonNull String url,
       @NonNull Map<String, String> params) {
     throw new IllegalArgumentException("If you use the 'Single', you can not call super");
@@ -87,4 +83,8 @@ public abstract class UseCase<Request, Response> {
 
   @CheckResult protected abstract Observable<Response> interactor(@NonNull String url,
       @NonNull Map<String, String> params);
+
+  public void unsubscribe() {
+    if (!subscription.isUnsubscribed()) subscription.unsubscribe();
+  }
 }

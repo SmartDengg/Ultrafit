@@ -7,9 +7,7 @@ import java.lang.annotation.Annotation;
 /**
  * Created by Joker on 2016/6/28.
  */
-class UrlHandler extends UltraHandler<Annotation[]> {
-
-  private static Class<?> CLASS;
+class UrlHandler<T> extends UltraHandler<T> {
 
   private RestType restType = null;
   private String url = null;
@@ -18,15 +16,14 @@ class UrlHandler extends UltraHandler<Annotation[]> {
   private UrlHandler() {
   }
 
-  static <T> void apply(RequestBuilder builder, T request) {
-
-    CLASS = request.getClass();
-
-    new UrlHandler().process(builder, request.getClass().getAnnotations());
+  @SuppressWarnings("unchecked")
+  static <Request> void apply(RequestBuilder builder, Request request) {
+    new UrlHandler().process(builder, request);
   }
 
-  @Override void process(RequestBuilder builder, Annotation[] annotations) {
+  @Override void process(RequestBuilder builder, T value) {
 
+    Annotation[] annotations = value.getClass().getAnnotations();
     for (Annotation httpAnnotation : annotations) {
 
       Class<? extends Annotation> clazz = httpAnnotation.annotationType();
@@ -37,7 +34,7 @@ class UrlHandler extends UltraHandler<Annotation[]> {
       if (this.restType != null) {
         String previousUrl =
             Reflections.invokeMethod(httpAnnotation, clazz, RequestBuilder.HTTP_METHOD);
-        throw Utils.methodError(CLASS,
+        throw Utils.methodError(value.getClass(),
             "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", this.restType,
             this.url, restMethod.type(), previousUrl);
       }
@@ -49,7 +46,7 @@ class UrlHandler extends UltraHandler<Annotation[]> {
     }
 
     if (this.restType == null || this.url == null) {
-      throw Utils.methodError(CLASS,
+      throw Utils.methodError(value.getClass(),
           "Http method annotation is required (e.g.@HttpGet, @HttpPost, etc.).");
     }
 

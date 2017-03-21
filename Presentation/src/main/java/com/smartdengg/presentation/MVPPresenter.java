@@ -3,9 +3,9 @@ package com.smartdengg.presentation;
 /**
  * Created by Joker on 2015/2/22.
  */
-public interface BasePresenter<P> {
+public interface MVPPresenter<V> {
 
-  void attachView(P view);
+  void attachView(V view);
 
   void detachView();
 }
