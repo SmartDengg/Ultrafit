@@ -1,7 +1,7 @@
 package com.smartdengg.ultra;
 
 import com.smartdengg.jsonprinter.JsonPrinter;
-import com.smartdengg.ultra.annotation.RestType;
+import com.smartdengg.ultra.annotation.Type;
 import java.util.Iterator;
 import java.util.Map;
 import rx.Observable;
@@ -12,7 +12,7 @@ public class RequestEntity<R> {
   /** Log tag, apps may override it. */
   public static String TAG = RequestEntity.class.getSimpleName();
 
-  private RestType restType;
+  private Type type;
   private String url;
   private Map<String, String> paramMap;
 
@@ -23,12 +23,12 @@ public class RequestEntity<R> {
   RequestEntity() {
   }
 
-  public RestType getRestType() {
-    return restType;
+  public Type getType() {
+    return type;
   }
 
-  RequestEntity setRestType(RestType restType) {
-    this.restType = restType;
+  RequestEntity setType(Type type) {
+    this.type = type;
     return RequestEntity.this;
   }
 
@@ -50,19 +50,19 @@ public class RequestEntity<R> {
     return RequestEntity.this;
   }
 
-  public R getSourceRequest() {
+  public R getRequest() {
     return sourceRequest;
   }
 
-  public void setSourceRequest(R sourceEntity) {
+  void setRequest(R sourceEntity) {
     this.sourceRequest = sourceEntity;
   }
 
-  public boolean isShouldOutputs() {
+  boolean isShouldOutputs() {
     return shouldOutputs;
   }
 
-  public RequestEntity setShouldOutputs(boolean shouldOutputs) {
+  RequestEntity setShouldOutputs(boolean shouldOutputs) {
     this.shouldOutputs = shouldOutputs;
     return RequestEntity.this;
   }
@@ -77,7 +77,7 @@ public class RequestEntity<R> {
 
   void dump() {
     //StringBuilder info = new StringBuilder();
-    //info.append("Type").append('=').append(this.getRestType()).append(Printer.SEPARATOR);
+    //info.append("Type").append('=').append(this.getType()).append(Printer.SEPARATOR);
     //info.append("Url").append('=').append('\'').append(this.getUrl()).append('\'').append(Printer.SEPARATOR);
     //info.append("Params").append('=').append(this.getParamMap()).append(Printer.SEPARATOR);
     //info.append("Source").append('=').append(this.sourceRequest).append(Printer.SEPARATOR);
@@ -88,7 +88,7 @@ public class RequestEntity<R> {
 
     jsonBuilder.append("{");
 
-    jsonBuilder.append("\"http\"").append(':').append("\"").append(restType).append("\"");
+    jsonBuilder.append("\"http\"").append(':').append("\"").append(type).append("\"");
     jsonBuilder.append(',');
 
     jsonBuilder.append("\"url\"").append(':').append("\"").append(url).append("\"");
@@ -114,8 +114,8 @@ public class RequestEntity<R> {
 
   @Override public String toString() {
     return "RequestEntity{"
-        + "restType="
-        + restType
+        + "type="
+        + type
         + ", url='"
         + url
         + '\''

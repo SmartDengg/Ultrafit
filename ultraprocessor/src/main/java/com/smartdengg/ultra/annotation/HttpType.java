@@ -9,10 +9,8 @@ import java.lang.annotation.Target;
 /**
  * Created by SmartDengg on 2016/2/14.
  */
-@Documented
-@Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.ANNOTATION_TYPE)
-public @interface RestMethod {
+@Documented @Retention(value = RetentionPolicy.RUNTIME) @Target(value = ElementType.ANNOTATION_TYPE)
+public @interface HttpType {
 
-    RestType type();
+  Type type();
 }

@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)
-@RestMethod(type = RestType.POST)
+@HttpType(type = Type.POST)
 @Inherited
 public @interface HttpPost {
 

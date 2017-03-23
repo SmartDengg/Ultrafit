@@ -3,7 +3,7 @@ package com.smartdengg.domain;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import com.smartdengg.ultra.RequestEntity;
-import com.smartdengg.ultra.UltraParserFactory;
+import com.smartdengg.ultra.UltraParser;
 import java.util.Map;
 import rx.Observable;
 import rx.Observer;
@@ -37,7 +37,7 @@ public abstract class UseCase<Request, Response> {
     /*be care of ConnectableObservable!!!*/
     this.subscription = Observable.defer(new Func0<Observable<RequestEntity<Request>>>() {
       @Override public Observable<RequestEntity<Request>> call() {
-        return UltraParserFactory.createWith(request).parse().asObservable();
+        return UltraParser.createWith(request).parse().asObservable();
       }
     }).doOnNext(new Action1<RequestEntity<Request>>() {
       @Override public void call(RequestEntity<Request> requestEntity) {
@@ -62,7 +62,7 @@ public abstract class UseCase<Request, Response> {
     /*you can also use the operator {@link rx.Observable.toSingle}, it's simpler*/
     this.subscription = Single.defer(new Func0<Single<RequestEntity<Request>>>() {
       @Override public Single<RequestEntity<Request>> call() {
-        return UltraParserFactory.createWith(request).parse().asSingle();
+        return UltraParser.createWith(request).parse().asSingle();
       }
     }).map(new Func1<RequestEntity<Request>, RequestEntity<Request>>() {
       @Override public RequestEntity<Request> call(RequestEntity<Request> requestEntity) {

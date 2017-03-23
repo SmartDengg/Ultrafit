@@ -3,7 +3,6 @@ package com.smartdengg.ultra;
 import com.smartdengg.ultra.annotation.Argument;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,70 +11,59 @@ import java.util.Map;
  */
 class ParameterHandler<T> extends UltraHandler<T> {
 
-  private Map<String, String> params = new HashMap<>();
-
-  @SuppressWarnings("unchecked")
-  static <Request> void apply(RequestBuilder builder, Request Request) {
-    new ParameterHandler().process(builder, Request);
+  private ParameterHandler() {
   }
 
-  @Override void process(RequestBuilder builder, T request) {
+  static <Request> UltraHandler<Request> create() {
+    return new ParameterHandler<>();
+  }
 
+  @Override void process(RequestEntity<T> requestEntity, T request) {
+
+    final Map<String, String> parameters = new HashMap<>();
     Class<?> clazz = request.getClass();
-    Class<?> superClazz = clazz.getSuperclass();
 
-    while (superClazz != null) {
+    do {
+      if (Object.class.getName().equalsIgnoreCase(clazz.getName())) break;
 
-      if (Object.class.getName().equalsIgnoreCase(superClazz.getName())) break;
+      Field[] declaredFields = clazz.getDeclaredFields();
+      hunterParams(declaredFields, request, parameters);
 
-      Field[] superFields = superClazz.getDeclaredFields();
-      superClazz = superClazz.getSuperclass();
+      clazz = clazz.getSuperclass();
+    } while (clazz != null);
 
-      ParameterHandler.this.hunterParams(superFields, request);
-    }
-
-    ParameterHandler.this.hunterParams(clazz.getDeclaredFields(), request);
-
-    builder.requestEntity.setParamMap(Collections.unmodifiableMap(this.params));
+    requestEntity.setParamMap(parameters);
   }
 
-  private void hunterParams(Field[] declaredFields, T request) {
+  private static <T> void hunterParams(Field[] fields, T request, Map<String, String> parameters) {
 
-    if (declaredFields == null || declaredFields.length == 0) return;
+    if (fields == null || fields.length == 0) return;
+    //noinspection ForLoopReplaceableByForEach
+    for (int i = 0, n = fields.length; i < n; i++) {
+      final Field field = fields[i];
+      if (!field.isAnnotationPresent(Argument.class)) return;
 
-    for (Field field : declaredFields) {
+      String key;
+      Object rawValue;
+      String covertValue;
 
-      if (field.isAnnotationPresent(Argument.class)) {
+      if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
 
-        String key;
-        Object value;
-        String ultraValue;
-
-        if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
-
-        try {
-          value = field.get(request);
-        } catch (IllegalAccessException e) {
-          throw Utils.methodError(field.getDeclaringClass(),
-              "IllegalAccessException was happened when access " + "%s field", field.getName());
-        }
-
-        if (value == null) continue;
-
-        key = field.getAnnotation(Argument.class).parameter();
-        ultraValue = Utils.toString(value, Types.getRawType(field.getType()));
-
-        if (this.params.containsKey(key)) {
-          throw Utils.methodError(field.getDeclaringClass(),//
-              "The parameter %s at least already exists one.You must choose one from these which value is '%s' or '%s'",
-              //
-              key, this.params.get(key), ultraValue);
-        }
-
-        if (key == null || key.trim().isEmpty()) key = field.getName();
-
-        this.params.put(key, ultraValue);
+      key = field.getAnnotation(Argument.class).parameter();
+      try {
+        rawValue = field.get(request);
+        if (rawValue == null) continue;
+      } catch (IllegalAccessException e) {
+        throw Utils.methodError(field.getDeclaringClass(),
+            "IllegalAccessException was happened when access " + "%s field", field.getName());
       }
+
+      covertValue = Utils.toString(rawValue, Types.getRawType(field.getType()));
+      if (parameters.containsKey(key)) covertValue = parameters.get(key) + "," + covertValue;
+      if (key.trim().isEmpty()) key = field.getName();
+
+      parameters.put(key, covertValue);
     }
   }
 }
+

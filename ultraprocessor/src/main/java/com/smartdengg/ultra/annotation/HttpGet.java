@@ -13,11 +13,11 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)
-@RestMethod(type = RestType.GET)
+@HttpType(type = Type.GET)
 @Inherited
 public @interface HttpGet {
 
-    String stringUrl();
+    String url();
 
     boolean LOG() default true;
 }

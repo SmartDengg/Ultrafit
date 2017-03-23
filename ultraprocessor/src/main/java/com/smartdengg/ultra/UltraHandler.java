@@ -5,12 +5,5 @@ package com.smartdengg.ultra;
  */
 abstract class UltraHandler<T> {
 
-  abstract void process(RequestBuilder builder, T value);
-
-
-
-
-
-
-
+  abstract void process(RequestEntity<T> requestEntity, T value) throws Exception;
 }

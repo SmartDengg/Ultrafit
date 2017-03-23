@@ -3,7 +3,7 @@ package com.smartdengg.domain.transforms;
 import com.smartdengg.domain.request.MovieDetailRequest;
 import com.smartdengg.domain.response.MovieListResponse;
 import com.smartdengg.ultra.RequestEntity;
-import com.smartdengg.ultra.UltraParserFactory;
+import com.smartdengg.ultra.UltraParser;
 import java.util.List;
 import rx.Observable;
 import rx.functions.Func1;
@@ -34,7 +34,7 @@ import rx.functions.Func1;
       @Override public Observable<RequestEntity<MovieDetailRequest>> call(
           MovieListResponse movieListResponse) {
         MovieDetailRequest movieDetailRequest = new MovieDetailRequest(movieListResponse.movieId);
-        return UltraParserFactory.createWith(movieDetailRequest).parse().asObservable();
+        return UltraParser.createWith(movieDetailRequest).parse().asObservable();
       }
     });
   }

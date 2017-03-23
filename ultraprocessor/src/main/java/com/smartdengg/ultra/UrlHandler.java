@@ -1,55 +1,57 @@
 package com.smartdengg.ultra;
 
-import com.smartdengg.ultra.annotation.RestMethod;
-import com.smartdengg.ultra.annotation.RestType;
+import com.smartdengg.ultra.annotation.HttpType;
+import com.smartdengg.ultra.annotation.Type;
 import java.lang.annotation.Annotation;
 
 /**
- * Created by Joker on 2016/6/28.
+ * 创建时间: 2017/03/23 11:46 <br>
+ * 作者: dengwei <br>
+ * 描述:
  */
 class UrlHandler<T> extends UltraHandler<T> {
 
-  private RestType restType = null;
+  private Type httpType = null;
   private String url = null;
   private boolean logFlag = true;
 
   private UrlHandler() {
   }
 
-  @SuppressWarnings("unchecked")
-  static <Request> void apply(RequestBuilder builder, Request request) {
-    new UrlHandler().process(builder, request);
+  static <Request> UltraHandler<Request> create() {
+    return new UrlHandler<>();
   }
 
-  @Override void process(RequestBuilder builder, T value) {
+  @Override void process(RequestEntity<T> requestEntity, T request) throws Exception {
 
-    Annotation[] annotations = value.getClass().getAnnotations();
-    for (Annotation httpAnnotation : annotations) {
+    Class<?> clazz = request.getClass();
+    Annotation[] annotations = clazz.getAnnotations();
+    //noinspection ForLoopReplaceableByForEach
+    for (int i = 0, n = annotations.length; i < n; i++) {
 
-      Class<? extends Annotation> clazz = httpAnnotation.annotationType();
-      if (!clazz.isAnnotationPresent(RestMethod.class)) continue;
+      final Annotation annotation = annotations[i];
+      final Class<? extends Annotation> annotationClazz = annotation.annotationType();
+      if (!annotationClazz.isAnnotationPresent(HttpType.class)) continue;
+      final HttpType httpTypeAnnotation = annotationClazz.getAnnotation(HttpType.class);
 
-      RestMethod restMethod = clazz.getAnnotation(RestMethod.class);
-
-      if (this.restType != null) {
-        String previousUrl =
-            Reflections.invokeMethod(httpAnnotation, clazz, RequestBuilder.HTTP_METHOD);
-        throw Utils.methodError(value.getClass(),
-            "Only one HTTP method is allowed!\n Found: %s: '%s' or %s: '%s'!", this.restType,
-            this.url, restMethod.type(), previousUrl);
+      if (httpType != null) {
+        String otherUrl = Reflections.invokeAnnotation(annotation, RequestEntityBuilder.HTTP_URL);
+        throw Utils.methodError(clazz,
+            "Only one HTTP type is allowed!\n Found: %s: '%s' and %s: '%s'!", this.httpType,
+            this.url, httpTypeAnnotation.type(), otherUrl);
       }
 
       /*Only HttpGet or HttpPost*/
-      this.restType = restMethod.type();
-      this.url = Reflections.invokeMethod(httpAnnotation, clazz, RequestBuilder.HTTP_METHOD);
-      this.logFlag = Reflections.invokeMethod(httpAnnotation, clazz, RequestBuilder.LOG_FLAG);
+      this.httpType = httpTypeAnnotation.type();
+      this.url = Reflections.invokeAnnotation(annotation, RequestEntityBuilder.HTTP_URL);
+      this.logFlag = Reflections.invokeAnnotation(annotation, RequestEntityBuilder.LOG_FLAG);
     }
 
-    if (this.restType == null || this.url == null) {
-      throw Utils.methodError(value.getClass(),
+    if (this.httpType == null || this.url == null) {
+      throw Utils.methodError(clazz,
           "Http method annotation is required (e.g.@HttpGet, @HttpPost, etc.).");
     }
 
-    builder.requestEntity.setRestType(restType).setUrl(url).setShouldOutputs(logFlag);
+    requestEntity.setType(httpType).setUrl(url).setShouldOutputs(logFlag);
   }
 }

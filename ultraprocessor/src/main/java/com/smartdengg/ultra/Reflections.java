@@ -61,27 +61,26 @@ class Reflections {
     return declaredMethod;
   }
 
-  public static Object invokeMethod(Method method, Object instance, Object... parameters) {
+  public static Object invokeMethod(Object instance, Method method, Object... parameters) {
 
     Object returnObject = null;
 
     try {
       if (!Modifier.isPublic(method.getModifiers())) method.setAccessible(true);
       returnObject = method.invoke(instance, parameters);
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (Exception ignored) {
     }
 
     return returnObject;
   }
 
   /** Safe because of generics erasure */
-  @SuppressWarnings("unchecked") public static <T> T invokeMethod(Annotation classAnnotation,
-      Class<? extends Annotation> clazz, String methodName) {
+  @SuppressWarnings("unchecked") static <T> T invokeAnnotation(Object instance, String methodName) {
     try {
+      Class<? extends Annotation> clazz = ((Annotation) instance).annotationType();
       Method declaredMethod = clazz.getDeclaredMethod(methodName);
       if (!Modifier.isPublic(declaredMethod.getModifiers())) declaredMethod.setAccessible(true);
-      return (T) declaredMethod.invoke(classAnnotation);
+      return (T) declaredMethod.invoke(instance);
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
