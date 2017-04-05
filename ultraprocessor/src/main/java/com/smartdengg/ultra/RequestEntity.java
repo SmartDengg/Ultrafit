@@ -2,10 +2,13 @@ package com.smartdengg.ultra;
 
 import com.smartdengg.jsonprinter.JsonPrinter;
 import com.smartdengg.ultra.annotation.Type;
-import java.util.Iterator;
 import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 import rx.Observable;
 import rx.Single;
+
+import static com.smartdengg.ultra.Utils.getJsonFromMap;
 
 public class RequestEntity<R> {
 
@@ -76,40 +79,15 @@ public class RequestEntity<R> {
   }
 
   void dump() {
-    //StringBuilder info = new StringBuilder();
-    //info.append("Type").append('=').append(this.getType()).append(Printer.SEPARATOR);
-    //info.append("Url").append('=').append('\'').append(this.getUrl()).append('\'').append(Printer.SEPARATOR);
-    //info.append("Params").append('=').append(this.getParamMap()).append(Printer.SEPARATOR);
-    //info.append("Source").append('=').append(this.sourceRequest).append(Printer.SEPARATOR);
-    //String result = Printer.translate("Request entity !!!!", info.toString());
-    //Log.v(TAG, result);
 
-    StringBuilder jsonBuilder = new StringBuilder();
-
-    jsonBuilder.append("{");
-
-    jsonBuilder.append("\"http\"").append(':').append("\"").append(type).append("\"");
-    jsonBuilder.append(',');
-
-    jsonBuilder.append("\"url\"").append(':').append("\"").append(url).append("\"");
-    jsonBuilder.append(',');
-
-    if (paramMap != null) {
-      jsonBuilder.append("\"parameters\"").append(':').append("{");
-      for (Iterator<Map.Entry<String, String>> iterator = paramMap.entrySet().iterator();
-          iterator.hasNext(); ) {
-        Map.Entry<String, String> entry = iterator.next();
-        jsonBuilder.append("\"").append(entry.getKey()).append("\"");
-        jsonBuilder.append(':');
-        jsonBuilder.append("\"").append(entry.getValue()).append("\"");
-        if (iterator.hasNext()) jsonBuilder.append(',');
-      }
-      jsonBuilder.append("}");
+    JSONObject jsonObject = new JSONObject();
+    try {
+      jsonObject.put("http", type);
+      jsonObject.put("url", url);
+      jsonObject.putOpt("paramMap", getJsonFromMap(paramMap));
+    } catch (JSONException ignored) {
     }
-
-    jsonBuilder.append("}");
-
-    JsonPrinter.d(TAG, jsonBuilder.toString());
+    JsonPrinter.d(TAG, jsonObject.toString());
   }
 
   @Override public String toString() {

@@ -13,11 +13,9 @@ public class CityEntity implements Cloneable {
   }
 
   public CityEntity newInstance() {
-
     try {
       return (CityEntity) super.clone();
-    } catch (CloneNotSupportedException e) {
-      e.printStackTrace();
+    } catch (CloneNotSupportedException ignored) {
     }
     return null;
   }

@@ -3,7 +3,10 @@ package com.smartdengg.ultra;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Joker on 2016/4/25.
@@ -240,5 +243,18 @@ class Utils {
       return "null";
     }
     return "0x" + String.format("%02x", b).toUpperCase(Locale.US);
+  }
+
+  static JSONObject getJsonFromMap(Map<String, ?> map) throws JSONException {
+    JSONObject jsonObject = new JSONObject();
+    for (String key : map.keySet()) {
+      Object value = map.get(key);
+      if (value instanceof Map) {
+        //noinspection unchecked
+        value = getJsonFromMap((Map<String, ?>) value);
+      }
+      jsonObject.put(key, value);
+    }
+    return jsonObject;
   }
 }
