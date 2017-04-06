@@ -99,7 +99,7 @@ class Utils {
     return type;
   }
 
-  static String toString(Object obj) {
+  private static String toString(Object obj) {
     if (obj == null) {
       return "null";
     }
