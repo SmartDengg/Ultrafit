@@ -86,6 +86,7 @@ public class RequestEntity<R> {
       jsonObject.put("url", url);
       jsonObject.putOpt("paramMap", getJsonFromMap(paramMap));
     } catch (JSONException ignored) {
+      return;
     }
     JsonPrinter.d(TAG, jsonObject.toString());
   }

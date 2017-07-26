@@ -16,6 +16,7 @@ public class SimpleSubscriber<T> extends Subscriber<T> {
   }
 
   @CallSuper @Override public void onError(Throwable e) {
+    e.printStackTrace();
     Logger.t(Constants.OKHTTP_TAG, 0).e(e.toString());
     if (e instanceof HttpException) {
       Response<?> response = ((HttpException) e).response();

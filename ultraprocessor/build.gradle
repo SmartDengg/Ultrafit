@@ -8,5 +8,4 @@ dependencies {
   compile 'com.github.SmartDengg.jsonprinter:jsonprinter:0.2.0'
   compileOnly 'io.reactivex:rxjava:1.2.1'
   compileOnly 'com.google.android:android:4.1.1.4'
-//  compile 'org.json:json:20160810'
 }

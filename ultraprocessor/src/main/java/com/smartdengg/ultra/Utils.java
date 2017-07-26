@@ -23,62 +23,30 @@ class Utils {
     return object;
   }
 
-  static String toString(Object object, Class<?> rawType) {
+  static String getValue(Object object) {
 
-    if (!rawType.isArray()) return object.toString();
+    Class<?> clazz = object.getClass().getComponentType();
+    if (clazz == null) return object.toString();
 
-    Class<?> parameterType = Utils.boxIfPrimitive(rawType.getComponentType());
     String value;
-    if (parameterType == Boolean.class) {/* Boolean[] */
-      try {
-        value = Arrays.toString(((Boolean[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((boolean[]) object));
-      }
-    } else if (parameterType == Byte.class) {/* Byte[] */
-      try {
-        value = Arrays.toString(((Byte[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((byte[]) object));
-      }
-    } else if (parameterType == Character.class) {/* Character[] */
-      try {
-        value = Arrays.toString(((Character[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((char[]) object));
-      }
-    } else if (parameterType == Double.class) {/* Double[] */
-      try {
-        value = Arrays.toString(((Double[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((double[]) object));
-      }
-    } else if (parameterType == Float.class) {/* Float[] */
-      try {
-        value = Arrays.toString(((Float[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((float[]) object));
-      }
-    } else if (parameterType == Integer.class) {/* Integer[] */
-      try {
-        value = Arrays.toString(((Integer[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((int[]) object));
-      }
-    } else if (parameterType == Long.class) {/* Long[] */
-      try {
-        value = Arrays.toString(((Long[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((long[]) object));
-      }
-    } else if (parameterType == Short.class) {/* Short[] */
-      try {
-        value = Arrays.toString(((Short[]) object));
-      } catch (ClassCastException e) {
-        value = Arrays.toString(((short[]) object));
-      }
+    if (clazz == boolean.class) {/* boolean[] */
+      value = Arrays.toString(((boolean[]) object));
+    } else if (clazz == byte.class) {/* byte[] */
+      value = Arrays.toString(((byte[]) object));
+    } else if (clazz == char.class) {/* character[] */
+      value = Arrays.toString(((char[]) object));
+    } else if (clazz == double.class) {/* double[] */
+      value = Arrays.toString(((double[]) object));
+    } else if (clazz == float.class) {/* float[] */
+      value = Arrays.toString(((float[]) object));
+    } else if (clazz == int.class) {/* int[] */
+      value = Arrays.toString(((int[]) object));
+    } else if (clazz == long.class) {/* long[] */
+      value = Arrays.toString(((long[]) object));
+    } else if (clazz == short.class) {/* short[] */
+      value = Arrays.toString(((short[]) object));
     } else {
-      value = object != null ? Arrays.toString((Object[]) object) : null;
+      value = Arrays.toString((Object[]) object);
     }
 
     return value;

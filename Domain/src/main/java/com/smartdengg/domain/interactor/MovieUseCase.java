@@ -21,17 +21,16 @@ import rx.functions.Func1;
  */
 public class MovieUseCase extends UseCase<MovieIdRequest, List<MovieEntity>> {
 
-  private MovieRepository mMovieRepository;
+  private MovieRepository movieRepository;
 
-  private MovieUseCase(MovieRepository movieRepository,
-      Observable.Transformer<List<MovieEntity>, List<MovieEntity>> transformer) {
-    super(transformer);
-    this.mMovieRepository = movieRepository;
+  private MovieUseCase(MovieRepository movieRepository, Executor<List<MovieEntity>> executor) {
+    super(executor);
+    this.movieRepository = movieRepository;
   }
 
   public static MovieUseCase create(MovieRepository movieRepository,
-      Observable.Transformer<List<MovieEntity>, List<MovieEntity>> transformer) {
-    return new MovieUseCase(movieRepository, transformer);
+      Executor<List<MovieEntity>> executor) {
+    return new MovieUseCase(movieRepository, executor);
   }
 
   @Override protected Observable<List<MovieEntity>> interactor(@NonNull String url,
@@ -42,7 +41,7 @@ public class MovieUseCase extends UseCase<MovieIdRequest, List<MovieEntity>> {
         .concatMap(new Func1<RequestEntity<MovieDetailRequest>, Observable<MovieDetailResponse>>() {
           @Override public Observable<MovieDetailResponse> call(
               RequestEntity<MovieDetailRequest> requestEntity) {
-            return mMovieRepository.getMovieDetailResponse(requestEntity.getUrl(),
+            return movieRepository.getMovieDetailResponse(requestEntity.getUrl(),
                 requestEntity.getParamMap());
           }
         })
@@ -51,6 +50,6 @@ public class MovieUseCase extends UseCase<MovieIdRequest, List<MovieEntity>> {
 
   private Observable<List<MovieListResponse>> fetchMovieList(@NonNull String url,
       @NonNull Map<String, String> params) {
-    return mMovieRepository.getMoviesResponse(url, params);
+    return movieRepository.getMoviesResponse(url, params);
   }
 }

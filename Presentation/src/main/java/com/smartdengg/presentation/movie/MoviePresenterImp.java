@@ -5,9 +5,9 @@ import com.smartdengg.domain.entity.MovieEntity;
 import com.smartdengg.domain.errors.WebServiceException;
 import com.smartdengg.domain.interactor.MovieUseCase;
 import com.smartdengg.domain.request.MovieIdRequest;
-import com.smartdengg.httpservice.lib.adapter.rxadapter.rxcompat.SchedulersCompat;
 import com.smartdengg.model.SimpleSubscriber;
 import com.smartdengg.model.service.movie.MovieService;
+import com.smartdengg.presentation.rxcompat.SchedulersCompat;
 import java.util.List;
 import rx.Observable;
 
@@ -19,9 +19,15 @@ class MoviePresenterImp implements MovieContract.Presenter<List<MovieEntity>> {
   private MovieContract.View<List<MovieEntity>> view;
   private UseCase<MovieIdRequest, List<MovieEntity>> movieUseCase;
 
+  @SuppressWarnings("unchecked") private static final UseCase.Executor<List<MovieEntity>> executor =
+      new UseCase.Executor() {
+        @Override public Observable.Transformer<List<MovieEntity>, List<MovieEntity>> scheduler() {
+          return SchedulersCompat.applyExecutorSchedulers();
+        }
+      };
+
   private MoviePresenterImp() {
-    this.movieUseCase = MovieUseCase.create(MovieService.createdService(),
-        SchedulersCompat.<List<MovieEntity>>applyExecutorSchedulers());
+    this.movieUseCase = MovieUseCase.create(MovieService.createdService(), executor);
   }
 
   static MoviePresenterImp createdPresenter() {

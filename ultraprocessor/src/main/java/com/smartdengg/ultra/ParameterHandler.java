@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Joker on 2016/6/28.
+ * 创建时间: 2017/07/26 16:33 <br>
+ * 作者: dengwei <br>
+ * 描述:
  */
 class ParameterHandler<T> extends UltraHandler<T> {
 
@@ -44,25 +46,25 @@ class ParameterHandler<T> extends UltraHandler<T> {
       if (!field.isAnnotationPresent(Argument.class)) return;
 
       String key;
-      Object rawValue;
-      String covertValue;
+      Object raw;
+      String value;
 
       if (!Modifier.isPublic(field.getModifiers())) field.setAccessible(true);
 
       key = field.getAnnotation(Argument.class).parameter();
       try {
-        rawValue = field.get(request);
-        if (rawValue == null) continue;
+        raw = field.get(request);
+        if (raw == null) continue;
       } catch (IllegalAccessException e) {
         throw Utils.methodError(field.getDeclaringClass(),
             "IllegalAccessException was happened when access " + "%s field", field.getName());
       }
 
-      covertValue = Utils.toString(rawValue, Types.getRawType(field.getType()));
-      if (parameters.containsKey(key)) covertValue = parameters.get(key) + "," + covertValue;
+      value = Utils.getValue(raw);
+      if (parameters.containsKey(key)) value = parameters.get(key) + "," + value;
       if (key.trim().isEmpty()) key = field.getName();
 
-      parameters.put(key, covertValue);
+      parameters.put(key, value);
     }
   }
 }

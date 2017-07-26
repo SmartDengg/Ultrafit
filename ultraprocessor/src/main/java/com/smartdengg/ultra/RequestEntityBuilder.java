@@ -10,7 +10,7 @@ import java.util.List;
 class RequestEntityBuilder<Request> {
 
   static final String HTTP_URL = "url";
-  static final String LOG_FLAG = "LOG";
+  static final String LOGGABLE = "log";
 
   private Request request;
   private List<UltraHandler<Request>> builtInHandlers;
@@ -24,14 +24,15 @@ class RequestEntityBuilder<Request> {
     this.builtInHandlers = Collections.unmodifiableList(handlers);
   }
 
-  public RequestEntity<Request> build() {
+  public RequestEntity<Request> build() throws Exception {
 
     try {
       for (int i = 0, n = builtInHandlers.size(); i < n; i++) {
         final UltraHandler<Request> handler = builtInHandlers.get(i);
         handler.process(requestEntity, request);
       }
-    } catch (Throwable ignored) {
+    } catch (Exception ex) {
+      throw new RuntimeException(ex.getCause());
     }
 
     requestEntity.setRequest(request);

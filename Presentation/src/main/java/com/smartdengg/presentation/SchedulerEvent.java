@@ -47,6 +47,12 @@ public class SchedulerEvent {
           }
         });
 
+    Observable.just(1).publish(new Func1<Observable<Integer>, Observable<Integer>>() {
+      @Override public Observable<Integer> call(Observable<Integer> integerObservable) {
+        return null;
+      }
+    });
+
     for (; ; ) ;
   }
 

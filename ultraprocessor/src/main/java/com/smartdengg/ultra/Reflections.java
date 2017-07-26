@@ -85,4 +85,19 @@ class Reflections {
       throw new IllegalStateException(e);
     }
   }
+
+  static String getMethodNameByReturnType(Class clazz, Class returnType, String defaultName) {
+
+    Method[] methods = clazz.getDeclaredMethods();
+
+    //noinspection ForLoopReplaceableByForEach
+    for (int i = 0, n = methods.length; i < n; i++) {
+
+      Method method = methods[i];
+      if (method.isSynthetic() || method.isBridge()) continue;
+      if (method.getReturnType() == returnType) return method.getName();
+    }
+
+    return defaultName;
+  }
 }

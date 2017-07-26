@@ -2,6 +2,9 @@ package com.smartdengg.ultra;
 
 import com.smartdengg.ultra.annotation.HttpGet;
 import com.smartdengg.ultra.annotation.HttpPost;
+import rx.Observable;
+import rx.Single;
+import rx.plugins.RxJavaHooks;
 
 /**
  * 创建时间: 2017/03/23 12:13 <br>
@@ -31,7 +34,21 @@ public class UltraParser<Request> {
     this.request = request;
   }
 
-  public RequestEntity<Request> parse() {
-    return new RequestEntityBuilder<>(request).build();
+  public Observable<RequestEntity<Request>> parseAsObservable() {
+    try {
+      return new RequestEntityBuilder<>(request).build().asObservable();
+    } catch (Exception e) {
+      RxJavaHooks.onError(e);
+      return Observable.error(e);
+    }
+  }
+
+  public Single<RequestEntity<Request>> parseAsSingle() {
+    try {
+      return new RequestEntityBuilder<>(request).build().asSingle();
+    } catch (Exception e) {
+      RxJavaHooks.onError(e);
+      return Single.error(e);
+    }
   }
 }

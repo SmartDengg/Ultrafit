@@ -19,9 +19,15 @@ class CityPresenterImp implements CityContract.Presenter<List<CityEntity>> {
   private CityContract.View<List<CityEntity>> view;
   private UseCase<CityListRequest, List<CityEntity>> cityUseCase;
 
+  @SuppressWarnings("unchecked") private static final UseCase.Executor<List<CityEntity>> executor =
+      new UseCase.Executor() {
+        @Override public Observable.Transformer<List<CityEntity>, List<CityEntity>> scheduler() {
+          return SchedulersCompat.applyExecutorSchedulers();
+        }
+      };
+
   private CityPresenterImp() {
-    this.cityUseCase = CityUseCase.create(CityService.create(),
-        SchedulersCompat.<List<CityEntity>>applyExecutorSchedulers());
+    this.cityUseCase = CityUseCase.create(CityService.create(), executor);
   }
 
   public static CityPresenterImp created() {

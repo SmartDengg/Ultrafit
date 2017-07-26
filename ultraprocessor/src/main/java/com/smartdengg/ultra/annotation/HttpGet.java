@@ -10,14 +10,10 @@ import java.lang.annotation.Target;
 /**
  * Created by SmartDengg on 2016/2/14.
  */
-@Documented
-@Retention(value = RetentionPolicy.RUNTIME)
-@Target(value = ElementType.TYPE)
-@HttpType(type = Type.GET)
-@Inherited
-public @interface HttpGet {
+@Documented @Retention(value = RetentionPolicy.RUNTIME) @Target(value = ElementType.TYPE)
+@HttpType(type = Type.GET) @Inherited public @interface HttpGet {
 
-    String url();
+  String url();
 
-    boolean LOG() default true;
+  boolean log() default true;
 }

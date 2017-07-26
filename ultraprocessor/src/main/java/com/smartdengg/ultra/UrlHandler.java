@@ -13,7 +13,7 @@ class UrlHandler<T> extends UltraHandler<T> {
 
   private Type httpType = null;
   private String url = null;
-  private boolean logFlag = true;
+  private boolean loggable = true;
 
   private UrlHandler() {
   }
@@ -30,9 +30,9 @@ class UrlHandler<T> extends UltraHandler<T> {
     for (int i = 0, n = annotations.length; i < n; i++) {
 
       final Annotation annotation = annotations[i];
-      final Class<? extends Annotation> annotationClazz = annotation.annotationType();
-      if (!annotationClazz.isAnnotationPresent(HttpType.class)) continue;
-      final HttpType httpTypeAnnotation = annotationClazz.getAnnotation(HttpType.class);
+      final Class<? extends Annotation> annotationClass = annotation.annotationType();
+      if (!annotationClass.isAnnotationPresent(HttpType.class)) continue;
+      final HttpType httpTypeAnnotation = annotationClass.getAnnotation(HttpType.class);
 
       if (httpType != null) {
         String otherUrl = Reflections.invokeAnnotation(annotation, RequestEntityBuilder.HTTP_URL);
@@ -43,8 +43,8 @@ class UrlHandler<T> extends UltraHandler<T> {
 
       /*Only HttpGet or HttpPost*/
       this.httpType = httpTypeAnnotation.type();
-      this.url = Reflections.invokeAnnotation(annotation, RequestEntityBuilder.HTTP_URL);
-      this.logFlag = Reflections.invokeAnnotation(annotation, RequestEntityBuilder.LOG_FLAG);
+      this.url = Reflections.invokeAnnotation(annotation, getUrlMethodName(annotationClass));
+      this.loggable = Reflections.invokeAnnotation(annotation, getLogMethodName(annotationClass));
     }
 
     if (this.httpType == null || this.url == null) {
@@ -52,6 +52,16 @@ class UrlHandler<T> extends UltraHandler<T> {
           "Http method annotation is required (e.g.@HttpGet, @HttpPost, etc.).");
     }
 
-    requestEntity.setType(httpType).setUrl(url).setShouldOutputs(logFlag);
+    requestEntity.setType(httpType).setUrl(url).setShouldOutputs(loggable);
+  }
+
+  private static String getUrlMethodName(Class clazz) {
+    return Reflections.getMethodNameByReturnType(clazz, String.class,
+        RequestEntityBuilder.HTTP_URL);
+  }
+
+  private static String getLogMethodName(Class clazz) {
+    return Reflections.getMethodNameByReturnType(clazz, boolean.class,
+        RequestEntityBuilder.LOGGABLE);
   }
 }

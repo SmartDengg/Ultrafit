@@ -34,7 +34,7 @@ import rx.functions.Func1;
       @Override public Observable<RequestEntity<MovieDetailRequest>> call(
           MovieListResponse movieListResponse) {
         MovieDetailRequest movieDetailRequest = new MovieDetailRequest(movieListResponse.movieId);
-        return UltraParser.createWith(movieDetailRequest).parse().asObservable();
+        return UltraParser.createWith(movieDetailRequest).parseAsObservable();
       }
     });
   }
