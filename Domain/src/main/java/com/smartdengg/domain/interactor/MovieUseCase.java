@@ -42,7 +42,7 @@ public class MovieUseCase extends UseCase<MovieIdRequest, List<MovieEntity>> {
           @Override public Observable<MovieDetailResponse> call(
               RequestEntity<MovieDetailRequest> requestEntity) {
             return movieRepository.getMovieDetailResponse(requestEntity.getUrl(),
-                requestEntity.getParamMap());
+                requestEntity.getParams());
           }
         })
         .compose(MovieEntityTransfer.create());

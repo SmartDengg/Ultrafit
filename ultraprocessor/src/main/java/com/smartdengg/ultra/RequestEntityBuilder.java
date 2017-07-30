@@ -9,7 +9,8 @@ import java.util.List;
  */
 class RequestEntityBuilder<Request> {
 
-  static final String HTTP_URL = "url";
+  static final String DEFAULT_VALUE = "value";
+  static final String URL = "url";
   static final String LOGGABLE = "log";
 
   private Request request;
@@ -19,8 +20,8 @@ class RequestEntityBuilder<Request> {
   RequestEntityBuilder(Request Request) {
     this.request = Request;
     List<UltraHandler<Request>> handlers = new ArrayList<>(2);
-    handlers.add(UrlHandler.<Request>create());
-    handlers.add(ParameterHandler.<Request>create());
+    handlers.add(ClassHandler.<Request>create());
+    handlers.add(FieldHandler.<Request>create());
     this.builtInHandlers = Collections.unmodifiableList(handlers);
   }
 
@@ -35,9 +36,9 @@ class RequestEntityBuilder<Request> {
       throw new RuntimeException(ex.getCause());
     }
 
-    requestEntity.setRequest(request);
+    requestEntity.setSource(request);
 
-    if (requestEntity.isShouldOutputs()) this.outputs();
+    if (requestEntity.isLoggable()) this.outputs();
 
     return requestEntity;
   }

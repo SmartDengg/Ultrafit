@@ -1,7 +1,6 @@
 package com.smartdengg.ultra;
 
-import com.smartdengg.ultra.annotation.HttpGet;
-import com.smartdengg.ultra.annotation.HttpPost;
+import com.smartdengg.ultra.annotation.Http;
 import rx.Observable;
 import rx.Single;
 import rx.plugins.RxJavaHooks;
@@ -20,11 +19,9 @@ public class UltraParser<Request> {
     Utils.checkNotNull(request, "request == null");
 
     Class<?> clazz = request.getClass();
-    HttpGet httpGet = clazz.getAnnotation(HttpGet.class);
-    HttpPost httpPost = clazz.getAnnotation(HttpPost.class);
-    if (httpGet == null && httpPost == null) {
-      throw Utils.methodError(clazz, "%s lack of HTTP annotation, neither @HttpGet nor @HttpPost",
-          clazz.getName());
+    Http http = clazz.getAnnotation(Http.class);
+    if (http == null) {
+      throw Utils.classError(null, clazz, "%s lack of @Http annotation", clazz.getName());
     }
 
     return new UltraParser<>(request);

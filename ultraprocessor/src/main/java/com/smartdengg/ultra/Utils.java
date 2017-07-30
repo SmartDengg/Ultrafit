@@ -1,5 +1,6 @@
 package com.smartdengg.ultra;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
@@ -13,9 +14,19 @@ import org.json.JSONObject;
  */
 class Utils {
 
-  static RuntimeException methodError(Class clazz, String message, Object... args) {
-    message = (args.length == 0) ? message : String.format(message, args);
-    return new IllegalArgumentException(clazz.getSimpleName() + ": " + message);
+  static RuntimeException classError(Throwable cause, Class clazz, String message, Object... args) {
+    message = String.format(message, args);
+    return new IllegalArgumentException(message + "\n    for class " + clazz.getSimpleName(),
+        cause);
+  }
+
+  static RuntimeException fieldError(Throwable cause, Field field, String message, Object... args) {
+    message = String.format(message, args);
+    return new IllegalArgumentException(message
+        + "\n    for field "
+        + field.getDeclaringClass().getSimpleName()
+        + "."
+        + field.getName(), cause);
   }
 
   static <T> T checkNotNull(T object, String message) {
@@ -24,6 +35,8 @@ class Utils {
   }
 
   static String getValue(Object object) {
+
+    if (object == null) return null;
 
     Class<?> clazz = object.getClass().getComponentType();
     if (clazz == null) return object.toString();

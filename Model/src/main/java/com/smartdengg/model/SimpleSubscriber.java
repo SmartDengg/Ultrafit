@@ -1,6 +1,7 @@
 package com.smartdengg.model;
 
 import android.support.annotation.CallSuper;
+import android.util.Log;
 import com.orhanobut.logger.Logger;
 import com.smartdengg.common.Constants;
 import com.smartdengg.httpservice.lib.errors.HttpException;
@@ -17,7 +18,7 @@ public class SimpleSubscriber<T> extends Subscriber<T> {
 
   @CallSuper @Override public void onError(Throwable e) {
     e.printStackTrace();
-    Logger.t(Constants.OKHTTP_TAG, 0).e(e.toString());
+    Logger.t(Constants.OKHTTP_TAG, 0).e(Log.getStackTraceString(e));
     if (e instanceof HttpException) {
       Response<?> response = ((HttpException) e).response();
       if (response != null) {

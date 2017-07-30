@@ -41,7 +41,7 @@ public abstract class UseCase<Request, Response> {
           }
         }).concatMap(new Func1<RequestEntity<Request>, Observable<Response>>() {
           @Override public Observable<Response> call(RequestEntity<Request> requestEntity) {
-            return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParamMap());
+            return UseCase.this.interactor(requestEntity.getUrl(), requestEntity.getParams());
           }
         }).onBackpressureDrop().compose(transformer.scheduler()).subscribe(useCaseSubscriber);
 

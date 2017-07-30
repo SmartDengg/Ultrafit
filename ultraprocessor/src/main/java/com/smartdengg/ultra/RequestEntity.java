@@ -1,7 +1,12 @@
 package com.smartdengg.ultra;
 
 import com.smartdengg.jsonprinter.JsonPrinter;
-import com.smartdengg.ultra.annotation.Type;
+import com.smartdengg.ultra.annotation.Http;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,71 +15,89 @@ import rx.Single;
 
 import static com.smartdengg.ultra.Utils.getJsonFromMap;
 
-public class RequestEntity<R> {
+public class RequestEntity<Source> {
 
   /** Log tag, apps may override it. */
   public static String TAG = RequestEntity.class.getSimpleName();
 
-  private Type type;
-  private String url;
-  private Map<String, String> paramMap;
+  private Http.Type type;
+  private String classAnnotationUrl;
+  private String fieldAnnotationUrl;
+  private Map<String, String> params;
+  private List<String> headers;
+  private boolean loggable;
 
-  private R sourceRequest;
-
-  private boolean shouldOutputs;
+  private Source source;
 
   RequestEntity() {
   }
 
-  public Type getType() {
+  public Http.Type getType() {
     return type;
   }
 
-  RequestEntity setType(Type type) {
+  RequestEntity setType(Http.Type type) {
     this.type = type;
     return RequestEntity.this;
   }
 
   public String getUrl() {
-    return url;
+    if (fieldAnnotationUrl == null) return classAnnotationUrl;
+    return fieldAnnotationUrl;
   }
 
-  RequestEntity setUrl(String url) {
-    this.url = url;
+  RequestEntity setUrlFromClassAnno(String url) {
+    this.classAnnotationUrl = url;
     return RequestEntity.this;
   }
 
-  public Map<String, String> getParamMap() {
-    return paramMap;
+  String setUrlFromFieldAnno(String url) {
+    String temp = fieldAnnotationUrl;
+    this.fieldAnnotationUrl = url;
+    return temp;
   }
 
-  RequestEntity setParamMap(Map<String, String> paramMap) {
-    this.paramMap = paramMap;
+  public Map<String, String> getParams() {
+    return new HashMap<>(params);
+  }
+
+  RequestEntity setParams(Map<String, String> params) {
+    this.params = params;
     return RequestEntity.this;
   }
 
-  public R getRequest() {
-    return sourceRequest;
+  public List<String> getHeaders() {
+    if (headers == null || headers.isEmpty()) return Collections.emptyList();
+    return new ArrayList<>(headers);
   }
 
-  void setRequest(R sourceEntity) {
-    this.sourceRequest = sourceEntity;
-  }
-
-  boolean isShouldOutputs() {
-    return shouldOutputs;
-  }
-
-  RequestEntity setShouldOutputs(boolean shouldOutputs) {
-    this.shouldOutputs = shouldOutputs;
+  RequestEntity setHeaders(List<String> headers) {
+    this.headers = headers;
     return RequestEntity.this;
   }
 
-  public Observable<RequestEntity<R>> asObservable() {
+  public Source getSource() {
+    return source;
+  }
+
+  void setSource(Source source) {
+    this.source = source;
+  }
+
+  boolean isLoggable() {
+    return loggable;
+  }
+
+  RequestEntity setLoggable(boolean loggable) {
+    this.loggable = loggable;
+    return RequestEntity.this;
+  }
+
+  public Observable<RequestEntity<Source>> asObservable() {
     return Observable.just(RequestEntity.this);
   }
 
-  public Single<RequestEntity<R>> asSingle() {
+  public Single<RequestEntity<Source>> asSingle() {
     return Single.just(RequestEntity.this);
   }
 
@@ -83,8 +106,9 @@ public class RequestEntity<R> {
     JSONObject jsonObject = new JSONObject();
     try {
       jsonObject.put("http", type);
-      jsonObject.put("url", url);
-      jsonObject.putOpt("paramMap", getJsonFromMap(paramMap));
+      jsonObject.put("url", fieldAnnotationUrl != null ? fieldAnnotationUrl : classAnnotationUrl);
+      jsonObject.putOpt("headers", Arrays.toString(headers.toArray()));
+      jsonObject.putOpt("params", getJsonFromMap(params));
     } catch (JSONException ignored) {
       return;
     }
@@ -95,15 +119,17 @@ public class RequestEntity<R> {
     return "RequestEntity{"
         + "type="
         + type
-        + ", url='"
-        + url
+        + ", ur='"
+        + (fieldAnnotationUrl != null ? fieldAnnotationUrl : classAnnotationUrl)
         + '\''
-        + ", paramMap="
-        + paramMap
-        + ", sourceRequest="
-        + sourceRequest
-        + ", shouldOutputs="
-        + shouldOutputs
+        + ", params="
+        + params
+        + ", headers="
+        + Arrays.toString(headers.toArray())
+        + ", loggable="
+        + loggable
+        + ", source="
+        + source
         + '}';
   }
 }
